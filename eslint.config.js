@@ -1,0 +1,45 @@
+module.exports = {
+  root: true,
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint', 'prettier'],
+  parserOptions: {
+    project: './tsconfig.json',
+    createDefaultProgram: true,
+  },
+  env: {
+    browser: true,
+    node: true,
+    es6: true,
+  },
+  extends: [
+    'airbnb',
+    'airbnb-typescript',
+    'airbnb/hooks',
+    'next/core-web-vitals',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+    'prettier',
+  ],
+  rules: {
+    'react/button-has-type': 'off',
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    'react/jsx-filename-extension': ['warn', { extensions: ['.ts', '.tsx'] }],
+    'no-useless-catch': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'no-use-before-define': 'off',
+    'no-nested-ternary': 'off',
+    'no-underscore-dangle': 'off',
+    'no-alert': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    '@typescript-eslint/no-use-before-define': [
+      'error',
+      { variables: false, functions: false, classes: false },
+    ],
+    'react/function-component-definition': [
+      2,
+      { namedComponents: ['arrow-function', 'function-declaration'] },
+    ],
+  },
+  ignores: ['node_modules/**/*', '.next/**/*'],
+};
