@@ -14,12 +14,16 @@ ${Reset}
   }
 
   body {
-    background-color: #e0d7d0;
+    // background-color: ${props => props.theme.primary_08};
     font-family: 'Pretendard', sans-serif;
-    font-weight: 300;
-    font-size: 13px;
-    line-height: 1.3;
-    color: #252525;
+    max-width: 750px;
+    min-width: 280px;
+    height: calc(var(--vh, 1vh) * 100);
+    margin: 0 auto;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.4;
+    color: ${props => props.theme.font_color};
     ::-webkit-scrollbar {
       display: none;
     }
@@ -30,7 +34,6 @@ ${Reset}
   }
   button {
     background: transparent;
-    font-size: 13px;
     cursor: pointer;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;

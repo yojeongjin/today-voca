@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyles from '@/styles/globalstyles';
 import theme from '@/styles/theme';
+import '../styles/fonts/index.css';
 
 const App: NextPage<AppProps> = ({ Component, pageProps }: AppProps) => {
   const setScreenSize = () => {
