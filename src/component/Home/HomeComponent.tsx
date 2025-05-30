@@ -8,6 +8,7 @@ const HomeComponent = () => {
     <HomeBase>
       <HomeTitle />
       <PlanComponent />
+      <div>=============</div>
     </HomeBase>
   );
 };
