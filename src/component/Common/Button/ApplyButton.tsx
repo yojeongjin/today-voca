@@ -2,13 +2,14 @@ import styled from 'styled-components';
 
 interface ApplyBtnProps {
   children: React.ReactNode;
+  color?: string;
   onClick?: () => void;
   disabled?: boolean;
 }
 
-const ApplyBtn: React.FC<ApplyBtnProps> = ({ children, onClick, disabled }) => {
+const ApplyBtn: React.FC<ApplyBtnProps> = ({ children, onClick, color, disabled }) => {
   return (
-    <Btn onClick={onClick} disabled={disabled}>
+    <Btn color={color} onClick={onClick} disabled={disabled}>
       {children}
     </Btn>
   );
@@ -16,8 +17,8 @@ const ApplyBtn: React.FC<ApplyBtnProps> = ({ children, onClick, disabled }) => {
 
 export default ApplyBtn;
 
-const Btn = styled.button<{ color?: string; margin?: string }>`
-  background-color: ${props => props.theme.primary_01};
+const Btn = styled.button`
+  background-color: ${props => (props.color ? props.color : '#027FFF')};
   width: 100%;
   height: 52px;
   border-radius: 8px;

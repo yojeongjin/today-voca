@@ -6,14 +6,17 @@ import H3 from './H3';
 
 interface StepTitleProps {
   children: React.ReactNode;
+  onBack?: () => void;
 }
 
-const StepTitle: React.FC<StepTitleProps> = ({ children }) => {
+const StepTitle: React.FC<StepTitleProps> = ({ children, onBack }) => {
   return (
     <StepTitleBase>
-      <StepBack>
-        <StepIcon />
-      </StepBack>
+      {onBack && (
+        <StepBack onClick={onBack}>
+          <StepIcon />
+        </StepBack>
+      )}
       <H3>{children}</H3>
     </StepTitleBase>
   );
@@ -26,13 +29,15 @@ const StepTitleBase = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 24px;
 `;
 
 const StepBack = styled.button`
   position: absolute;
-  left: 0;
+  left: 8px;
 `;
 
 const StepIcon = styled(SlArrowLeft)`
-  // font-size: 25px;
+  color: ${props => props.theme.font_color};
+  font-size: 14px;
 `;

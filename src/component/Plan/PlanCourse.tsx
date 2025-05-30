@@ -1,19 +1,12 @@
 import styled from 'styled-components';
-// icons
-import { FaFileAlt } from 'react-icons/fa';
+// components
 import ApplyBtn from '../Common/Button/ApplyButton';
-import StepTitle from '../Common/Title/StepTitle';
+// ifs
+import { NextStepProps } from '@/Interface/Istep';
 
-const CreatePlanComponent = () => {
+const PlanCourse = ({ onNext }: NextStepProps) => {
   return (
-    <CreateBase>
-      <StepTitle>플랜 만들기</StepTitle>
-      {/* input */}
-      <PlanInputBox>
-        <InputIcon />
-        <PlanInput placeholder="플랜 이름" />
-      </PlanInputBox>
-      {/* select-category */}
+    <TypeBase>
       <SelectCategory>
         <Category>
           <CategoryName>기초</CategoryName>
@@ -32,41 +25,24 @@ const CreatePlanComponent = () => {
           <CategorySpan>1100 단어</CategorySpan>
         </Category>
       </SelectCategory>
+
       {/* button */}
-      <ApplyBtn>다음</ApplyBtn>
-    </CreateBase>
+      <ApplyBtn onClick={onNext}>다음</ApplyBtn>
+    </TypeBase>
   );
 };
 
-export default CreatePlanComponent;
+export default PlanCourse;
 
-const CreateBase = styled.section`
+const TypeBase = styled.section`
+  position: relative;
   width: 100%;
-  padding: 24px;
-`;
-
-const PlanInputBox = styled.div`
-  background-color: ${props => props.theme.primary_08};
+  height: calc(var(--vh, 1vh) * 100 - 75px);
   display: flex;
   align-items: center;
-  width: 100%;
-  height: 50px;
-  border-radius: 12px;
-  padding: 0 16px;
-`;
-
-const InputIcon = styled(FaFileAlt)`
-  font-size: 16px;
-  color: ${props => props.theme.primary_06};
-`;
-
-const PlanInput = styled.input`
-  background-color: transparent;
-  margin-left: 12px;
-  &::placeholder {
-    color: ${props => props.theme.primary_06};
-    font-size: 16px;
-  }
+  justify-content: space-between;
+  flex-direction: column;
+  padding: 24px;
 `;
 
 const SelectCategory = styled.ul`
@@ -98,11 +74,15 @@ const Category = styled.li`
   gap: 16px;
   border-radius: 12px;
   cursor: pointer;
+
+  // border: 1px solid #027fff;
+  // background-color: rgb(244, 249, 253);
 `;
 
 const CategoryName = styled.h4`
   font-size: 18px;
   font-weight: 600;
+  // color: #737373;
 `;
 
 const CategorySpan = styled.span`
