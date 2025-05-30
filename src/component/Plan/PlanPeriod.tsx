@@ -8,13 +8,23 @@ import ReactDatePicker from 'react-datepicker';
 import { ko } from 'date-fns/locale/ko';
 import 'react-datepicker/dist/react-datepicker.css';
 dayjs.locale('ko');
-
+// type
+import { PlanInfo } from '@/type/planInfo';
 // components
 import ApplyBtn from '../Common/Button/ApplyButton';
+// icons
+import { RiCloseLargeLine } from 'react-icons/ri';
 
-const PlanPeriod = () => {
+interface PlanPeriodProps {
+  planInfo: PlanInfo;
+  setPlanInfo: React.Dispatch<React.SetStateAction<PlanInfo>>;
+  setOpenBottom: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const PlanPeriod = ({ planInfo, setPlanInfo, setOpenBottom }: PlanPeriodProps) => {
   const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(dayjs(new Date()).add(1, 'month'));
+  const [endDate, setEndDate] = useState(dayjs(new Date()).add(1, 'month').toDate());
+
   const onChange = (dates: any) => {
     const [start, end] = dates;
     setStartDate(start);
@@ -22,9 +32,20 @@ const PlanPeriod = () => {
   };
   return (
     <PeriodBase>
+      <CloseBtn
+        onClick={() => {
+          setOpenBottom(false);
+        }}
+      >
+        <CloseIcon />
+      </CloseBtn>
       {/* period */}
       <PeriodBox>
-        <TotalTime>총 1개월</TotalTime>
+        <TotalTime>
+          {startDate && endDate
+            ? `총 ${dayjs(endDate).diff(dayjs(startDate), 'day')} 일`
+            : '날짜를 선택해주세요'}
+        </TotalTime>
         <PeriodMenu>
           <StartDay>
             <Start>{dayjs(startDate).format('MM월 D일 (dd)')}</Start>
@@ -32,7 +53,7 @@ const PlanPeriod = () => {
           </StartDay>
           <EndDay>
             <Span>●</Span>
-            <End>{dayjs(endDate).format('MM월 D일 (dd)')}</End>
+            <End>{endDate ? dayjs(endDate).format('MM월 D일 (dd)') : '종료일'}</End>
           </EndDay>
         </PeriodMenu>
       </PeriodBox>
@@ -46,6 +67,7 @@ const PlanPeriod = () => {
           startDate={startDate}
           endDate={endDate}
           minDate={new Date()}
+          maxDate={dayjs(startDate).add(1, 'month').toDate()}
           selectsRange
           inline
           disabledKeyboardNavigation
@@ -53,7 +75,19 @@ const PlanPeriod = () => {
       </PeriodCalendar>
       {/* button */}
       <BtnBox>
-        <ApplyBtn color="#027FFF">확인</ApplyBtn>
+        <ApplyBtn
+          color="#027FFF"
+          onClick={() => {
+            setPlanInfo({
+              ...planInfo,
+              startDate: startDate,
+              endDate: endDate,
+            });
+            setOpenBottom(false);
+          }}
+        >
+          확인
+        </ApplyBtn>
       </BtnBox>
     </PeriodBase>
   );
@@ -63,12 +97,20 @@ export default PlanPeriod;
 
 const PeriodBase = styled.section`
   position: relative;
-  padding: 16px 0 0;
+  padding: 24px 0 0;
 `;
 
 const PeriodBox = styled.div`
   padding: 0 16px;
   border-bottom: 5px solid ${props => props.theme.primary_08};
+`;
+const CloseBtn = styled.button`
+  position: absolute;
+  top: 16px;
+  right: 18px;
+`;
+const CloseIcon = styled(RiCloseLargeLine)`
+  font-size: 16px;
 `;
 
 const TotalTime = styled.div`
@@ -128,7 +170,6 @@ const Span = styled.span`
 const PeriodCalendar = styled.div`
   font-family: 'Pretendard', sans-serif;
   max-height: 450px;
-  padding-top: 8px;
   overflow-y: scroll;
   .react-datepicker {
     font-family: 'Pretendard', sans-serif;

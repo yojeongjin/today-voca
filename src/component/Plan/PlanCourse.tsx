@@ -2,32 +2,51 @@ import styled from 'styled-components';
 // components
 import ApplyBtn from '../Common/Button/ApplyButton';
 // ifs
-import { NextStepProps } from '@/Interface/Istep';
+import { PlanProps } from '@/Interface/IPlan';
 
-const PlanCourse = ({ onNext }: NextStepProps) => {
+const PlanCourse = ({ planInfo, setPlanInfo, onNext }: PlanProps) => {
+  const courseList = [
+    {
+      name: '기초',
+      length: 800,
+    },
+    {
+      name: '700점',
+      length: 1200,
+    },
+    {
+      name: '800점',
+      length: 1400,
+    },
+    {
+      name: '900점',
+      length: 1100,
+    },
+  ];
   return (
     <TypeBase>
       <SelectCategory>
-        <Category>
-          <CategoryName>기초</CategoryName>
-          <CategorySpan>800 단어</CategorySpan>
-        </Category>
-        <Category>
-          <CategoryName>700점</CategoryName>
-          <CategorySpan>1200 단어</CategorySpan>
-        </Category>
-        <Category>
-          <CategoryName>800점</CategoryName>
-          <CategorySpan>1400 단어</CategorySpan>
-        </Category>
-        <Category>
-          <CategoryName>900점</CategoryName>
-          <CategorySpan>1100 단어</CategorySpan>
-        </Category>
+        {courseList.map(course => (
+          <Category
+            key={course.name}
+            isSelect={planInfo.course === course.name}
+            onClick={() => {
+              setPlanInfo({
+                ...planInfo,
+                course: course.name,
+              });
+            }}
+          >
+            <CategoryName>{course.name}</CategoryName>
+            <CategorySpan>{course.length} 단어</CategorySpan>
+          </Category>
+        ))}
       </SelectCategory>
 
       {/* button */}
-      <ApplyBtn onClick={onNext}>다음</ApplyBtn>
+      <ApplyBtn disabled={planInfo.course === ''} onClick={onNext}>
+        다음
+      </ApplyBtn>
     </TypeBase>
   );
 };
@@ -64,27 +83,25 @@ const SelectCategory = styled.ul`
   }
 `;
 
-const Category = styled.li`
-  background-color: ${props => props.theme.primary_08};
+const Category = styled.li<{ isSelect: boolean }>`
+  background-color: ${props => (props.isSelect ? '#f4f9fd' : '#f8F9FA')};
   height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
+  border: ${props => (props.isSelect ? '1px solid #027fff' : 'none')};
   border-radius: 12px;
+  color: ${props => (props.isSelect ? ' #1871ff' : '#212529')};
   cursor: pointer;
-
-  // border: 1px solid #027fff;
-  // background-color: rgb(244, 249, 253);
 `;
 
 const CategoryName = styled.h4`
   font-size: 18px;
   font-weight: 600;
-  // color: #737373;
 `;
 
 const CategorySpan = styled.span`
-  color: ${props => props.theme.primary_04};
+  color: ${props => props.theme.primary_05};
 `;

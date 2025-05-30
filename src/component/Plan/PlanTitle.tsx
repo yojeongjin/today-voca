@@ -1,15 +1,16 @@
+import { useState } from 'react';
+import dayjs from 'dayjs';
 import styled from 'styled-components';
+// ifs
+import { PlanProps } from '@/Interface/IPlan';
+// components
+import BottomSheet from '../Common/BottomSheet/BottomSheet';
+import ApplyBtn from '../Common/Button/ApplyButton';
+import PlanPeriod from './PlanPeriod';
 // icons
 import { FaFileAlt, FaCalendarDay } from 'react-icons/fa';
-// components
-import BottomButton from '../Common/Button/BottomButton';
-// ifs
-import { NextStepProps } from '@/Interface/Istep';
-import BottomSheet from '../Common/BottomSheet/BottomSheet';
-import PlanPeriod from './PlanPeriod';
-import { useState } from 'react';
-import ApplyBtn from '../Common/Button/ApplyButton';
-const PlanTitle = ({ onNext }: NextStepProps) => {
+
+const PlanTitle = ({ planInfo, setPlanInfo, onNext }: PlanProps) => {
   const [openBottom, setOpenBottom] = useState<boolean>(false);
   return (
     <CreateBase>
@@ -24,17 +25,31 @@ const PlanTitle = ({ onNext }: NextStepProps) => {
       <PlanContents>
         <PlanInputBox>
           <InputIcon />
-          <PlanInput placeholder="플랜 이름" />
+          <PlanInput
+            value={planInfo.title}
+            placeholder="플랜 이름"
+            onChange={e => {
+              setPlanInfo({
+                ...planInfo,
+                title: e.target.value,
+              });
+            }}
+          />
         </PlanInputBox>
 
         {/* calendar */}
         <PeriodCalendar
+          isNull={planInfo.startDate !== null && planInfo.endDate !== null}
           onClick={() => {
             setOpenBottom(true);
           }}
         >
           <CalendarIcon />
-          <CalendarP>시작일 - 종료일</CalendarP>
+          <CalendarP>
+            {planInfo.startDate === null && planInfo.endDate === null
+              ? '시작일 - 종료일'
+              : `${dayjs(planInfo.startDate).format('MM월 DD일')} ~ ${dayjs(planInfo.endDate).format('MM월 DD일')}`}
+          </CalendarP>
         </PeriodCalendar>
       </PlanContents>
 
@@ -46,13 +61,20 @@ const PlanTitle = ({ onNext }: NextStepProps) => {
             setOpenBottom(false);
           }}
         >
-          <PlanPeriod />
+          <PlanPeriod planInfo={planInfo} setPlanInfo={setPlanInfo} setOpenBottom={setOpenBottom} />
         </BottomSheet>
       )}
 
       {/* button */}
       <BtnBox>
-        <ApplyBtn onClick={onNext}>다음</ApplyBtn>
+        <ApplyBtn
+          disabled={
+            planInfo.title === '' || planInfo.startDate === null || planInfo.endDate === null
+          }
+          onClick={onNext}
+        >
+          다음
+        </ApplyBtn>
       </BtnBox>
     </CreateBase>
   );
@@ -114,8 +136,8 @@ const PlanInput = styled.input`
 `;
 
 // calendar
-const PeriodCalendar = styled(PlanInputBox)`
-  color: ${props => props.theme.primary_06};
+const PeriodCalendar = styled(PlanInputBox)<{ isNull: boolean }>`
+  color: ${props => (props.isNull ? '#212529' : '#ADB5BD')};
 `;
 
 const CalendarIcon = styled(FaCalendarDay)`

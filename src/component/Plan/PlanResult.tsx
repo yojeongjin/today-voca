@@ -1,22 +1,28 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import Picker from '@emoji-mart/react';
+//ifs
+import { PlanProps } from '@/Interface/IPlan';
+// components
 import ApplyBtn from '../Common/Button/ApplyButton';
+import dayjs from 'dayjs';
 
-const PlanResult = () => {
-  const [selectedEmoji, setSelectedEmoji] = useState('😀');
+const PlanResult = ({ planInfo, setPlanInfo }: PlanProps) => {
   const [showPicker, setShowPicker] = useState(false);
 
   return (
     <ResultBase>
       <ResultBox>
         <ResultEmojiWrapper>
-          <ResultEmoji onClick={() => setShowPicker(prev => !prev)}>{selectedEmoji}</ResultEmoji>
+          <ResultEmoji onClick={() => setShowPicker(prev => !prev)}>{planInfo.emoji}</ResultEmoji>
           {showPicker && (
             <PickerWrapper>
               <Picker
                 onEmojiSelect={(emoji: any) => {
-                  setSelectedEmoji(emoji.native);
+                  setPlanInfo({
+                    ...planInfo,
+                    emoji: emoji.native,
+                  });
                   setShowPicker(false);
                 }}
               />
@@ -24,15 +30,19 @@ const PlanResult = () => {
           )}
         </ResultEmojiWrapper>
 
-        <ResultH3>플랜명</ResultH3>
+        <ResultH3>{planInfo.title}</ResultH3>
         <ResultMenu>
           <ResultItem>
             <ResultSubject>기간</ResultSubject>
-            <ResultContent>5월 29일 ~ 6월 29일</ResultContent>
+            <ResultContent>
+              {`${dayjs(planInfo.startDate).format('MM월 DD일')} ~ 
+                ${dayjs(planInfo.endDate).format('MM월 DD일')} 
+                `}
+            </ResultContent>
           </ResultItem>
           <ResultItem>
             <ResultSubject>코스</ResultSubject>
-            <ResultContent>토익 700점</ResultContent>
+            <ResultContent>{planInfo.course}</ResultContent>
           </ResultItem>
         </ResultMenu>
       </ResultBox>
