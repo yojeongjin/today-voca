@@ -6,7 +6,8 @@ import { ThemeProvider } from 'styled-components';
 import GlobalStyles from '@/styles/globalstyles';
 import theme from '@/styles/theme';
 import '../styles/fonts/index.css';
-import BottomNav from '@/component/Common/BottomNav/BottomNav';
+// components
+import Layout from '@/component/Common/Layout/Layout';
 
 const App: NextPage<AppProps> = ({ Component, pageProps }: AppProps) => {
   const setScreenSize = () => {
@@ -25,8 +26,9 @@ const App: NextPage<AppProps> = ({ Component, pageProps }: AppProps) => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <Component {...pageProps} />
-      <BottomNav />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </ThemeProvider>
   );
 };

@@ -57,7 +57,7 @@ export default PlanResult;
 const ResultBase = styled.div`
   position: relative;
   width: 100%;
-  height: calc(var(--vh, 1vh) * 100 - 75px);
+  height: calc(100% - 60px);
   display: flex;
   align-items: center;
   justify-content: space-between;

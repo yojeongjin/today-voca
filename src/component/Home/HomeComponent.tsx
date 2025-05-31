@@ -13,7 +13,7 @@ export default HomeComponent;
 
 const HomeBase = styled.main`
   background-color: ${props => props.theme.primary_08};
-  height: calc(var(--vh, 1vh) * 100 - 60px);
+  height: 100%;
   padding: 24px;
   display: flex;
   justify-content: space-between;

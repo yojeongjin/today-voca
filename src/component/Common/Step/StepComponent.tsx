@@ -26,8 +26,7 @@ export default function StepComponent({ stepKey, children }: StepProps) {
 const MotionBase = styled(motion.div)`
   position: relative;
   width: 100%;
+  height: 100%;
   max-width: 720px;
   min-width: 280px;
-  height: calc(var(--vh, 1vh) * 100);
-  // border: 1px solid black;
 `;

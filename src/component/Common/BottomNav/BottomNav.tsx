@@ -26,7 +26,12 @@ const BottomNav = () => {
           <NoteIcon />
           단어장
         </BottomItem>
-        <BottomItem isLocation={router.pathname === '/mypage'}>
+        <BottomItem
+          isLocation={router.pathname === '/mypage'}
+          onClick={() => {
+            router.push('/mypage');
+          }}
+        >
           <MoreIcon />더 보기
         </BottomItem>
       </BottomMenu>
