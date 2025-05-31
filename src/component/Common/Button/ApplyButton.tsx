@@ -21,6 +21,9 @@ const Btn = styled.button`
   background-color: ${props => (props.color ? props.color : '#027FFF')};
   width: 100%;
   height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 8px;
   font-size: 15px;
   font-weight: 500;

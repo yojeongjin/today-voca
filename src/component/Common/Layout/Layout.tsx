@@ -10,7 +10,11 @@ type LayoutProps = {
 const Layout = ({ children }: LayoutProps) => {
   const router = useRouter();
 
-  if (router.pathname === '/plan' || router.pathname === '/day/[slug]') {
+  if (
+    router.pathname === '/signin' ||
+    router.pathname === '/plan' ||
+    router.pathname === '/day/[slug]'
+  ) {
     return (
       <LayoutBase>
         <Inner>{children}</Inner>
