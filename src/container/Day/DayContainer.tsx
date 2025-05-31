@@ -1,5 +1,5 @@
 // hooks
-import { useStep } from '@/component/hooks/useStep';
+import { useStep } from '@/hooks/useStep';
 // components
 import Practice1 from '@/component/Day/Practice1';
 import Practice2 from '@/component/Day/Practice2';

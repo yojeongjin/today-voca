@@ -1,5 +1,7 @@
 import styled from 'styled-components';
+// components
 import ApplyBtn from '../Common/Button/ApplyButton';
+// ifs
 import { NextStepProps } from '@/Interface/Istep';
 
 const Practice1 = ({ onNext }: NextStepProps) => {
@@ -7,37 +9,7 @@ const Practice1 = ({ onNext }: NextStepProps) => {
     <PracticeBase>
       <WordMenu>
         <WordItem>
-          <Word>Postpone</Word>
-          <Pronunciation>[pouspuomnt]</Pronunciation>
-          <Meaning>V. 연기, 뒤로 미루기</Meaning>
-        </WordItem>
-        <WordItem>
-          <Word>Postpone</Word>
-          <Pronunciation>[pouspuomnt]</Pronunciation>
-          <Meaning>V. 연기, 뒤로 미루기</Meaning>
-        </WordItem>
-        <WordItem>
-          <Word>Postpone</Word>
-          <Pronunciation>[pouspuomnt]</Pronunciation>
-          <Meaning>V. 연기, 뒤로 미루기</Meaning>
-        </WordItem>
-        <WordItem>
-          <Word>Postpone</Word>
-          <Pronunciation>[pouspuomnt]</Pronunciation>
-          <Meaning>V. 연기, 뒤로 미루기</Meaning>
-        </WordItem>{' '}
-        <WordItem>
-          <Word>Postpone</Word>
-          <Pronunciation>[pouspuomnt]</Pronunciation>
-          <Meaning>V. 연기, 뒤로 미루기</Meaning>
-        </WordItem>{' '}
-        <WordItem>
-          <Word>Postpone</Word>
-          <Pronunciation>[pouspuomnt]</Pronunciation>
-          <Meaning>V. 연기, 뒤로 미루기</Meaning>
-        </WordItem>{' '}
-        <WordItem>
-          <Word>Postpone</Word>
+          <Voca>Postpone</Voca>
           <Pronunciation>[pouspuomnt]</Pronunciation>
           <Meaning>V. 연기, 뒤로 미루기</Meaning>
         </WordItem>
@@ -65,7 +37,7 @@ const WordItem = styled.li`
   margin-bottom: 16px;
 `;
 
-const Word = styled.h4`
+const Voca = styled.h4`
   font-weight: 700;
   font-size: 18px;
 `;

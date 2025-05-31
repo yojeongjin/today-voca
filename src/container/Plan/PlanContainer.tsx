@@ -1,6 +1,6 @@
 import { useState } from 'react';
 // hooks
-import { useStep } from '@/component/hooks/useStep';
+import { useStep } from '@/hooks/useStep';
 // type
 import { PlanInfo } from '@/type/planInfo';
 // components
