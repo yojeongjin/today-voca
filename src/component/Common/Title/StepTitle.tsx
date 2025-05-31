@@ -29,7 +29,7 @@ const StepTitleBase = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 16px;
 `;
 
 const StepBack = styled.button`
