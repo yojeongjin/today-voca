@@ -12,10 +12,9 @@ const DayContainer = () => {
 
   return (
     <>
-      <StepTitle>🏄🏻‍♀️ 플랜명</StepTitle>
-      {step === 'one' && <Practice1 onNext={next} />}
+      {/* {step === 'one' && <Practice1 onNext={next} />}
       {step === 'two' && <Practice2 />}
-      {/* {step === 'three' && <Practice3 />} */}
+      {step === 'three' && <Practice3 />} */}
       <Practice3 />
     </>
   );

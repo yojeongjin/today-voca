@@ -14,12 +14,10 @@ ${Reset}
   }
 
   body {
-    // background-color: ${props => props.theme.primary_08};
     font-family: 'Pretendard', sans-serif;
     width: 100%;
     max-width: 720px;
     min-width: 280px;
-    // height: calc(var(--vh, 1vh) * 100);
     margin: 0 auto;
     font-weight: 400;
     font-size: 14px;

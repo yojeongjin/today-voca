@@ -78,7 +78,8 @@ export default PlanComponent;
 
 const PlanBase = styled.section`
   background-color: ${props => props.theme.primary_09};
-  height: calc(100% - 80px);
+  height: 100%;
+  // border: 1px solid black;
   border-radius: 8px;
   padding: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
