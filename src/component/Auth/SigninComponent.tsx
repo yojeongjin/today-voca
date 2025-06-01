@@ -71,8 +71,8 @@ const SigninBase = styled.main`
   width: 100%;
   max-width: 450px;
   min-width: 280px;
-  margin: 0 auto;
   height: 100%;
+  margin: 0 auto;
 `;
 
 const SigninContents = styled.article`
@@ -83,24 +83,6 @@ const SigninContents = styled.article`
   align-items: center;
   justify-content: center;
   gap: 16px;
-`;
-
-// label
-const LabelTitleBase = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 24px;
-  border-top: 1px solid ${props => props.theme.primary_07};
-`;
-
-const LabelSpan = styled.span`
-  background-color: ${props => props.theme.primary_09};
-  display: inline-block;
-  padding: 0 16px;
-  margin-top: -8px;
-  font-size: 12px;
-  text-align: center;
 `;
 
 // input

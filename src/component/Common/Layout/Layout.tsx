@@ -12,6 +12,7 @@ const Layout = ({ children }: LayoutProps) => {
 
   if (
     router.pathname === '/signin' ||
+    router.pathname === '/join' ||
     router.pathname === '/plan' ||
     router.pathname === '/day/[slug]'
   ) {
