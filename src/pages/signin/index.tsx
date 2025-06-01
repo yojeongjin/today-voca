@@ -1,8 +1,8 @@
 import { NextPage } from 'next';
-import SigninContainer from '@/container/Auth/SigninContainer';
+import SigninComponent from '@/component/Auth/SigninComponent';
 
 const Signin: NextPage = () => {
-  return <SigninContainer />;
+  return <SigninComponent />;
 };
 
 export default Signin;

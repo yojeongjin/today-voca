@@ -1,18 +1,40 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 // icons
 import { IoMailOutline, IoKeyOutline } from 'react-icons/io5';
-import { RiKakaoTalkFill } from 'react-icons/ri';
 
 // component
 import ApplyBtn from '../Common/Button/ApplyButton';
+import { useDispatch } from 'react-redux';
+import { signin } from '@/redux/modules/auth';
 
 const SigninComponent = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
   // ref
   const idRef = useRef<HTMLInputElement>(null);
   const pwRef = useRef<HTMLInputElement>(null);
   // input state
   const [inputState, setInputState] = useState(false);
+
+  // 로그인
+  const signinHandler = useCallback(() => {
+    const id = idRef.current?.value;
+    const pw = pwRef.current?.value;
+
+    const body = {
+      email: id,
+      pwd: pw,
+    };
+    dispatch(signin(body));
+  }, [dispatch]);
+
+  const handleOnKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      signinHandler();
+    }
+  };
 
   return (
     <SigninBase>
@@ -23,7 +45,7 @@ const SigninComponent = () => {
             <Input id="idInput" type="text" required placeholder="&nbsp;" ref={idRef} />
             <InputSpan>
               <IdIcon />
-              아이디를 입력해주세요.
+              이메일을 입력해주세요.
             </InputSpan>
           </InputLabel>
         </InputWrapper>
@@ -39,6 +61,7 @@ const SigninComponent = () => {
               onChange={() => {
                 setInputState(true);
               }}
+              onKeyDown={e => handleOnKeyPress(e)}
             />
             <InputSpan>
               <PwIcon />
@@ -46,20 +69,17 @@ const SigninComponent = () => {
             </InputSpan>
           </InputLabel>
         </InputWrapper>
-        {/* 자동로그인 & 아이디,비밀번호 찾기 */}
-        <CheckContainer>
-          <CheckBox>
-            <CheckInput type="checkbox" id="auto-signin" />
-            <CheckLabel htmlFor="auto-signin">자동로그인</CheckLabel>
-          </CheckBox>
-          <FindMenu>
-            <FindItem>아이디 찾기</FindItem>
-            <FindItem>비밀번호 찾기</FindItem>
-          </FindMenu>
-        </CheckContainer>
         {/* button */}
-        <ApplyBtn disabled={!inputState}>로그인</ApplyBtn>
-        <JoinBtn>이메일로 가입하기</JoinBtn>
+        <ApplyBtn disabled={!inputState} onClick={signinHandler}>
+          로그인
+        </ApplyBtn>
+        <JoinBtn
+          onClick={() => {
+            router.push('/join');
+          }}
+        >
+          이메일로 가입하기
+        </JoinBtn>
       </SigninContents>
     </SigninBase>
   );
@@ -151,70 +171,6 @@ const IdIcon = styled(IoMailOutline)`
 const PwIcon = styled(IoKeyOutline)`
   margin-right: 5px;
   font-size: 15px;
-`;
-
-const KakaoIcon = styled(RiKakaoTalkFill)`
-  margin-right: 8px;
-  font-size: 21px;
-  color: #f9e000;
-`;
-
-// Check & Find
-const CheckContainer = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 13px;
-`;
-
-const CheckBox = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const CheckInput = styled.input`
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  border: 1px solid ${props => props.theme.primary_04};
-  border-radius: 1px;
-  margin-right: 10px;
-  cursor: pointer;
-
-  &:checked {
-    background-color: ${props => props.theme.primary_01};
-    border-color: transparent;
-    background-image: url('/svg/check.svg');
-    background-size: 100% 100%;
-    background-position: 50%;
-    background-repeat: no-repeat;
-  }
-`;
-
-const CheckLabel = styled.label``;
-
-const FindMenu = styled.ul`
-  display: flex;
-`;
-
-const FindItem = styled.li`
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 0 8px;
-  cursor: pointer;
-  &:last-child {
-    padding-right: 0;
-    &:before {
-      content: '';
-      background-color: ${props => props.theme.primary_06};
-      position: absolute;
-      left: 0px;
-      width: 1px;
-      height: 13px;
-    }
-  }
 `;
 
 const JoinBtn = styled.button`

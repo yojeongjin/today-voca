@@ -4,8 +4,16 @@ import { CustomError } from '../class/CustomError';
 import { HttpStatus } from '../enum/HttpStatus.enum';
 import { ErrorCode } from '../enum/ErrorCode.enum';
 
+declare global {
+  namespace Express {
+    interface Request {
+      verifiedToken?: string | jwt.JwtPayload;
+    }
+  }
+}
+
 export const jwtMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers['authorization'] ? req.headers['authorization'].split(' ')[1] : null;
+  const token = req.cookies.access_token;
 
   if (!token) {
     throw new CustomError(
@@ -16,9 +24,7 @@ export const jwtMiddleware = (req: Request, res: Response, next: NextFunction) =
   }
 
   try {
-    const jwtKey = process.env.JWT_KEY as string;
-    const verifiedToken = jwt.verify(token, jwtKey);
-
+    const verifiedToken = jwt.verify(token, process.env.JWT_KEY as string);
     req.verifiedToken = verifiedToken;
 
     next();
