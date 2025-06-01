@@ -59,6 +59,7 @@ ${Reset}
     -webkit-tap-highlight-color: transparent;
     outline:none;
     border: none;
+    color: ${props => props.theme.primary_03};
     &:disabled {
       cursor: default;
     }

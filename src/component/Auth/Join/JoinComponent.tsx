@@ -1,17 +1,24 @@
 import styled from 'styled-components';
-// icons
-import { IoMdCheckmarkCircleOutline } from 'react-icons/io';
 // components
 import H2 from '../../Common/Title/H2';
 
 interface JoinProps {
+  isVerified: boolean;
+  isLoading: boolean;
   joinInfo: { email: string; pwd: string; rePwd: string; name: string };
   valid: { email: boolean; pwd: boolean; rePwd: boolean; name: boolean };
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  handleAuth: () => void;
 }
 
-const JoinComponent = ({ joinInfo, valid, handleChange, setOpenModal }: JoinProps) => {
+const JoinComponent = ({
+  isVerified,
+  isLoading,
+  joinInfo,
+  valid,
+  handleChange,
+  handleAuth,
+}: JoinProps) => {
   return (
     <JoinContents>
       <H2>회원정보 입력</H2>
@@ -26,13 +33,10 @@ const JoinComponent = ({ joinInfo, valid, handleChange, setOpenModal }: JoinProp
               name="email"
               isValid={valid.email || joinInfo.email === ''}
               onChange={handleChange}
+              disabled={isVerified}
             />
-            <JoinCheckBtn
-              onClick={() => {
-                setOpenModal(true);
-              }}
-            >
-              인증요청
+            <JoinCheckBtn onClick={handleAuth} disabled={isVerified || isLoading}>
+              {isLoading ? <SpinnerImg src="/images/spinner.gif" alt="spinner" /> : '인증요청'}
             </JoinCheckBtn>
           </JoinInputBox>
           {!valid.email && joinInfo.email !== '' && (
@@ -144,6 +148,10 @@ const JoinCheckBtn = styled.button`
   }
 `;
 
+const SpinnerImg = styled.img`
+  width: 50%;
+`;
+
 // caution
 const JoinCaution = styled.p`
   display: flex;
@@ -151,63 +159,4 @@ const JoinCaution = styled.p`
   padding: 3px 8px;
   color: #c64657;
   font-size: 14px;
-`;
-
-const ValidP = styled(JoinCaution)`
-  color: ${props => props.theme.font_color};
-  font-weight: 300;
-`;
-
-const ValidIcon = styled(IoMdCheckmarkCircleOutline)`
-  font-size: 14px;
-  margin-right: 4px;
-`;
-
-// modal
-
-const ModalContent = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-flow: column;
-  gap: 24px;
-`;
-
-const ModalP = styled.p`
-  color: #333;
-  text-align: center;
-  letter-spacing: -0.5px;
-`;
-
-const AuthBox = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const AuthInput = styled.input`
-  background-color: ${props => props.theme.primary_08};
-  width: 18%;
-  height: 55px;
-  border-radius: 8px;
-  text-align: center;
-  font-size: 22px;
-  font-wieght: 600;
-  border: 1px solid #dedede;
-`;
-
-const ReSendBox = styled.div`
-  font-size: 13px;
-  text-align: center;
-`;
-
-const ReSpan = styled.span`
-  font-size: 13px;
-  color: ${props => props.theme.primary_06};
-`;
-
-const ResendBtn = styled.button`
-  font-size: 13px;
-
-  color: ${props => props.theme.primary_01};
-  text-decoration: underline;
 `;

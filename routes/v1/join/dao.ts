@@ -4,14 +4,16 @@ import { HttpStatus } from '../../../back/enum/HttpStatus.enum';
 import { ErrorCode } from '../../../back/enum/ErrorCode.enum';
 import { successResponse } from '../../../back/utils/apiResponse';
 import nodemailer from 'nodemailer';
+import bcrypt from 'bcrypt';
+
 // db
-import { RowDataPacket } from 'mysql2';
+import { RowDataPacket, ResultSetHeader } from 'mysql2';
 import getPool from '../../../config/db';
 const pool = getPool();
 
 // 인증번호 생성
 const generateAuthCode = (): string => {
-  return String(Math.floor(Math.random() * 1000000)).padStart(5, '0');
+  return String(Math.floor(Math.random() * 100000)).padStart(5, '0');
 };
 
 // 메일 transporter 생성
@@ -78,6 +80,21 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
         }),
       );
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const add = async (req: Request, res: Response, next: NextFunction) => {
+  const { name, email, pwd } = req.body;
+
+  try {
+    const hashedPwd = await bcrypt.hash(pwd, 12);
+
+    const sql = 'insert into tbl_user (nickname, email, pwd) values (?, ?, ?)';
+    const [result] = await pool.execute<ResultSetHeader>(sql, [name, email, hashedPwd]);
+
+    res.status(HttpStatus.OK).json(successResponse());
   } catch (err) {
     next(err);
   }

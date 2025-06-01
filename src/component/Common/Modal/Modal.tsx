@@ -1,55 +1,30 @@
-import React, { ReactNode, useEffect, useRef } from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-// icons
 import { IoCloseOutline } from 'react-icons/io5';
 import H4 from '../Title/H4';
 
 interface ModalProps {
   children: ReactNode;
-  onCloseModal: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose: () => void;
   onApply?: () => void;
+  disabled?: boolean;
+  modalRef: React.RefObject<HTMLDivElement>;
 }
 
-const Modal: React.FC<ModalProps> = props => {
-  const { children, onCloseModal, onApply } = props;
-
-  useEffect(() => {
-    // 외부화면 스크롤방지
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, []);
-
-  // 모달 밖 클릭시 모달 off
-  const outside = useRef<HTMLDivElement | null>(null);
-  const handleOutside = (e: MouseEvent) => {
-    if (!outside.current?.contains(e.target as Node)) {
-      onCloseModal(false);
-    }
-  };
-  useEffect(() => {
-    document.addEventListener('mousedown', handleOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleOutside);
-    };
-  });
-
+const Modal = ({ children, onClose, onApply, disabled, modalRef }: ModalProps) => {
   return (
     <ModalBase>
-      <ModalInner ref={outside}>
+      <ModalInner ref={modalRef}>
         <ModalHeading>
           <H4>알림</H4>
-          <ModalCloseBtn
-            onClick={() => {
-              onCloseModal(false);
-            }}
-          >
+          <ModalCloseBtn onClick={onClose}>
             <IoCloseOutline />
           </ModalCloseBtn>
         </ModalHeading>
         <ModalBody>{children}</ModalBody>
-        <ApplyBtn onClick={onApply}>확인</ApplyBtn>
+        <ApplyBtn disabled={disabled} onClick={onApply}>
+          확인
+        </ApplyBtn>
       </ModalInner>
     </ModalBase>
   );
@@ -103,4 +78,8 @@ const ApplyBtn = styled.button`
   font-size: 14px;
   color: #fff;
   border-radius: 0 0 5px 5px;
+  &:disabled {
+    background-color: ${props => props.theme.primary_07};
+    cursor: default;
+  }
 `;

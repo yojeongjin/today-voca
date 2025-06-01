@@ -1,5 +1,13 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import axios, { AxiosError } from 'axios';
 import styled from 'styled-components';
+// utils
+import { validateField } from '@/utils/validation';
+import { handleApiError } from '@/utils/handleApiError';
+// hooks
+import { useModal } from '@/hooks/useModal';
+import { useLoading } from '@/hooks/useLoading';
+import { useBottom } from '@/hooks/useBottom';
 
 // components
 import JoinComponent from '@/component/Auth/Join/JoinComponent';
@@ -7,10 +15,16 @@ import JoinGuide from '@/component/Auth/Join/JoinGuide';
 import JoinAuth from '@/component/Auth/Join/JoinAuth';
 import ApplyBtn from '@/component/Common/Button/ApplyButton';
 import Modal from '@/component/Common/Modal/Modal';
+import BottomSheet from '@/component/Common/BottomSheet/BottomSheet';
+import JoinComplete from '@/component/Auth/Join/JoinComplete';
 
 const JoinContainer = () => {
+  const { isLoading, setIsLoading } = useLoading();
+  const { openBottom, setOpenBottom } = useBottom();
+  const { isOpen, openModal, closeModal, modalRef } = useModal();
   // 인증 modal state
-  const [openModal, setOpenModal] = useState(false);
+  const [emailCode, setEmailCode] = useState(null);
+  const [isVerified, setIsVerified] = useState(false);
   // 이용약관 필수동의 state
   const [agreements, setAgreements] = useState({
     guidanceAgreed: false,
@@ -30,50 +44,114 @@ const JoinContainer = () => {
     rePwd: false,
     name: false,
   });
-  // 정규식
-  const regex: Record<string, RegExp> = {
-    email: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-    pwd: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/, // 숫자, 대소문자 포함, 최소 8자
-    name: /^[a-zA-Z가-힣]{2,}$/, // 한글과 영어만 및 최소 2자 이상
-  };
 
   // join input form onchange
+  useEffect(() => {
+    setValid(prev => ({
+      ...prev,
+      rePwd: joinInfo.rePwd === joinInfo.pwd,
+    }));
+  }, [joinInfo.rePwd, joinInfo.pwd]);
+
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
 
       setJoinInfo(prev => ({ ...prev, [name]: value }));
-      setValid(prev => ({
-        ...prev,
-        [name]: regex[name]?.test(value) || (name === 'rePwd' && value === joinInfo.pwd),
-      }));
+
+      // rePwd 제외한 일반 필드 유효성만 검증
+      if (name !== 'rePwd') {
+        setValid(prev => ({
+          ...prev,
+          [name]: validateField(name, value),
+        }));
+      }
     },
-    [joinInfo, valid],
+    [joinInfo],
   );
+
+  const handleAuth = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_APP_API_KEY}/v1/join`, {
+        params: {
+          email: joinInfo.email,
+        },
+      });
+      if (res.data.code === 200) {
+        setEmailCode(res.data.data.authCode);
+        openModal();
+      }
+    } catch (error) {
+      handleApiError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [joinInfo.email]);
+
+  const handleJoin = async () => {
+    const body = {
+      name: joinInfo.name,
+      pwd: joinInfo.pwd,
+      email: joinInfo.email,
+    };
+    try {
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_APP_API_KEY}/v1/join`, body);
+      setOpenBottom(true);
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
+
   return (
-    <JoinBase>
-      <JoinComponent
-        joinInfo={joinInfo}
-        valid={valid}
-        handleChange={handleChange}
-        setOpenModal={setOpenModal}
-      />
-      <JoinGuide agreements={agreements} setAgreements={setAgreements} />
-      <ApplyBtn disabled={Object.values(joinInfo).includes('') || !agreements.guidanceAgreed}>
-        가입하기
-      </ApplyBtn>
-      {openModal && (
-        <Modal onCloseModal={setOpenModal}>
-          <JoinAuth />
-        </Modal>
+    <>
+      <JoinBase>
+        <JoinComponent
+          valid={valid}
+          isLoading={isLoading}
+          joinInfo={joinInfo}
+          handleChange={handleChange}
+          handleAuth={handleAuth}
+          isVerified={isVerified}
+        />
+        <JoinGuide agreements={agreements} setAgreements={setAgreements} />
+        <ApplyBtn
+          disabled={
+            Object.values(joinInfo).includes('') || !agreements.guidanceAgreed || !isVerified
+          }
+          onClick={handleJoin}
+        >
+          가입하기
+        </ApplyBtn>
+        {isOpen && (
+          <Modal
+            modalRef={modalRef}
+            disabled={!isVerified}
+            onClose={() => {
+              closeModal();
+            }}
+            onApply={() => {
+              setIsVerified(true);
+              closeModal();
+            }}
+          >
+            <JoinAuth setIsVerified={setIsVerified} emailCode={emailCode} />
+          </Modal>
+        )}
+      </JoinBase>
+      {openBottom && (
+        <BottomSheet height={580} isOpen={openBottom}>
+          <JoinComplete setOpenBottom={setOpenBottom} />
+        </BottomSheet>
       )}
-    </JoinBase>
+    </>
   );
 };
 
 export default JoinContainer;
 
 const JoinBase = styled.main`
+  position: relative;
   width: 100%;
   max-width: 450px;
   min-width: 280px;

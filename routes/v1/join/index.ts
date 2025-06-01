@@ -2,8 +2,9 @@ import { Router } from 'express';
 const router = Router();
 
 // controller
-import { list } from './dao';
+import { list, add } from './dao';
 
 router.get('/', list);
+router.post('/', add);
 
 export default router;

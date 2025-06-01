@@ -11,42 +11,23 @@ interface JoinGuideProps {
 }
 
 const JoinGuide = ({ agreements, setAgreements }: JoinGuideProps) => {
-  // 이용약관 전체동의 state
-  const [totalAgreement, setTotalAgreement] = useState<boolean>(false);
-  // 이용약관 state
-  const [totalAgree, setTotalAgree] = useState(false);
+  const isAllAgreed = Object.values(agreements).every(Boolean);
 
   // 이용약관 동의
   const handleAgreementChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
 
-    setAgreements(prev => ({ ...prev, [name]: checked }));
-
-    const totalAgreed = Object.values({ ...agreements, [name]: checked }).every(
-      value => value === true,
-    );
-    setTotalAgree(totalAgreed);
-    setTotalAgreement(totalAgreed);
+    const updated = { ...agreements, [name]: checked };
+    setAgreements(updated);
   };
 
   // 이용약관 전체동의
   const handleAllAgreementChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = e.target;
-
-    setAgreements(prev =>
-      Object.keys(prev).reduce(
-        (newAgreements, agreementKey) => ({
-          ...newAgreements,
-          [agreementKey]: checked,
-        }),
-        {
-          guidanceAgreed: false, // 초기값
-          personalInfoAgreed: false,
-        },
-      ),
-    );
-    setTotalAgree(checked);
-    setTotalAgreement(checked);
+    setAgreements({
+      guidanceAgreed: checked,
+      personalInfoAgreed: checked,
+    });
   };
 
   return (
@@ -57,7 +38,7 @@ const JoinGuide = ({ agreements, setAgreements }: JoinGuideProps) => {
           type="checkbox"
           id="agree_check_all"
           name="agree_check_all"
-          checked={totalAgree}
+          checked={isAllAgreed}
           onChange={handleAllAgreementChange}
         />
         <TotalLabel htmlFor="agree_check_all">이용약관 전체동의</TotalLabel>
