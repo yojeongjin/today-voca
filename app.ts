@@ -10,13 +10,8 @@ import { globalExceptionHandler } from './back/middleware/globalExceptionHandler
 // router
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
-// db
-import { init, connect } from './config/db';
 
 const app = express();
-// db 연결
-const conn = init();
-connect(conn);
 
 // 로그 미들웨어 적용
 app.use(LoggerMiddleware);

@@ -2,16 +2,16 @@ import styled from 'styled-components';
 // icons
 import { IoMdCheckmarkCircleOutline } from 'react-icons/io';
 // components
-import H2 from '../Common/Title/H2';
-import Modal from '../Common/Modal/Modal';
+import H2 from '../../Common/Title/H2';
 
 interface JoinProps {
   joinInfo: { email: string; pwd: string; rePwd: string; name: string };
   valid: { email: boolean; pwd: boolean; rePwd: boolean; name: boolean };
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const JoinComponent = ({ joinInfo, valid, handleChange }: JoinProps) => {
+const JoinComponent = ({ joinInfo, valid, handleChange, setOpenModal }: JoinProps) => {
   return (
     <JoinContents>
       <H2>회원정보 입력</H2>
@@ -27,7 +27,13 @@ const JoinComponent = ({ joinInfo, valid, handleChange }: JoinProps) => {
               isValid={valid.email || joinInfo.email === ''}
               onChange={handleChange}
             />
-            <JoinCheckBtn>인증요청</JoinCheckBtn>
+            <JoinCheckBtn
+              onClick={() => {
+                setOpenModal(true);
+              }}
+            >
+              인증요청
+            </JoinCheckBtn>
           </JoinInputBox>
           {!valid.email && joinInfo.email !== '' && (
             <JoinCaution>이메일 형식에 맞게 작성해주세요.</JoinCaution>
@@ -78,25 +84,6 @@ const JoinComponent = ({ joinInfo, valid, handleChange }: JoinProps) => {
           )}
         </JoinItem>
       </JoinMenu>
-      {/* <Modal>
-        <ModalContent>
-          <ModalP>
-            작성하신 이메일로 회원가입 인증코드를 발송하였습니다.<br></br>
-            이메일로 전송된 인증코드를 입력해 주세요.
-          </ModalP>
-          <AuthBox>
-            <AuthInput />
-            <AuthInput />
-            <AuthInput />
-            <AuthInput />
-            <AuthInput />
-          </AuthBox>
-          <ReSendBox>
-            <ReSpan>이메일이 오지않았나요?</ReSpan>
-            <ResendBtn>재전송</ResendBtn>
-          </ReSendBox>
-        </ModalContent>
-      </Modal> */}
     </JoinContents>
   );
 };

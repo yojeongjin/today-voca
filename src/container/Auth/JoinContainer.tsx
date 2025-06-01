@@ -2,11 +2,15 @@ import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 // components
-import JoinComponent from '@/component/Auth/JoinComponent';
-import JoinGuide from '@/component/Auth/JoinGuide';
+import JoinComponent from '@/component/Auth/Join/JoinComponent';
+import JoinGuide from '@/component/Auth/Join/JoinGuide';
+import JoinAuth from '@/component/Auth/Join/JoinAuth';
 import ApplyBtn from '@/component/Common/Button/ApplyButton';
+import Modal from '@/component/Common/Modal/Modal';
 
 const JoinContainer = () => {
+  // 인증 modal state
+  const [openModal, setOpenModal] = useState(false);
   // 이용약관 필수동의 state
   const [agreements, setAgreements] = useState({
     guidanceAgreed: false,
@@ -48,11 +52,21 @@ const JoinContainer = () => {
   );
   return (
     <JoinBase>
-      <JoinComponent joinInfo={joinInfo} valid={valid} handleChange={handleChange} />
+      <JoinComponent
+        joinInfo={joinInfo}
+        valid={valid}
+        handleChange={handleChange}
+        setOpenModal={setOpenModal}
+      />
       <JoinGuide agreements={agreements} setAgreements={setAgreements} />
       <ApplyBtn disabled={Object.values(joinInfo).includes('') || !agreements.guidanceAgreed}>
         가입하기
       </ApplyBtn>
+      {openModal && (
+        <Modal onCloseModal={setOpenModal}>
+          <JoinAuth />
+        </Modal>
+      )}
     </JoinBase>
   );
 };

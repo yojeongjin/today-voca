@@ -6,11 +6,12 @@ import H4 from '../Title/H4';
 
 interface ModalProps {
   children: ReactNode;
-  onCloseModal: () => void;
+  onCloseModal: React.Dispatch<React.SetStateAction<boolean>>;
+  onApply?: () => void;
 }
 
 const Modal: React.FC<ModalProps> = props => {
-  const { children, onCloseModal } = props;
+  const { children, onCloseModal, onApply } = props;
 
   useEffect(() => {
     // 외부화면 스크롤방지
@@ -24,7 +25,7 @@ const Modal: React.FC<ModalProps> = props => {
   const outside = useRef<HTMLDivElement | null>(null);
   const handleOutside = (e: MouseEvent) => {
     if (!outside.current?.contains(e.target as Node)) {
-      onCloseModal();
+      onCloseModal(false);
     }
   };
   useEffect(() => {
@@ -39,12 +40,16 @@ const Modal: React.FC<ModalProps> = props => {
       <ModalInner ref={outside}>
         <ModalHeading>
           <H4>알림</H4>
-          <ModalCloseBtn onClick={onCloseModal}>
+          <ModalCloseBtn
+            onClick={() => {
+              onCloseModal(false);
+            }}
+          >
             <IoCloseOutline />
           </ModalCloseBtn>
         </ModalHeading>
         <ModalBody>{children}</ModalBody>
-        <ApplyBtn onClick={onCloseModal}>확인</ApplyBtn>
+        <ApplyBtn onClick={onApply}>확인</ApplyBtn>
       </ModalInner>
     </ModalBase>
   );

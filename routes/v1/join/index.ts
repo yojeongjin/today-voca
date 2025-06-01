@@ -1,8 +1,9 @@
 import { Router } from 'express';
 const router = Router();
 
-import join from './join';
+// controller
+import { list } from './dao';
 
-router.use('/join', join);
+router.get('/', list);
 
 export default router;
