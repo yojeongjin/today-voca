@@ -74,6 +74,7 @@ function* signinSaga(action: SigninSagaAction): Generator<any, void, any> {
   try {
     yield put(pending());
 
+    console.log(action.payload);
     // 로그인 요청
     yield call(
       axios.post,

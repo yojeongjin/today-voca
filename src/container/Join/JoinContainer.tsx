@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import axios, { AxiosError } from 'axios';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
 import styled from 'styled-components';
+import { signin } from '@/redux/modules/auth';
 // utils
 import { validateField } from '@/utils/validation';
 import { handleApiError } from '@/utils/handleApiError';
@@ -8,7 +10,6 @@ import { handleApiError } from '@/utils/handleApiError';
 import { useModal } from '@/hooks/useModal';
 import { useLoading } from '@/hooks/useLoading';
 import { useBottom } from '@/hooks/useBottom';
-
 // components
 import JoinComponent from '@/component/Auth/Join/JoinComponent';
 import JoinGuide from '@/component/Auth/Join/JoinGuide';
@@ -19,6 +20,7 @@ import BottomSheet from '@/component/Common/BottomSheet/BottomSheet';
 import JoinComplete from '@/component/Auth/Join/JoinComplete';
 
 const JoinContainer = () => {
+  const dispatch = useDispatch();
   const { isLoading, setIsLoading } = useLoading();
   const { openBottom, setOpenBottom } = useBottom();
   const { isOpen, openModal, closeModal, modalRef } = useModal();
@@ -96,11 +98,19 @@ const JoinContainer = () => {
       email: joinInfo.email,
     };
     try {
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_APP_API_KEY}/v1/join`, body);
+      await axios.post(`${process.env.NEXT_PUBLIC_APP_API_KEY}/v1/join`, body);
       setOpenBottom(true);
     } catch (error) {
       handleApiError(error);
     }
+  };
+
+  const handleSignin = () => {
+    const body = {
+      email: joinInfo.email,
+      pwd: joinInfo.pwd,
+    };
+    dispatch(signin(body));
   };
 
   return (
@@ -141,7 +151,7 @@ const JoinContainer = () => {
       </JoinBase>
       {openBottom && (
         <BottomSheet height={580} isOpen={openBottom}>
-          <JoinComplete setOpenBottom={setOpenBottom} />
+          <JoinComplete handleSignin={handleSignin} setOpenBottom={setOpenBottom} />
         </BottomSheet>
       )}
     </>

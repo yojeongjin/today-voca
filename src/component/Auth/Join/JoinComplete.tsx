@@ -6,10 +6,11 @@ import { RiCloseLargeLine } from 'react-icons/ri';
 import ApplyBtn from '@/component/Common/Button/ApplyButton';
 
 interface JoinCompleteProps {
+  handleSignin: () => void;
   setOpenBottom: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const JoinComplete = ({ setOpenBottom }: JoinCompleteProps) => {
+const JoinComplete = ({ handleSignin, setOpenBottom }: JoinCompleteProps) => {
   const router = useRouter();
   return (
     <CompleteBase>
@@ -31,7 +32,7 @@ const JoinComplete = ({ setOpenBottom }: JoinCompleteProps) => {
         />
         <Confetti></Confetti>
       </CompleteBody>
-      <ApplyBtn>로그인하기</ApplyBtn>
+      <ApplyBtn onClick={handleSignin}>로그인하기</ApplyBtn>
     </CompleteBase>
   );
 };

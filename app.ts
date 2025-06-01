@@ -20,7 +20,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(cors());
+// app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:8000', // 프론트엔드 주소 (정확하게 지정해야 함)
+    credentials: true, // 쿠키, 세션 등 포함 가능하게
+  }),
+);
+
 app.use(express.static(path.join(__dirname, 'public')));
 // 라우터
 app.use('/', indexRouter);
