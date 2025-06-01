@@ -1,8 +1,8 @@
 import { NextPage } from 'next';
-import JoinComponent from '@/component/Auth/JoinComponent';
+import JoinContainer from '@/container/Auth/JoinContainer';
 
 const Join: NextPage = () => {
-  return <JoinComponent />;
+  return <JoinContainer />;
 };
 
 export default Join;

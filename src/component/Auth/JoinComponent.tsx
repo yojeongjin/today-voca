@@ -1,94 +1,113 @@
 import styled from 'styled-components';
 // icons
 import { IoMdCheckmarkCircleOutline } from 'react-icons/io';
+// components
 import H2 from '../Common/Title/H2';
-import ApplyBtn from '../Common/Button/ApplyButton';
+import Modal from '../Common/Modal/Modal';
 
-const JoinComponent = () => {
+interface JoinProps {
+  joinInfo: { email: string; pwd: string; rePwd: string; name: string };
+  valid: { email: boolean; pwd: boolean; rePwd: boolean; name: boolean };
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const JoinComponent = ({ joinInfo, valid, handleChange }: JoinProps) => {
   return (
-    <JoinBase>
-      <JoinContents>
-        <H2>회원정보 입력</H2>
-        <JoinMenu>
-          <JoinItem>
-            <JoinH4>이메일(아이디)</JoinH4>
-            <JoinInputBox>
-              <JoinInput required placeholder="abc@email.com" type="email" name="email" />
-              <JoinCheckBtn>인증요청</JoinCheckBtn>
-            </JoinInputBox>
-          </JoinItem>
-
-          <JoinItem>
-            <JoinH4>비밀번호</JoinH4>
+    <JoinContents>
+      <H2>회원정보 입력</H2>
+      <JoinMenu>
+        <JoinItem>
+          <JoinH4>이메일(아이디)</JoinH4>
+          <JoinInputBox>
             <JoinInput
               required
-              placeholder="숫자, 대소문자 포함하여 최소 8자 이상"
-              type="password"
-              name="pwd"
+              placeholder="abc@email.com"
+              type="email"
+              name="email"
+              isValid={valid.email || joinInfo.email === ''}
+              onChange={handleChange}
             />
-          </JoinItem>
+            <JoinCheckBtn>인증요청</JoinCheckBtn>
+          </JoinInputBox>
+          {!valid.email && joinInfo.email !== '' && (
+            <JoinCaution>이메일 형식에 맞게 작성해주세요.</JoinCaution>
+          )}
+        </JoinItem>
 
-          <JoinItem>
-            <JoinH4>비밀번호 확인</JoinH4>
-            <JoinInput
-              required
-              placeholder="숫자, 대소문자 포함하여 최소 8자 이상"
-              type="password"
-              name="rePwd"
-            />
-          </JoinItem>
+        <JoinItem>
+          <JoinH4>비밀번호</JoinH4>
+          <JoinInput
+            required
+            placeholder="숫자, 대소문자 포함하여 최소 8자 이상"
+            type="password"
+            name="pwd"
+            isValid={valid.pwd || joinInfo.pwd === ''}
+            onChange={handleChange}
+          />
+          {!valid.pwd && joinInfo.pwd !== '' && (
+            <JoinCaution>숫자와 대소문자를 포함하여 8자 이상 작성해주세요.</JoinCaution>
+          )}
+        </JoinItem>
 
-          <JoinItem>
-            <JoinH4>닉네임</JoinH4>
-            <JoinInput required placeholder="닉네임을 입력해주세요." name="name" />
-          </JoinItem>
-        </JoinMenu>
-        {/* 이용약관 동의 */}
-        <AgreeContainer>
-          {/* 전체 동의 */}
-          <TotalAgree>
-            <AgreeCheckInput type="checkbox" id="agree_check_all" name="agree_check_all" />
-            <TotalLabel htmlFor="agree_check_all">이용약관 전체동의</TotalLabel>
-          </TotalAgree>
-          {/* 선택 동의 */}
-          <AgreeMenu>
-            <AgreeItem>
-              <AgreeCheckInput type="checkbox" id="agree_check_used" name="guidanceAgreed" />
-              <AgreeLabel htmlFor="agree_check_used">[필수] 이용약관 동의</AgreeLabel>
-              <AgreeDetail>자세히</AgreeDetail>
-            </AgreeItem>
-            <AgreeItem>
-              <AgreeCheckInput type="checkbox" id="agree_check_info" name="personalInfoAgreed" />
-              <AgreeLabel htmlFor="agree_check_info">[선택] 개인정보 제3자 제공</AgreeLabel>
-              <AgreeDetail>자세히</AgreeDetail>
-            </AgreeItem>
-          </AgreeMenu>
-        </AgreeContainer>
-        <ApplyBtn>가입하기</ApplyBtn>
-      </JoinContents>
-    </JoinBase>
+        <JoinItem>
+          <JoinH4>비밀번호 확인</JoinH4>
+          <JoinInput
+            required
+            placeholder="숫자, 대소문자 포함하여 최소 8자 이상"
+            type="password"
+            name="rePwd"
+            isValid={valid.rePwd || joinInfo.rePwd === ''}
+            onChange={handleChange}
+          />
+          {!valid.rePwd && joinInfo.rePwd !== '' && (
+            <JoinCaution>비밀번호가 일치하지 않습니다.</JoinCaution>
+          )}
+        </JoinItem>
+
+        <JoinItem>
+          <JoinH4>닉네임</JoinH4>
+          <JoinInput
+            required
+            placeholder="닉네임을 입력해주세요."
+            name="name"
+            isValid={valid.name || joinInfo.name === ''}
+            onChange={handleChange}
+          />
+          {!valid.name && joinInfo.name !== '' && (
+            <JoinCaution>한글과 영어만 사용하여 최소 두 글자 이상 작성해주세요.</JoinCaution>
+          )}
+        </JoinItem>
+      </JoinMenu>
+      {/* <Modal>
+        <ModalContent>
+          <ModalP>
+            작성하신 이메일로 회원가입 인증코드를 발송하였습니다.<br></br>
+            이메일로 전송된 인증코드를 입력해 주세요.
+          </ModalP>
+          <AuthBox>
+            <AuthInput />
+            <AuthInput />
+            <AuthInput />
+            <AuthInput />
+            <AuthInput />
+          </AuthBox>
+          <ReSendBox>
+            <ReSpan>이메일이 오지않았나요?</ReSpan>
+            <ResendBtn>재전송</ResendBtn>
+          </ReSendBox>
+        </ModalContent>
+      </Modal> */}
+    </JoinContents>
   );
 };
 
 export default JoinComponent;
 
-const JoinBase = styled.main`
-  width: 100%;
-  max-width: 450px;
-  min-width: 280px;
-  height: 100%;
-  margin: 0 auto;
-  padding: 16px;
-`;
+const JoinContents = styled.article``;
 
-const JoinContents = styled.article`
-  display: flex;
-  justify-content: center;
-  flex-flow: column;
-  gap: 24px;
+const JoinMenu = styled.ul`
+  margin-top: 20px;
 `;
-
-const JoinMenu = styled.ul``;
 
 const JoinItem = styled.li`
   padding: 8px 0;
@@ -103,22 +122,25 @@ const JoinH4 = styled.h4`
   font-size: 13px;
   &:before {
     content: '*';
-    color: #9a404c;
+    color: #c64657;
     margin-right: 4px;
   }
 `;
 
-const JoinInput = styled.input`
+const JoinInputBox = styled.div`
+  display: flex;
+`;
+
+const JoinInput = styled.input<{ isValid: boolean }>`
   background-color: ${props => props.theme.primary_08};
   width: 100%;
   height: 46px;
   padding: 12px 10px 12px 12px;
   border-radius: 8px;
   font-size: 14px;
-`;
-
-const JoinInputBox = styled.div`
-  display: flex;
+  &:focus {
+    border: 1px solid ${props => props.theme.primary_03};
+  }
 `;
 
 const JoinCheckBtn = styled.button`
@@ -140,8 +162,8 @@ const JoinCaution = styled.p`
   display: flex;
   align-items: center;
   padding: 3px 8px;
-  color: #9a404c;
-  font-weight: 500;
+  color: #c64657;
+  font-size: 14px;
 `;
 
 const ValidP = styled(JoinCaution)`
@@ -154,63 +176,51 @@ const ValidIcon = styled(IoMdCheckmarkCircleOutline)`
   margin-right: 4px;
 `;
 
-// 이용약관 동의
-const AgreeContainer = styled.div``;
+// modal
 
-const AgreeMenu = styled.ul`
-  margin-top: 16px;
-`;
-
-const AgreeItem = styled.li`
-  position: relative;
+const ModalContent = styled.div`
   display: flex;
-  padding: 8px 0;
-  &:first-child {
-    padding: 0 0;
-  }
+  justify-content: center;
+  flex-flow: column;
+  gap: 24px;
 `;
 
-const AgreeCheckInput = styled.input`
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  border: 1px solid ${props => props.theme.primary_07};
-  border-radius: 1px;
-  margin-right: 10px;
-  cursor: pointer;
-
-  &:checked {
-    background-color: ${props => props.theme.primary_03};
-    border-color: transparent;
-    background-image: url('/svg/check.svg');
-    background-size: 100% 100%;
-    background-position: 50%;
-    background-repeat: no-repeat;
-  }
+const ModalP = styled.p`
+  color: #333;
+  text-align: center;
+  letter-spacing: -0.5px;
 `;
 
-const AgreeDetail = styled.span`
-  position: absolute;
-  right: 12px;
-  font-size: 13px;
-  text-decoration: underline;
-  cursor: pointer;
-`;
-
-const TotalAgree = styled.div`
+const AuthBox = styled.div`
   display: flex;
   align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #ebebeb;
+  justify-content: space-between;
 `;
 
-const TotalLabel = styled.label`
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
+const AuthInput = styled.input`
+  background-color: ${props => props.theme.primary_08};
+  width: 18%;
+  height: 55px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 22px;
+  font-wieght: 600;
+  border: 1px solid #dedede;
 `;
 
-const AgreeLabel = styled.label`
-  font-weight: 300;
-  cursor: pointer;
+const ReSendBox = styled.div`
+  font-size: 13px;
+  text-align: center;
+`;
+
+const ReSpan = styled.span`
+  font-size: 13px;
+  color: ${props => props.theme.primary_06};
+`;
+
+const ResendBtn = styled.button`
+  font-size: 13px;
+
+  color: ${props => props.theme.primary_01};
+  text-decoration: underline;
 `;
