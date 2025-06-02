@@ -22,14 +22,8 @@ interface PlanPeriodProps {
 }
 
 const PlanPeriod = ({ planInfo, setPlanInfo, setOpenBottom }: PlanPeriodProps) => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(dayjs(new Date()).add(1, 'month').toDate());
+  const [endDate, setEndDate] = useState(dayjs().add(30, 'day').startOf('day').toDate());
 
-  const onChange = (dates: any) => {
-    const [start, end] = dates;
-    setStartDate(start);
-    setEndDate(end);
-  };
   return (
     <PeriodBase>
       <CloseBtn
@@ -42,18 +36,18 @@ const PlanPeriod = ({ planInfo, setPlanInfo, setOpenBottom }: PlanPeriodProps) =
       {/* period */}
       <PeriodBox>
         <TotalTime>
-          {startDate && endDate
-            ? `총 ${dayjs(endDate).diff(dayjs(startDate), 'day')} 일`
-            : '날짜를 선택해주세요'}
+          총
+          <TotalStrong>{` ${dayjs(endDate).diff(dayjs().startOf('day'), 'day') + 1} `}</TotalStrong>
+          일
         </TotalTime>
         <PeriodMenu>
           <StartDay>
-            <Start>{dayjs(startDate).format('MM월 D일 (dd)')}</Start>
+            <Start>{dayjs().startOf('day').format('MM월 D일 (dd)')}</Start>
             <Span>○</Span>
           </StartDay>
           <EndDay>
             <Span>●</Span>
-            <End>{endDate ? dayjs(endDate).format('MM월 D일 (dd)') : '종료일'}</End>
+            <End>{dayjs(endDate).format('MM월 D일 (dd)')}</End>
           </EndDay>
         </PeriodMenu>
       </PeriodBox>
@@ -62,14 +56,16 @@ const PlanPeriod = ({ planInfo, setPlanInfo, setOpenBottom }: PlanPeriodProps) =
         <ReactDatePicker
           dateFormat="yyyy.MM.dd"
           locale={ko} // 한국말
-          selected={startDate}
-          onChange={onChange}
-          startDate={startDate}
+          selected={new Date()}
+          startDate={new Date()}
           endDate={endDate}
           minDate={new Date()}
-          maxDate={dayjs(startDate).add(1, 'month').toDate()}
-          selectsRange
+          maxDate={dayjs().add(30, 'day').startOf('day').toDate()}
+          selectsEnd
           inline
+          onChange={(date: any) => {
+            setEndDate(date);
+          }}
           disabledKeyboardNavigation
         />
       </PeriodCalendar>
@@ -80,7 +76,7 @@ const PlanPeriod = ({ planInfo, setPlanInfo, setOpenBottom }: PlanPeriodProps) =
           onClick={() => {
             setPlanInfo({
               ...planInfo,
-              startDate: startDate,
+              startDate: new Date(),
               endDate: endDate,
             });
             setOpenBottom(false);
@@ -117,7 +113,11 @@ const TotalTime = styled.div`
   margin: 25px 0 2px;
   text-align: center;
   color: ${props => props.theme.primary_03};
-  font-size: 14px;
+  font-size: 15px;
+`;
+
+const TotalStrong = styled.strong`
+  font-weight: 600;
 `;
 
 const PeriodMenu = styled.div`
@@ -154,12 +154,25 @@ const EndDay = styled.div`
 `;
 
 const Start = styled.span`
+  position: relative;
   font-weight: 500;
   margin-right: 10px;
+  &::before {
+    content: '시작일';
+    position: absolute;
+    top: -20px;
+    left: 18px;
+    font-size: 12px;
+    font-weight: 300;
+    color: ${props => props.theme.primary_05};
+  }
 `;
 
 const End = styled(Start)`
   margin: 0 0 0 10px;
+  &::before {
+    content: '종료일';
+  }
 `;
 
 const Span = styled.span`
@@ -169,7 +182,7 @@ const Span = styled.span`
 
 const PeriodCalendar = styled.div`
   font-family: 'Pretendard', sans-serif;
-  max-height: 450px;
+  max-height: 480px;
   overflow-y: scroll;
   .react-datepicker {
     font-family: 'Pretendard', sans-serif;

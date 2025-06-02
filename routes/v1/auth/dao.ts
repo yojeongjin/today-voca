@@ -42,14 +42,14 @@ export const signin = async (req: Request, res: Response, next: NextFunction) =>
     // Access & Refresh Token 생성
     const accessToken = jwt.sign(
       {
-        userIdx: user.id,
-        userName: user.nickname,
+        user_idx: user.id,
+        user_name: user.nickname,
       },
       process.env.JWT_KEY as string,
       { expiresIn: '1h' },
     );
 
-    const refreshToken = jwt.sign({ userIdx: user.id }, process.env.REFRESH_JWT_KEY as string, {
+    const refreshToken = jwt.sign({ user_idx: user.id }, process.env.REFRESH_JWT_KEY as string, {
       expiresIn: '14d',
     });
 
@@ -92,18 +92,25 @@ export const refreshAccessToken = (req: Request, res: Response, next: NextFuncti
 
     const newAccessToken = jwt.sign(
       {
-        userIdx: decoded.userIdx,
-        userName: decoded.userName,
+        user_idx: decoded.user_idx,
+        user_name: decoded.user_name,
       },
       process.env.JWT_KEY as string,
       { expiresIn: '1h' },
     );
 
+    // res.cookie('access_token', newAccessToken, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === 'production',
+    //   sameSite: 'strict',
+    //   maxAge: 1000 * 60 * 60, // 1시간
+    // });
+
     res.cookie('access_token', newAccessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 1000 * 60 * 60, // 1시간
+      secure: false,
+      sameSite: 'lax',
+      domain: 'localhost',
     });
 
     res.status(200).json(successResponse());
@@ -116,7 +123,7 @@ export const getUser = (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.verifiedToken as any;
 
-    if (!token?.userIdx || !token?.userName) {
+    if (!token?.user_idx || !token?.user_name) {
       throw new CustomError(
         HttpStatus.UNAUTHORIZED,
         '유효하지 않은 사용자입니다.',
@@ -126,8 +133,8 @@ export const getUser = (req: Request, res: Response, next: NextFunction) => {
 
     res.status(200).json(
       successResponse({
-        userIdx: token.userIdx,
-        userName: token.userName,
+        user_idx: token.user_idx,
+        user_name: token.user_name,
       }),
     );
   } catch (err) {

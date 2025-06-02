@@ -101,6 +101,16 @@ const PlanStrong = styled.strong`
   font-weight: 500;
 `;
 
+const PlanImgBox = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 32px;
+`;
+const PlanImg = styled.img`
+  width: 10%;
+  height: 10%;
+`;
+
 const PlanContents = styled.div`
   display: flex;
   flex-direction: column;
@@ -156,4 +166,56 @@ const BtnBox = styled.div`
   bottom: 20px;
   width: 100%;
   padding: 16px 24px;
+`;
+
+const CompleteBase = styled.div`
+  position: relative;
+  padding: 24px 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+`;
+
+const CompleteH2 = styled.h2`
+  font-weight: 500;
+  font-size: 16px;
+`;
+
+const CompleteBody = styled.div`
+  position: relative;
+  &:before {
+    content: '';
+    // background-image: url('/images/confetti.gif');
+    position: absolute;
+    left: 36px;
+    width: 80%;
+    height: 100%;
+  }
+`;
+
+const CompleteH4 = styled.h4`
+  font-size: 20px;
+  font-weight: 300;
+`;
+
+const CompleteP = styled.p`
+  color: ${props => props.theme.primary_05};
+  font-size: 13px;
+  margin-top: 8px;
+`;
+
+const CompleteImg = styled.img`
+  width: 15%;
+  height: 15%;
+`;
+
+const Img = styled.img`
+  width: 68px;
+  height: 68px;
+`;
+
+const Confetti = styled.div`
+  background-image: url('/images/confetti.gif');
+  height: 100;
 `;

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { RiCloseLargeLine } from 'react-icons/ri';
 // components
 import ApplyBtn from '@/component/Common/Button/ApplyButton';
+import CloseButton from '@/component/Common/Button/CloseButton';
 
 interface JoinCompleteProps {
   handleSignin: () => void;
@@ -14,14 +15,12 @@ const JoinComplete = ({ handleSignin, setOpenBottom }: JoinCompleteProps) => {
   const router = useRouter();
   return (
     <CompleteBase>
-      <CloseBtn
+      <CloseButton
         onClick={() => {
           setOpenBottom(false);
           router.push('/');
         }}
-      >
-        <RiCloseLargeLine />
-      </CloseBtn>
+      />
       <CompleteH2>회원가입 완료</CompleteH2>
       <CompleteBody>
         <CompleteH4>회원가입을 완료했습니다!</CompleteH4>
@@ -30,7 +29,6 @@ const JoinComplete = ({ handleSignin, setOpenBottom }: JoinCompleteProps) => {
           src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Heart%20Hands%20Light%20Skin%20Tone.png"
           alt="Heart Hands Light Skin Tone"
         />
-        <Confetti></Confetti>
       </CompleteBody>
       <ApplyBtn onClick={handleSignin}>로그인하기</ApplyBtn>
     </CompleteBase>
@@ -86,9 +84,4 @@ const CompleteImg = styled.img`
   width: 68px;
   height: 68px;
   z-index: 20;
-`;
-
-const Confetti = styled.div`
-  background-image: url('/images/confetti.gif');
-  height: 100;
 `;

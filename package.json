@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 8000",
+    "dev:local": "next dev -H 0.0.0.0 -p 8000",
     "build": "next build",
     "start": "ts-node ./bin/www.ts",
     "next-start": "next start -p 88"

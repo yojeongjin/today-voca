@@ -6,8 +6,7 @@ import { PlanProps } from '@/Interface/IPlan';
 // components
 import ApplyBtn from '../Common/Button/ApplyButton';
 import dayjs from 'dayjs';
-
-const PlanResult = ({ planInfo, setPlanInfo }: PlanProps) => {
+const PlanResult = ({ planInfo, setPlanInfo, addPlanHandler }: PlanProps) => {
   const [showPicker, setShowPicker] = useState(false);
 
   return (
@@ -47,7 +46,7 @@ const PlanResult = ({ planInfo, setPlanInfo }: PlanProps) => {
         </ResultMenu>
       </ResultBox>
 
-      <ApplyBtn>플랜 시작</ApplyBtn>
+      <ApplyBtn onClick={addPlanHandler}>플랜 시작</ApplyBtn>
     </ResultBase>
   );
 };

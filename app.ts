@@ -23,8 +23,8 @@ app.use(cookieParser());
 // app.use(cors());
 app.use(
   cors({
-    origin: 'http://localhost:8000', // 프론트엔드 주소 (정확하게 지정해야 함)
-    credentials: true, // 쿠키, 세션 등 포함 가능하게
+    origin: ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://172.30.1.26:8000'],
+    credentials: true,
   }),
 );
 

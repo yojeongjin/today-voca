@@ -9,18 +9,22 @@ const PlanCourse = ({ planInfo, setPlanInfo, onNext }: PlanProps) => {
     {
       name: '기초',
       length: 800,
+      level: 'basic',
     },
     {
-      name: '700점',
+      name: '중등',
       length: 1200,
+      level: '700',
     },
     {
-      name: '800점',
+      name: '고교/수능',
       length: 1400,
+      level: '800',
     },
     {
-      name: '900점',
+      name: 'toeic 850+',
       length: 1100,
+      level: '900',
     },
   ];
   return (
@@ -33,6 +37,7 @@ const PlanCourse = ({ planInfo, setPlanInfo, onNext }: PlanProps) => {
             onClick={() => {
               setPlanInfo({
                 ...planInfo,
+                level: course.level,
                 course: course.name,
               });
             }}
@@ -61,7 +66,7 @@ const TypeBase = styled.section`
   align-items: center;
   justify-content: space-between;
   flex-direction: column;
-  padding: 24px;
+  padding: 36px 24px 24px;
 `;
 
 const SelectCategory = styled.ul`
@@ -90,7 +95,7 @@ const Category = styled.li<{ isSelect: boolean }>`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   border: ${props => (props.isSelect ? '1px solid #027fff' : 'none')};
   border-radius: 12px;
   color: ${props => (props.isSelect ? ' #1871ff' : '#212529')};

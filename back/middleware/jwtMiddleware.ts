@@ -28,7 +28,14 @@ export const jwtMiddleware = (req: Request, res: Response, next: NextFunction) =
     req.verifiedToken = verifiedToken;
 
     next();
-  } catch (err) {
+  } catch (err: any) {
+    if (err.name === 'TokenExpiredError') {
+      throw new CustomError(
+        HttpStatus.UNAUTHORIZED,
+        'Access Token이 만료되었습니다.',
+        ErrorCode.EXPIRED_ACCESS_TOKEN,
+      );
+    }
     // 토큰 검증 실패 처리
     throw new CustomError(
       HttpStatus.FORBIDDEN,

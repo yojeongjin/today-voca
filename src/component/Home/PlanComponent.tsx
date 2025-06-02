@@ -2,74 +2,54 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 // progress
 import { Line } from 'rc-progress';
+// ifs
+import { PlanData } from '@/Interface/IPlan';
 // components
 import ApplyBtn from '../Common/Button/ApplyButton';
-import H4 from '../Common/Title/H4';
+import H2 from '../Common/Title/H2';
 
-const PlanComponent = () => {
+const PlanComponent = ({ planData }: PlanData) => {
+  console.log(planData);
   const router = useRouter();
   return (
     <PlanBase>
-      {/* <NoPlanBox>
-        <NoPlanI>📝</NoPlanI>
-        <NoPlanP>아직 등록된 학습 플랜이 없어요.</NoPlanP>
-        <ApplyBtn
-          onClick={() => {
-            router.push('/plan');
-          }}
-        >
-          플랜 등록하기
-        </ApplyBtn>
-      </NoPlanBox> */}
-      <PlanBox>
-        <PlanHead>
-          <H4>🏄🏻‍♀️ 냥냥이</H4>
-        </PlanHead>
+      {planData.length === 0 ? (
+        <NoPlanBox>
+          <NoPlanI>📝</NoPlanI>
+          <NoPlanP>아직 등록된 학습 플랜이 없어요.</NoPlanP>
+          <ApplyBtn
+            onClick={() => {
+              router.push('/plan');
+            }}
+          >
+            플랜 등록하기
+          </ApplyBtn>
+        </NoPlanBox>
+      ) : (
+        <PlanBox>
+          <PlanHead>
+            <H2>
+              {planData[0].emoji} {planData[0].title}
+            </H2>
+          </PlanHead>
 
-        <PlanMenu>
-          <PlanItem>
-            <PlanSubject>Day 1</PlanSubject>
-            <PlanProgress>
-              <ProgressSpan>52.3%</ProgressSpan>
-              <Line
-                percent={10}
-                strokeWidth={4}
-                trailWidth={4}
-                strokeColor="#1871ff"
-                trailColor="#eee"
-              />
-            </PlanProgress>
-          </PlanItem>
-
-          <PlanItem>
-            <PlanSubject>Day 1</PlanSubject>
-            <PlanProgress>
-              <ProgressSpan>52.3%</ProgressSpan>
-              <Line
-                percent={10}
-                strokeWidth={4}
-                trailWidth={4}
-                strokeColor="#1871ff"
-                trailColor="#eee"
-              />
-            </PlanProgress>
-          </PlanItem>
-
-          <PlanItem>
-            <PlanSubject>Day 1</PlanSubject>
-            <PlanProgress>
-              <ProgressSpan>52.3%</ProgressSpan>
-              <Line
-                percent={10}
-                strokeWidth={4}
-                trailWidth={4}
-                strokeColor="#1871ff"
-                trailColor="#eee"
-              />
-            </PlanProgress>
-          </PlanItem>
-        </PlanMenu>
-      </PlanBox>
+          <PlanMenu>
+            <PlanItem>
+              <PlanSubject>Day 1</PlanSubject>
+              <PlanProgress>
+                <ProgressSpan>52.3%</ProgressSpan>
+                <Line
+                  percent={10}
+                  strokeWidth={4}
+                  trailWidth={4}
+                  strokeColor="#1871ff"
+                  trailColor="#eee"
+                />
+              </PlanProgress>
+            </PlanItem>
+          </PlanMenu>
+        </PlanBox>
+      )}
     </PlanBase>
   );
 };
@@ -77,7 +57,7 @@ const PlanComponent = () => {
 export default PlanComponent;
 
 const PlanBase = styled.section`
-  background-color: ${props => props.theme.primary_09};
+  background-color: ${props => props.theme.primary_08};
   height: 100%;
   // border: 1px solid black;
   border-radius: 8px;
@@ -126,12 +106,6 @@ const PlanItem = styled.li`
   padding: 0 16px;
   margin: 12px 0;
   border-radius: 12px;
-`;
-
-const PlanIcon = styled.i`
-  font-family: 'Tossface', sans-serif;
-  font-size: 15px;
-  margin-right: 16px;
 `;
 
 const PlanSubject = styled.p`
