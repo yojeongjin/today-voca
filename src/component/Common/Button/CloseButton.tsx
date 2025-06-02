@@ -1,10 +1,7 @@
 import styled from 'styled-components';
+import { BtnProps } from '@/Interface/IBtn';
 // icons
 import { RiCloseLargeLine } from 'react-icons/ri';
-
-interface BtnProps {
-  onClick?: () => void;
-}
 
 const CloseButton = ({ onClick }: BtnProps) => {
   return (

@@ -1,11 +1,11 @@
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import axios from '../../utils/axiosInstance';
-
+import { DayProps } from '@/Interface/IDay';
 // container
 import DayContainer from '@/container/Day/DayContainer';
 
-const Day: NextPage = () => {
-  return <DayContainer />;
+const Day: NextPage<DayProps> = ({ dayData }) => {
+  return <DayContainer dayData={dayData} />;
 };
 
 // ssr
@@ -34,7 +34,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
     });
 
     const dayData = result.data.data.data;
-    console.log(dayData);
 
     if (result.data.code === 200) {
       return {

@@ -1,9 +1,9 @@
 import styled from 'styled-components';
+import { BtnProps } from '@/Interface/IBtn';
 
-interface ApplyBtnProps {
+interface ApplyBtnProps extends BtnProps {
   children: React.ReactNode;
   color?: string;
-  onClick?: () => void;
   disabled?: boolean;
 }
 

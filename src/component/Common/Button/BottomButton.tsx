@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
+import { BtnProps } from '@/Interface/IBtn';
 import styled from 'styled-components';
 
-interface ButtomBtnProps {
+interface ButtomBtnProps extends BtnProps {
   children: React.ReactNode;
-  onClick?: () => void;
-  disabled?: boolean;
+  disabled: boolean;
 }
 
 const BottomButton: React.FC<ButtomBtnProps> = ({ children, onClick, disabled }) => {
