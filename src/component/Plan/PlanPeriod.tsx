@@ -76,8 +76,8 @@ const PlanPeriod = ({ planInfo, setPlanInfo, setOpenBottom }: PlanPeriodProps) =
           onClick={() => {
             setPlanInfo({
               ...planInfo,
-              startDate: new Date(),
-              endDate: endDate,
+              plan_from: new Date(),
+              plan_to: endDate,
             });
             setOpenBottom(false);
           }}

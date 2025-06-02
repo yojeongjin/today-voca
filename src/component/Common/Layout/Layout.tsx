@@ -25,16 +25,14 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <LayoutBase>
       <LayoutInner>{children}</LayoutInner>
-      <BottomNav />
+      {/* <BottomNav /> */}
     </LayoutBase>
   );
 };
 
 export default Layout;
 
-const LayoutBase = styled.main`
-  // border: 1px solid purple;
-`;
+const LayoutBase = styled.main``;
 
 const LayoutInner = styled.div`
   height: calc(var(--vh, 1vh) * 100 - 60px);

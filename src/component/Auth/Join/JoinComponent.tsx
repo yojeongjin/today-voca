@@ -36,7 +36,7 @@ const JoinComponent = ({
               disabled={isVerified}
             />
             <JoinCheckBtn onClick={handleAuth} disabled={isVerified || isLoading}>
-              {isLoading ? <SpinnerImg src="/images/spinner.gif" alt="spinner" /> : '인증요청'}
+              {isLoading ? <SpinnerImg src="/gif/spinner.gif" alt="spinner" /> : '인증요청'}
             </JoinCheckBtn>
           </JoinInputBox>
           {!valid.email && joinInfo.email !== '' && (

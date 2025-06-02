@@ -1,11 +1,13 @@
 import { useState } from 'react';
+import dayjs from 'dayjs';
 import styled from 'styled-components';
 import Picker from '@emoji-mart/react';
 //ifs
 import { PlanProps } from '@/Interface/IPlan';
+
 // components
 import ApplyBtn from '../Common/Button/ApplyButton';
-import dayjs from 'dayjs';
+
 const PlanResult = ({ planInfo, setPlanInfo, addPlanHandler }: PlanProps) => {
   const [showPicker, setShowPicker] = useState(false);
 
@@ -34,8 +36,8 @@ const PlanResult = ({ planInfo, setPlanInfo, addPlanHandler }: PlanProps) => {
           <ResultItem>
             <ResultSubject>기간</ResultSubject>
             <ResultContent>
-              {`${dayjs(planInfo.startDate).format('MM월 DD일')} ~ 
-                ${dayjs(planInfo.endDate).format('MM월 DD일')} 
+              {`${dayjs(planInfo.plan_from).format('MM월 DD일')} ~ 
+                ${dayjs(planInfo.plan_to).format('MM월 DD일')} 
                 `}
             </ResultContent>
           </ResultItem>
@@ -45,7 +47,6 @@ const PlanResult = ({ planInfo, setPlanInfo, addPlanHandler }: PlanProps) => {
           </ResultItem>
         </ResultMenu>
       </ResultBox>
-
       <ApplyBtn onClick={addPlanHandler}>플랜 시작</ApplyBtn>
     </ResultBase>
   );
