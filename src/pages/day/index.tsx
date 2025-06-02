@@ -23,7 +23,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
     {} as { [key: string]: string },
   );
 
-  console.log(params);
   try {
     const result = await axios.get(`${process.env.NEXT_SERVER_APP_API_KEY}/v1/day`, {
       params,

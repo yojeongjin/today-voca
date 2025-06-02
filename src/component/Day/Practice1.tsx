@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import styled from 'styled-components';
 // components
 import ApplyBtn from '../Common/Button/ApplyButton';
@@ -5,9 +6,9 @@ import ApplyBtn from '../Common/Button/ApplyButton';
 import { DayProps } from '@/Interface/IDay';
 // icons
 import { PiSpeakerHighFill } from 'react-icons/pi';
-import { useCallback } from 'react';
 
 const Practice1 = ({ onNext, dayData }: DayProps) => {
+  // 단어 듣기
   const handlePhonetic = useCallback(async (word: string) => {
     const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
     const data = await res.json();
@@ -16,6 +17,7 @@ const Practice1 = ({ onNext, dayData }: DayProps) => {
 
     audio.play();
   }, []);
+
   return (
     <PracticeBase>
       <WordMenu>
@@ -49,16 +51,16 @@ const Practice1 = ({ onNext, dayData }: DayProps) => {
 export default Practice1;
 
 const PracticeBase = styled.div`
-  height: calc(var(--vh, 1vh) * 100 - 75px);
-  padding: 8px 24px;
+  height: calc(100% - 70px);
+  padding: 0 24px;
 `;
 
 const WordP = styled.p``;
 
 const WordMenu = styled.ul`
-  height: calc(100% - 60px);
+  height: calc(100% - 70px);
   overflow-y: scroll;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 `;
 
 const WordItem = styled.li`
@@ -67,7 +69,7 @@ const WordItem = styled.li`
 
 const VocaBox = styled.div`
   display: flex;
-  align-items: center;≈
+  align-items: center;
 `;
 
 const Voca = styled.h4`

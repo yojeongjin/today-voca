@@ -42,7 +42,14 @@ const SigninComponent = () => {
         {/* id input */}
         <InputWrapper>
           <InputLabel htmlFor="idInput">
-            <Input id="idInput" type="text" required placeholder="&nbsp;" ref={idRef} />
+            <Input
+              id="idInput"
+              type="text"
+              required
+              placeholder="&nbsp;"
+              ref={idRef}
+              autoComplete="off"
+            />
             <InputSpan>
               <IdIcon />
               이메일을 입력해주세요.

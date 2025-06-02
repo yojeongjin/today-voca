@@ -49,8 +49,6 @@ const PlanComponent = ({ planData }: PlanData) => {
     });
   };
 
-  console.log(plan);
-
   return (
     <PlanBase>
       <PlanBox>
@@ -93,7 +91,7 @@ const PlanBase = styled.section`
   height: 100%;
   overflow-y: scroll;
   border-radius: 8px;
-  padding: 24px 16px;
+  padding: 16px 16px 24px;
 `;
 
 const NoPlanBox = styled.div`
@@ -120,7 +118,6 @@ const NoPlanP = styled.p`
 const PlanBox = styled.div`
   background-color: ${props => props.theme.primary_09};
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-  margin-top: 16px;
   padding: 24px 16px;
   border-radius: 12px;
 `;

@@ -110,7 +110,7 @@ export const refreshAccessToken = (req: Request, res: Response, next: NextFuncti
       httpOnly: true,
       secure: false,
       sameSite: 'lax',
-      domain: 'localhost',
+      domain: 'http://172.30.1.26',
     });
 
     res.status(200).json(successResponse());

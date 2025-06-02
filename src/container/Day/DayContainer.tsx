@@ -7,16 +7,35 @@ import Practice1 from '@/component/Day/Practice1';
 import Practice2 from '@/component/Day/Practice2';
 import Practice3 from '@/component/Day/Practice3';
 import StepTitle from '@/component/Common/Title/StepTitle';
+import StepComponent from '@/component/Common/Step/StepComponent';
 
 const DayContainer = ({ dayData }: DayProps) => {
   const steps = ['one', 'two', 'three'] as const;
   const { step, next, back, isFirst } = useStep(steps);
-
   return (
     <>
-      {step === 'one' && <Practice1 dayData={dayData} onNext={next} />}
-      {step === 'two' && <Practice2 />}
-      {step === 'three' && <Practice3 />}
+      <StepComponent stepKey={step}>
+        <StepTitle onBack={!isFirst ? back : undefined}></StepTitle>
+        <Practice3 dayData={dayData} onNext={next} />
+        {/* {step === 'one' && (
+          <>
+            <StepTitle onBack={!isFirst ? back : undefined}>필수 어휘</StepTitle>
+            <Practice1 dayData={dayData} onNext={next} />
+          </>
+        )}
+        {step === 'two' && (
+          <>
+            <StepTitle onBack={!isFirst ? back : undefined}>필수 어휘</StepTitle>
+            <Practice2 dayData={dayData} onNext={next} />
+          </>
+        )}
+        {step === 'three' && (
+          <>
+            <StepTitle onBack={!isFirst ? back : undefined}></StepTitle>
+            <Practice3 dayData={dayData} onNext={next} />
+          </>
+        )} */}
+      </StepComponent>
     </>
   );
 };

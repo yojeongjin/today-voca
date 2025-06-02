@@ -151,7 +151,7 @@ const JoinContainer = () => {
       </JoinBase>
       {openBottom && (
         <BottomSheet height={580} isOpen={openBottom}>
-          <JoinComplete handleSignin={handleSignin} setOpenBottom={setOpenBottom} />
+          <JoinComplete handleComplete={handleSignin} setOpenBottom={setOpenBottom} />
         </BottomSheet>
       )}
     </>

@@ -1,23 +1,186 @@
+import { useReducer, useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import { DayProps } from '@/Interface/IDay';
+import ApplyBtn from '../Common/Button/ApplyButton';
 
-const Practice3 = () => {
+interface PracticeState {
+  stage: -1 | 0 | 1 | 2; // -1: 잠금, 0: 준비, 1: 진행, 2: 결과
+  count: number;
+  timer: number;
+  currentIndex: number;
+  answerList: string[];
+  answer: string;
+}
+
+type PracticeAction =
+  | { type: 'TICK_COUNT' }
+  | { type: 'START_TEST' }
+  | { type: 'TICK_TIMER' }
+  | { type: 'SUBMIT_ANSWER'; payload: string }
+  | { type: 'NEXT_QUESTION' }
+  | { type: 'FINISH_TEST' }
+  | { type: 'SET_ANSWER'; payload: string }
+  | { type: 'LOCK_STAGE' };
+
+const initialState: PracticeState = {
+  stage: 0,
+  count: 3,
+  timer: 0,
+  currentIndex: 0,
+  answerList: [],
+  answer: '',
+};
+
+const reducer = (state: PracticeState, action: PracticeAction): PracticeState => {
+  switch (action.type) {
+    case 'TICK_COUNT':
+      return { ...state, count: state.count - 1 };
+    case 'START_TEST':
+      return { ...state, stage: 1, timer: 5 };
+    case 'TICK_TIMER':
+      return { ...state, timer: state.timer - 1 };
+    case 'SET_ANSWER':
+      return { ...state, answer: action.payload };
+    case 'SUBMIT_ANSWER':
+      return {
+        ...state,
+        answerList: [...state.answerList, action.payload],
+        answer: '',
+      };
+    case 'NEXT_QUESTION':
+      return { ...state, currentIndex: state.currentIndex + 1 };
+    case 'FINISH_TEST':
+      return { ...state, stage: 2 };
+    case 'LOCK_STAGE':
+      return { ...state, stage: -1 };
+    default:
+      return state;
+  }
+};
+
+const Practice3 = ({ dayData }: DayProps) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const countId = useRef<NodeJS.Timeout | null>(null);
+  const timerId = useRef<NodeJS.Timeout | null>(null);
+
+  const vocaList = dayData.map(data => data.word);
+
+  useEffect(() => {
+    if (state.stage !== 0) return;
+    countId.current = setInterval(() => {
+      dispatch({ type: 'TICK_COUNT' });
+    }, 500);
+    return () => countId.current && clearInterval(countId.current);
+  }, [state.stage]);
+
+  useEffect(() => {
+    if (state.count <= 0 && state.stage === 0) {
+      countId.current && clearInterval(countId.current);
+      dispatch({ type: 'START_TEST' });
+    }
+  }, [state.count, state.stage]);
+
+  useEffect(() => {
+    if (state.stage !== 1) return;
+    timerId.current = setInterval(() => {
+      dispatch({ type: 'TICK_TIMER' });
+    }, 500);
+    return () => timerId.current && clearInterval(timerId.current);
+  }, [state.stage]);
+
+  useEffect(() => {
+    if (state.stage === 1 && state.timer <= 0) {
+      handleSubmit();
+    }
+  }, [state.timer, state.stage]);
+
+  const handleSubmit = () => {
+    if (state.stage !== 1) return;
+
+    dispatch({ type: 'LOCK_STAGE' }); // prevent double trigger
+    const input = inputRef.current?.value.trim() || '';
+    dispatch({ type: 'SUBMIT_ANSWER', payload: input });
+    if (inputRef.current) inputRef.current.value = '';
+
+    if (state.currentIndex + 1 >= vocaList.length) {
+      dispatch({ type: 'FINISH_TEST' });
+    } else {
+      setTimeout(() => {
+        dispatch({ type: 'NEXT_QUESTION' });
+        dispatch({ type: 'START_TEST' });
+      }, 100); // small delay for smoother transition
+    }
+  };
+
   return (
     <PracticeBase>
-      {/* count */}
-      {/* <CountContent>
-        1
-        <CountImg src="/images/mortarboard.png" alt="test" />
-      </CountContent> */}
-      {/* repeat */}
-      <RepeatContent>
-        <TimerBox>
-          <Time>5</Time>
-        </TimerBox>
-        <ContentBox>
-          <Question>foundation</Question>
-          <AnswerInput placeholder="정답 입력" />
-        </ContentBox>
-      </RepeatContent>
+      {state.stage === 0 && (
+        <>
+          <CountContent>
+            <CountCharacter src="/gif/happy.gif" />
+          </CountContent>
+          <CountP>
+            <Count>{state.count}</Count>초 뒤에 테스트가 시작됩니다!
+          </CountP>
+        </>
+      )}
+
+      {state.stage === 1 && (
+        <RepeatContent>
+          <TimerBox>
+            <Time>{state.timer}</Time>
+          </TimerBox>
+          <ContentBox>
+            <Question>{vocaList[state.currentIndex]}</Question>
+            <AnswerInput
+              ref={inputRef}
+              placeholder="정답을 입력해주세요."
+              value={state.answer}
+              onChange={e => dispatch({ type: 'SET_ANSWER', payload: e.target.value })}
+              onKeyUp={e => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  timerId.current && clearInterval(timerId.current);
+                  handleSubmit();
+                }
+              }}
+              autoComplete="off"
+            />
+          </ContentBox>
+        </RepeatContent>
+      )}
+
+      {state.stage === 2 && (
+        <AnswerBox>
+          <AnswerTitle>
+            <TitleImg
+              src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/main/Animals%20and%20Nature/Fire.webp"
+              alt="Fire"
+            />
+            정답을 확인하세요
+          </AnswerTitle>
+          <AnswerMenu>
+            <AnswerItem>
+              <ItemTitle>단어</ItemTitle>
+              <ItemTitle>뜻</ItemTitle>
+              <ItemTitle>나의 답안</ItemTitle>
+            </AnswerItem>
+            {state.answerList.map((userAnswer, idx) => (
+              <AnswerItem key={idx}>
+                <ItemQuestion>{dayData[idx].word}</ItemQuestion>
+                <ItemAnswer>
+                  {dayData[idx].meaning2
+                    ? `${dayData[idx].meaning1}, ${dayData[idx].meaning2}`
+                    : dayData[idx].meaning1}
+                </ItemAnswer>
+                <ItemUserAnswer>{userAnswer}</ItemUserAnswer>
+              </AnswerItem>
+            ))}
+          </AnswerMenu>
+          <ApplyBtn>테스트 종료</ApplyBtn>
+        </AnswerBox>
+      )}
     </PracticeBase>
   );
 };
@@ -25,36 +188,46 @@ const Practice3 = () => {
 export default Practice3;
 
 const PracticeBase = styled.div`
-  // background-color: ${props => props.theme.primary_08};
-  // height: calc(var(--vh, 1vh) * 100 - 60px);
+  width: 100%;
+  height: calc(100% - 70px);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: 24px;
+  padding: 0 16px 24px;
 `;
-// count
+
 const CountContent = styled.div`
-  background-color: ${props => props.theme.primary_09};
+  background-color: ${props => props.theme.primary_08};
   position: relative;
   width: 135px;
   height: 135px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 45px;
-  font-weight: 700;
+  margin-bottom: 24px;
   border-radius: 50%;
 `;
 
-const CountImg = styled.img`
-  position: absolute;
-  top: -35px;
-  right: -12px;
-  width: 80%;
-  transform: rotate(5deg);
+const CountCharacter = styled.img`
+  width: 100%;
+  height: 100%;
 `;
-// repeat
+
+const CountP = styled.p`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 300;
+  font-size: 16px;
+  color: ${props => props.theme.primary_04};
+`;
+
+const Count = styled.strong`
+  font-size: 16px;
+  font-weight: 700;
+  color: ${props => props.theme.primary_01};
+  margin-right: 4px;
+`;
+
 const RepeatContent = styled.div`
   background-color: ${props => props.theme.primary_08};
   width: 100%;
@@ -91,11 +264,9 @@ const ContentBox = styled.div`
   justify-content: center;
   flex-direction: column;
   gap: 24px;
-  // border: 1px solid black;
 `;
 
 const Question = styled.p`
-  // padding: 42px 0;
   text-align: center;
   font-weight: 600;
   font-size: 32px;
@@ -110,4 +281,60 @@ const AnswerInput = styled.input`
   font-size: 17px;
   text-align: center;
   border-radius: 12px;
+`;
+
+const AnswerBox = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
+const AnswerTitle = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 12px 6px;
+  font-size: 16px;
+  font-weight: 500;
+`;
+
+const TitleImg = styled.img`
+  width: 20px;
+  height: 20px;
+`;
+
+const AnswerMenu = styled.ul`
+  height: calc(100% - 80px);
+  padding-bottom: 8px;
+  overflow-y: scroll;
+`;
+
+const AnswerItem = styled.li`
+  display: flex;
+  border-bottom: 1px dashed ${props => props.theme.primary_07};
+  &:first-child {
+    background-color: ${props => props.theme.primary_08};
+    border-radius: 12px 12px 0 0;
+  }
+  &:first-child,
+  &:last-child {
+    border: none;
+  }
+`;
+
+const ItemTitle = styled.h4`
+  flex: 1;
+  padding: 12px 0;
+  text-align: center;
+  color: ${props => props.theme.primary_04};
+`;
+
+const ItemQuestion = styled(ItemTitle)`
+  color: ${props => props.theme.primary_03};
+`;
+
+const ItemAnswer = styled(ItemTitle)`
+  color: ${props => props.theme.primary_03};
+`;
+
+const ItemUserAnswer = styled(ItemTitle)`
+  color: ${props => props.theme.primary_03};
 `;

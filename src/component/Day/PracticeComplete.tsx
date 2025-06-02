@@ -3,12 +3,12 @@ import styled from 'styled-components';
 
 import { CompleteProps } from '@/Interface/IComplete';
 
-// components
-import ApplyBtn from '@/component/Common/Button/ApplyButton';
-import CloseButton from '@/component/Common/Button/CloseButton';
+import CloseButton from '../Common/Button/CloseButton';
+import ApplyBtn from '../Common/Button/ApplyButton';
 
-const JoinComplete = ({ handleComplete, setOpenBottom }: CompleteProps) => {
+const PracticeComplete = ({ handleComplete, setOpenBottom }: CompleteProps) => {
   const router = useRouter();
+
   return (
     <CompleteBase>
       <CloseButton
@@ -17,20 +17,23 @@ const JoinComplete = ({ handleComplete, setOpenBottom }: CompleteProps) => {
           router.push('/');
         }}
       />
-      <CompleteH2>회원가입 완료</CompleteH2>
+      <CompleteH2>학습 완료</CompleteH2>
       <CompleteBody>
-        <CompleteH4>회원가입을 완료했습니다!</CompleteH4>
-        <CompleteP>지금 바로 공부를 시작해보세요.</CompleteP>
-        <CompleteImg
-          src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Heart%20Hands%20Light%20Skin%20Tone.png"
-          alt="Heart Hands Light Skin Tone"
-        />
+        <CompleteH4>오늘 학습을 완료했어요!</CompleteH4>
+        <CompleteP>반복 테스트를 통해서 실력을 업그레이드 시켜보세요</CompleteP>
+
+        <CompleteImgBox>
+          <CompleteImg src="/gif/neutral.gif" alt="neutral" />
+          <CompleteSpan>아쉬워요</CompleteSpan>
+        </CompleteImgBox>
       </CompleteBody>
-      <ApplyBtn onClick={handleComplete}>로그인하기</ApplyBtn>
+
+      <ApplyBtn onClick={handleComplete}>다음 가기</ApplyBtn>
     </CompleteBase>
   );
 };
-export default JoinComplete;
+
+export default PracticeComplete;
 
 const CompleteBase = styled.div`
   position: relative;
@@ -69,8 +72,18 @@ const CompleteP = styled.p`
   margin-top: 8px;
 `;
 
+const CompleteImgBox = styled.div`
+  margin: 16px 0 8px;
+`;
+
 const CompleteImg = styled.img`
-  width: 68px;
+  width: 68ßpx;
   height: 68px;
-  z-index: 20;
+`;
+
+const CompleteSpan = styled.span`
+  display: block;
+  color: #ffbf3e;
+  // color: #6ecc64;
+  font-weight: 500;
 `;

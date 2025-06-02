@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import BottomNav from '../BottomNav/BottomNav';
+import Header from '../Header/Header';
 
 type LayoutProps = {
   children: ReactNode;
@@ -14,7 +14,7 @@ const Layout = ({ children }: LayoutProps) => {
     router.pathname === '/signin' ||
     router.pathname === '/join' ||
     router.pathname === '/plan' ||
-    router.pathname === '/day/[slug]'
+    router.pathname === '/day'
   ) {
     return (
       <LayoutBase>
@@ -24,8 +24,8 @@ const Layout = ({ children }: LayoutProps) => {
   }
   return (
     <LayoutBase>
+      <Header />
       <LayoutInner>{children}</LayoutInner>
-      {/* <BottomNav /> */}
     </LayoutBase>
   );
 };
@@ -35,9 +35,10 @@ export default Layout;
 const LayoutBase = styled.main``;
 
 const LayoutInner = styled.div`
-  height: calc(var(--vh, 1vh) * 100 - 60px);
+  height: calc(var(--vh, 1vh) * 100 - 50px);
+  margin-top: 50px;
 `;
 
-const Inner = styled(LayoutInner)`
+const Inner = styled.div`
   height: calc(var(--vh, 1vh) * 100);
 `;

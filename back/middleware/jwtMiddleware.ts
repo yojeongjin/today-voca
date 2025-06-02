@@ -15,14 +15,6 @@ declare global {
 export const jwtMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.access_token;
 
-  if (!token) {
-    throw new CustomError(
-      HttpStatus.UNAUTHORIZED,
-      '로그인 되어있지 않습니다.',
-      ErrorCode.UNAUTHORIZED_ACCESS,
-    );
-  }
-
   try {
     const verifiedToken = jwt.verify(token, process.env.JWT_KEY as string);
     req.verifiedToken = verifiedToken;
