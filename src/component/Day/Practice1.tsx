@@ -1,4 +1,6 @@
 import { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { setLoading } from '@/redux/modules/common';
 import styled from 'styled-components';
 // components
 import ApplyBtn from '../Common/Button/ApplyButton';
@@ -6,16 +8,25 @@ import ApplyBtn from '../Common/Button/ApplyButton';
 import { DayProps } from '@/Interface/IDay';
 // icons
 import { PiSpeakerHighFill } from 'react-icons/pi';
+import { handleApiError } from '@/utils/handleApiError';
 
 const Practice1 = ({ onNext, dayData }: DayProps) => {
+  const dispatch = useDispatch();
   // 단어 듣기
   const handlePhonetic = useCallback(async (word: string) => {
-    const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-    const data = await res.json();
-    const audioUrl = data[0]?.phonetics?.find((p: { audio: any }) => p.audio)?.audio;
-    const audio = new Audio(audioUrl);
+    try {
+      dispatch(setLoading(true));
+      const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+      const data = await res.json();
+      const audioUrl = data[0]?.phonetics?.find((p: { audio: any }) => p.audio)?.audio;
+      const audio = new Audio(audioUrl);
 
-    audio.play();
+      audio.play();
+    } catch (err) {
+      handleApiError(err);
+    } finally {
+      dispatch(setLoading(false));
+    }
   }, []);
 
   return (

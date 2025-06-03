@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import Header from '../Header/Header';
 
 type LayoutProps = {
   children: ReactNode;
@@ -24,7 +23,6 @@ const Layout = ({ children }: LayoutProps) => {
   }
   return (
     <LayoutBase>
-      <Header />
       <LayoutInner>{children}</LayoutInner>
     </LayoutBase>
   );
@@ -35,8 +33,7 @@ export default Layout;
 const LayoutBase = styled.main``;
 
 const LayoutInner = styled.div`
-  height: calc(var(--vh, 1vh) * 100 - 50px);
-  margin-top: 50px;
+  height: calc(var(--vh, 1vh) * 100);
 `;
 
 const Inner = styled.div`

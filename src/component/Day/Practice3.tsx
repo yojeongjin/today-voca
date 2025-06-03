@@ -99,13 +99,17 @@ const Practice3 = ({ dayData }: DayProps) => {
     }
   }, [state.timer, state.stage]);
 
+  useEffect(() => {
+    if (state.stage === 1) {
+      inputRef.current?.focus();
+    }
+  }, [state.currentIndex, state.stage]);
+
   const handleSubmit = () => {
     if (state.stage !== 1) return;
 
-    dispatch({ type: 'LOCK_STAGE' }); // prevent double trigger
-    const input = inputRef.current?.value.trim() || '';
-    dispatch({ type: 'SUBMIT_ANSWER', payload: input });
-    if (inputRef.current) inputRef.current.value = '';
+    dispatch({ type: 'LOCK_STAGE' });
+    dispatch({ type: 'SUBMIT_ANSWER', payload: state.answer });
 
     if (state.currentIndex + 1 >= vocaList.length) {
       dispatch({ type: 'FINISH_TEST' });
@@ -193,7 +197,7 @@ export default Practice3;
 
 const PracticeBase = styled.div`
   width: 100%;
-  height: calc(100% - 70px);
+  height: calc(100% - 35px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -295,7 +299,7 @@ const AnswerBox = styled.div`
 const AnswerTitle = styled.div`
   display: flex;
   align-items: center;
-  padding: 12px 6px;
+  padding: 16px 6px;
   font-size: 16px;
   font-weight: 500;
 `;
@@ -306,7 +310,8 @@ const TitleImg = styled.img`
 `;
 
 const AnswerMenu = styled.ul`
-  height: calc(100% - 80px);
+  height: calc(100% - 100px);
+  margin-bottom: 8px;
   padding-bottom: 8px;
   overflow-y: scroll;
 `;

@@ -15,7 +15,7 @@ const Practice2 = ({ onNext, dayData }: DayProps) => {
   const currentWord = dayData[currentIdx];
 
   const { question, choices, correct } = useMemo(() => {
-    const correct = currentWord.meaning1;
+    const correct = currentWord?.meaning1;
 
     const wrongs = dayData
       .filter((data, idx) => idx !== currentIdx && data.meaning1)
@@ -25,7 +25,7 @@ const Practice2 = ({ onNext, dayData }: DayProps) => {
     const allChoices = [...shuffledWrong, correct].sort(() => Math.random() - 0.5);
 
     return {
-      question: currentWord.word,
+      question: currentWord?.word,
       choices: allChoices,
       correct,
     };
@@ -45,7 +45,7 @@ const Practice2 = ({ onNext, dayData }: DayProps) => {
         } else {
           setOpenBottom(true);
         }
-      }, 800);
+      }, 500);
     },
     [correct, currentIdx, dayData.length, onNext],
   );
@@ -159,6 +159,7 @@ const AnswerItem = styled.li<{
   border-radius: 8px;
   color: ${props => (props.isCorrect ? '#027FFF' : props.isWrong ? '#c64657' : '#212529')};
   text-align: center;
+  cursor: pointer;
   &:last-child {
     margin-bottom: 0;
   }
