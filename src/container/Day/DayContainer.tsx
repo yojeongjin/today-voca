@@ -15,9 +15,7 @@ const DayContainer = ({ dayData }: DayProps) => {
   return (
     <>
       <StepComponent stepKey={step}>
-        <StepTitle onBack={!isFirst ? back : undefined}></StepTitle>
-        <Practice3 dayData={dayData} onNext={next} />
-        {/* {step === 'one' && (
+        {step === 'one' && (
           <>
             <StepTitle onBack={!isFirst ? back : undefined}>필수 어휘</StepTitle>
             <Practice1 dayData={dayData} onNext={next} />
@@ -34,7 +32,7 @@ const DayContainer = ({ dayData }: DayProps) => {
             <StepTitle onBack={!isFirst ? back : undefined}></StepTitle>
             <Practice3 dayData={dayData} onNext={next} />
           </>
-        )} */}
+        )}
       </StepComponent>
     </>
   );

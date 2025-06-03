@@ -71,7 +71,9 @@ const Practice3 = ({ dayData }: DayProps) => {
     countId.current = setInterval(() => {
       dispatch({ type: 'TICK_COUNT' });
     }, 500);
-    return () => countId.current && clearInterval(countId.current);
+    return () => {
+      if (countId.current) clearInterval(countId.current);
+    };
   }, [state.stage]);
 
   useEffect(() => {
@@ -86,7 +88,9 @@ const Practice3 = ({ dayData }: DayProps) => {
     timerId.current = setInterval(() => {
       dispatch({ type: 'TICK_TIMER' });
     }, 500);
-    return () => timerId.current && clearInterval(timerId.current);
+    return () => {
+      if (timerId.current) clearInterval(timerId.current);
+    };
   }, [state.stage]);
 
   useEffect(() => {
@@ -109,7 +113,7 @@ const Practice3 = ({ dayData }: DayProps) => {
       setTimeout(() => {
         dispatch({ type: 'NEXT_QUESTION' });
         dispatch({ type: 'START_TEST' });
-      }, 100); // small delay for smoother transition
+      }, 100);
     }
   };
 

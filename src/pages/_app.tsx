@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 import wrapper from '@/redux/store';
 // persist
 import { PersistGate } from 'redux-persist/integration/react';
+// hook
+import useRouteLoading from '@/hooks/useRouteLoading';
 // styles
 import { ThemeProvider } from 'styled-components';
 import GlobalStyles from '@/styles/globalstyles';
@@ -12,8 +14,13 @@ import theme from '@/styles/theme';
 import '../styles/fonts/index.css';
 // components
 import Layout from '@/component/Common/Layout/Layout';
+import Loading from '@/component/Common/Loading/Loading';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/modules/reducer';
 
 const App: NextPage<AppProps> = ({ Component, pageProps }: AppProps) => {
+  useRouteLoading();
+  const loading = useSelector((state: RootState) => state.common.setLoading);
   const { store } = wrapper.useWrappedStore(pageProps);
 
   const setScreenSize = () => {
@@ -35,6 +42,7 @@ const App: NextPage<AppProps> = ({ Component, pageProps }: AppProps) => {
       {store.__persistor && (
         <PersistGate loading={null} persistor={store.__persistor}>
           <Layout>
+            {loading && <Loading />}
             <Component {...pageProps} />
           </Layout>
         </PersistGate>

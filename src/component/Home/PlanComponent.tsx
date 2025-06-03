@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
@@ -67,6 +67,8 @@ const PlanComponent = ({ planData }: PlanData) => {
                 key={idx}
                 locked={!isCompleted}
                 onClick={() => {
+                  if (!isCompleted) return;
+
                   handleDay(idx + 1);
                   return;
                 }}
