@@ -1,4 +1,5 @@
 import { useReducer, useRef, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { DayProps } from '@/Interface/IDay';
 
@@ -67,6 +68,7 @@ interface Practice3Props extends DayProps {
 
 const Practice3 = ({ dayData, handleFinish }: Practice3Props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const countId = useRef<NodeJS.Timeout | null>(null);
   const timerId = useRef<NodeJS.Timeout | null>(null);
@@ -111,6 +113,12 @@ const Practice3 = ({ dayData, handleFinish }: Practice3Props) => {
       inputRef.current?.focus();
     }
   }, [state.currentIndex, state.stage]);
+
+  useEffect(() => {
+    if (state.stage === 2) {
+      handleFinish();
+    }
+  }, [state.stage]);
 
   const handleSubmit = () => {
     if (state.stage !== 1) return;
@@ -193,7 +201,13 @@ const Practice3 = ({ dayData, handleFinish }: Practice3Props) => {
               </AnswerItem>
             ))}
           </AnswerMenu>
-          <ApplyBtn onClick={handleFinish}>테스트 종료</ApplyBtn>
+          <ApplyBtn
+            onClick={() => {
+              router.push('/');
+            }}
+          >
+            테스트 종료
+          </ApplyBtn>
         </AnswerBox>
       )}
     </PracticeBase>

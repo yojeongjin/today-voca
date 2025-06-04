@@ -8,6 +8,7 @@ import getPool from '../../../config/db';
 const pool = getPool();
 
 export const list = async (req: Request, res: Response, next: NextFunction) => {
+  const user_id = (req.verifiedToken as any).user_idx;
   const { day, day_size, level } = req.query;
 
   const pageValue = Number(day) || 1;
@@ -15,16 +16,18 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
   const offset = (pageValue - 1) * pageSizeValue;
 
   try {
-    const sql = `SELECT tw.*, tp.id as plan_id
+    const sql = `SELECT tw.*, tp.id as plan_id, td.percent
                 FROM tbl_word as tw
                 LEFT JOIN tbl_plan as tp on tp.level = tw.level
-                WHERE tw.level = ?
+                LEFT JOIN tbl_daily as td on td.plan_id = tp.id
+                WHERE tw.level = ? and td.day_number = ? and tp.user_id = ?
                 ORDER BY tw.id ASC
                 LIMIT ${pageSizeValue} OFFSET ${offset}
                 `;
-    const [rows] = await pool.execute<RowDataPacket[]>(sql, [level]);
+    const [rows] = await pool.execute<RowDataPacket[]>(sql, [level, day, user_id]);
 
     const planId = rows.length > 0 ? rows[0].plan_id : null;
+    const percent = rows.length > 0 ? rows[0].percent : null;
     // word 데이터만 추출
     const wordData = rows.map(({ plan_id, ...word }) => word);
 
@@ -32,6 +35,7 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
       successResponse({
         data: wordData,
         plan_id: planId,
+        percent: percent,
       }),
     );
   } catch (err) {
@@ -59,28 +63,30 @@ export const modify = async (req: Request, res: Response, next: NextFunction) =>
 };
 
 export const done = async (req: Request, res: Response, next: NextFunction) => {
-  const { plan_id, day_number } = req.body;
+  const { plan_id, day_number, step } = req.body;
 
   const conn = await pool.getConnection();
   await conn.beginTransaction();
 
   try {
-    // 1. 기존 day를 done 처리
+    // 1. 기존 day 완료 처리
     const updateSql = `
       UPDATE tbl_daily AS td
       JOIN tbl_plan AS tp ON tp.id = td.plan_id
-      SET td.state = 'done' 
+      SET 
+        td.state = 'done',
+        td.percent = CASE WHEN ? = 3 THEN 100 ELSE td.percent END
       WHERE td.plan_id = ? AND day_number = ?
     `;
-    await conn.execute(updateSql, [plan_id, day_number]);
+    await conn.execute(updateSql, [step, plan_id, day_number]);
 
-    // 2. 다음 day가 이미 존재하는지 확인
+    // 2. 다음 day 존재 확인
     const [[existing]] = await conn.execute<RowDataPacket[]>(
       `SELECT id FROM tbl_daily WHERE plan_id = ? AND day_number = ?`,
       [plan_id, day_number + 1],
     );
 
-    // 3. 존재하지 않으면 다음 day 새로 생성
+    // 3. 없으면 새로 생성
     if (!existing) {
       const insertSql = `
         INSERT INTO tbl_daily (plan_id, day_number)

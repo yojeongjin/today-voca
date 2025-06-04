@@ -5,4 +5,5 @@ export interface DayProps extends NextStepProps {
   dayData: Day[];
   plan_id?: number;
   day_number?: number;
+  percent?: number;
 }
