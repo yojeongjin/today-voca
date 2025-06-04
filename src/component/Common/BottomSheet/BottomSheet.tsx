@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 // react-spring
-import { useSpring, animated } from '@react-spring/web';
+import { useSpring, animated, config } from '@react-spring/web';
 
 interface BottomSheetProps {
   isOpen: boolean;
@@ -24,6 +24,7 @@ const BottomSheet: React.FC<BottomSheetProps> = props => {
 
   const [springProps, api] = useSpring(() => ({
     height: '0px',
+    config: { tension: 190, friction: 23 },
     onRest: {
       height: height => {
         if (height.value === `${heightPixel}px`) {

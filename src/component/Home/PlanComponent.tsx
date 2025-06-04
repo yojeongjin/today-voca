@@ -15,6 +15,7 @@ import Delighted from '../Common/Lottie/Delighted';
 
 // icons
 import { RiLockFill } from 'react-icons/ri';
+import BottomSheet from '../Common/BottomSheet/BottomSheet';
 
 const PlanComponent = ({ planData }: PlanData) => {
   const router = useRouter();

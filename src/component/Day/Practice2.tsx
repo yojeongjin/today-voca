@@ -13,6 +13,8 @@ interface Practice2Props extends DayProps {
 
 const Practice2 = ({ onNext, dayData, handleFinish }: Practice2Props) => {
   const { openBottom, setOpenBottom } = useBottom();
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
   const [answer, setAnswer] = useState<string | null>(null);
   const [great, setGreat] = useState<number>(0);
   const [currentIdx, setCurrentIdx] = useState<number>(0);
@@ -37,7 +39,11 @@ const Practice2 = ({ onNext, dayData, handleFinish }: Practice2Props) => {
 
   const handleNext = useCallback(
     (choice: string) => {
+      if (isTransitioning || answer !== null) return; // 더블체킹 방지
+
+      setIsTransitioning(true);
       setAnswer(choice);
+
       if (correct === choice) {
         setGreat(prev => prev + 1);
       }
@@ -49,9 +55,10 @@ const Practice2 = ({ onNext, dayData, handleFinish }: Practice2Props) => {
         } else {
           setOpenBottom(true);
         }
+        setIsTransitioning(false);
       }, 1000);
     },
-    [correct, currentIdx, dayData.length, onNext],
+    [correct, currentIdx, dayData.length, answer, isTransitioning],
   );
 
   const percentage = useMemo(() => {
@@ -90,7 +97,7 @@ const Practice2 = ({ onNext, dayData, handleFinish }: Practice2Props) => {
                 isCorrect={isCorrect}
                 isWrong={isWrong}
                 onClick={() => {
-                  handleNext(choice!);
+                  if (!isTransitioning) handleNext(choice!);
                 }}
               >
                 {choice}
