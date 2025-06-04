@@ -70,16 +70,24 @@ export const done = async (req: Request, res: Response, next: NextFunction) => {
       UPDATE tbl_daily AS td
       JOIN tbl_plan AS tp ON tp.id = td.plan_id
       SET td.state = 'done' 
-      WHERE td.plan_id = ?
+      WHERE td.plan_id = ? AND day_number = ?
     `;
-    await conn.execute(updateSql, [plan_id]);
+    await conn.execute(updateSql, [plan_id, day_number]);
 
-    // 2. 다음 day 새로 생성
-    const insertSql = `
+    // 2. 다음 day가 이미 존재하는지 확인
+    const [[existing]] = await conn.execute<RowDataPacket[]>(
+      `SELECT id FROM tbl_daily WHERE plan_id = ? AND day_number = ?`,
+      [plan_id, day_number + 1],
+    );
+
+    // 3. 존재하지 않으면 다음 day 새로 생성
+    if (!existing) {
+      const insertSql = `
         INSERT INTO tbl_daily (plan_id, day_number)
         VALUES (?, ?)
       `;
-    await conn.execute(insertSql, [plan_id, day_number + 1]);
+      await conn.execute(insertSql, [plan_id, day_number + 1]);
+    }
 
     await conn.commit();
     res.status(HttpStatus.OK).json(successResponse());

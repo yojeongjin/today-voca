@@ -204,7 +204,7 @@ export default Practice3;
 
 const PracticeBase = styled.div`
   width: 100%;
-  height: calc(100% - 35px);
+  height: calc(100% - 60px);
   display: flex;
   align-items: center;
   justify-content: center;
