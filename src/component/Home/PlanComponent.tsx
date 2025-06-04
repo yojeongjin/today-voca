@@ -9,6 +9,8 @@ import ApplyBtn from '../Common/Button/ApplyButton';
 import H2 from '../Common/Title/H2';
 // icons
 import { RiLockFill } from 'react-icons/ri';
+import Happy from '../Common/Lottie/Happy';
+import Loading from '../Common/Loading/Loading';
 
 const PlanComponent = ({ planData }: PlanData) => {
   const router = useRouter();
@@ -17,11 +19,13 @@ const PlanComponent = ({ planData }: PlanData) => {
     return (
       <PlanBase>
         <NoPlanBox>
-          <NoPlanImg
-            src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/main/Animals%20and%20Nature/Seedling.webp"
-            alt="Seedling"
-          />
-          <NoPlanP>아직 등록된 학습 플랜이 없어요.</NoPlanP>
+          <NoPlanImg src="/gif/neutral.gif" alt="Seedling" />
+          <NoPlanP>
+            아직 학습 플랜이 없어요.
+            <br></br>
+            아래 버튼을 눌러 학습 플랜을 심어주세요!
+          </NoPlanP>
+
           <ApplyBtn onClick={() => router.push('/plan')}>플랜 심기</ApplyBtn>
         </NoPlanBox>
       </PlanBase>
@@ -51,15 +55,19 @@ const PlanComponent = ({ planData }: PlanData) => {
 
   return (
     <PlanBase>
-      <PlanBox>
-        <PlanHead>
+      <PlanHead>
+        <PlanTitle>
           <H2>
             {emoji} {title}
           </H2>
-          <PeriodP>
-            {`${dayjs(plan_from).format('MM.DD')} - ${dayjs(plan_to).format('MM.DD')}`}
-          </PeriodP>
-        </PlanHead>
+          <PeriodLevel>{level}</PeriodLevel>
+        </PlanTitle>
+        <PeriodP>
+          {`${dayjs(plan_from).format('MM.DD')} - ${dayjs(plan_to).format('MM.DD')}`} (총
+          <PeriodStrong> {total_date}</PeriodStrong> 일)
+        </PeriodP>
+      </PlanHead>
+      <PlanBox>
         <PlanMenu>
           {daysArray.map((isCompleted, idx) => (
             <>
@@ -93,7 +101,6 @@ const PlanBase = styled.section`
   height: 100%;
   overflow-y: scroll;
   border-radius: 8px;
-  padding: 16px 16px 24px;
 `;
 
 const NoPlanBox = styled.div`
@@ -107,34 +114,52 @@ const NoPlanBox = styled.div`
 `;
 
 const NoPlanImg = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 64px;
+  height: 64px;
 `;
 
 const NoPlanP = styled.p`
   text-align: center;
   word-break: keep-all;
   overflow-wrap: break-word;
+  color: ${props => props.theme.primary_04};
 `;
+
+// plan
 
 const PlanBox = styled.div`
   background-color: ${props => props.theme.primary_09};
+  min-height: calc(100% - 100px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
   padding: 24px 16px;
-  border-radius: 12px;
+  border-radius: 24px 24px 0 0;
 `;
 
 const PlanHead = styled.div`
-  font-size: 13px;
-  display: flex;
-  align-items: flex-end;
-  margin-bottom: 24px;
+  padding: 24px 24px 16px;
 `;
 
-const PeriodP = styled.p`
+const PlanTitle = styled.div`
+  display: flex;
+  align-items: flex-end;
+  font-size: 13px;
+`;
+
+const PeriodLevel = styled.p`
   margin: 0 4px;
   color: ${props => props.theme.primary_05};
   font-weight: 300;
+`;
+
+const PeriodP = styled.p`
+  margin: 4px 0 0 24px;
+  font-weight: 300;
+  font-size: 13px;
+  color: ${props => props.theme.primary_04};
+`;
+
+const PeriodStrong = styled.strong`
+  font-weight: 400;
 `;
 
 const PlanMenu = styled.ul`
@@ -165,12 +190,18 @@ const ItemContent = styled.div`
 `;
 
 const MenuIcon = ({ locked }: { locked: boolean }) => {
-  return locked ? <RiLockFill /> : <ItemImg src="/gif/happy.gif" alt="emoji" />;
+  return locked ? (
+    <RiLockFill />
+  ) : (
+    <LottieBox>
+      <Happy />
+    </LottieBox>
+  );
 };
 
-const ItemImg = styled.img`
-  width: 100%;
-  height: 100%;
+const LottieBox = styled.div`
+  border-radius: 50%;
+  padding-top: 4px;
 `;
 
 const Day = styled.span<{ locked: boolean }>`

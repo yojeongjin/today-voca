@@ -101,16 +101,6 @@ const PlanStrong = styled.strong`
   font-weight: 500;
 `;
 
-const PlanImgBox = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding-right: 32px;
-`;
-const PlanImg = styled.img`
-  width: 10%;
-  height: 10%;
-`;
-
 const PlanContents = styled.div`
   display: flex;
   flex-direction: column;
@@ -156,7 +146,6 @@ const CalendarIcon = styled(FaCalendarDay)`
 `;
 
 const CalendarP = styled.p`
-  // width: calc(100% - 16px);
   margin-left: 18px;
   font-size: 17px;
 `;

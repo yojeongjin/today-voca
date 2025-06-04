@@ -47,7 +47,7 @@ export const add = async (req: Request, res: Response, next: NextFunction) => {
     ]);
 
     // 플랜 id
-    const planId = planResult.insertId; // 방금 생성된 plan의 PK
+    const planId = planResult.insertId;
 
     // 2) tbl_daily에 plan_id를 사용해 한 줄 추가
     const dailySql = 'INSERT INTO tbl_daily (plan_id) VALUES (?)';

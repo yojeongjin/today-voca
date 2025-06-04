@@ -5,8 +5,15 @@ import { CompleteProps } from '@/Interface/IComplete';
 
 import CloseButton from '../Common/Button/CloseButton';
 import ApplyBtn from '../Common/Button/ApplyButton';
+import Neutral from '../Common/Lottie/Neutral';
+import Angry from '../Common/Lottie/Angry';
+import Delighted from '../Common/Lottie/Delighted';
 
-const PracticeComplete = ({ handleComplete, setOpenBottom }: CompleteProps) => {
+interface PracticeProps extends CompleteProps {
+  percentage: number;
+}
+
+const PracticeComplete = ({ handleComplete, setOpenBottom, percentage }: PracticeProps) => {
   const router = useRouter();
 
   return (
@@ -22,10 +29,28 @@ const PracticeComplete = ({ handleComplete, setOpenBottom }: CompleteProps) => {
         <CompleteH4>오늘 학습을 완료했어요!</CompleteH4>
         <CompleteP>반복 테스트를 통해서 실력을 업그레이드 시켜보세요</CompleteP>
 
-        <CompleteImgBox>
-          <CompleteImg src="/gif/neutral.gif" alt="neutral" />
-          <CompleteSpan>아쉬워요</CompleteSpan>
-        </CompleteImgBox>
+        {percentage < 30 ? (
+          <CompleteImgBox>
+            <CompleteImg>
+              <Angry />
+            </CompleteImg>
+            <CompleteSpan percentage={percentage}>조금 더 분발해보아요</CompleteSpan>
+          </CompleteImgBox>
+        ) : percentage < 70 ? (
+          <CompleteImgBox>
+            <CompleteImg>
+              <Neutral />
+            </CompleteImg>
+            <CompleteSpan percentage={percentage}>아쉬워요</CompleteSpan>
+          </CompleteImgBox>
+        ) : (
+          <CompleteImgBox>
+            <CompleteImg>
+              <Delighted />
+            </CompleteImg>
+            <CompleteSpan percentage={percentage}>잘했어요!</CompleteSpan>
+          </CompleteImgBox>
+        )}
       </CompleteBody>
 
       <ApplyBtn onClick={handleComplete}>다음 가기</ApplyBtn>
@@ -76,14 +101,15 @@ const CompleteImgBox = styled.div`
   margin: 16px 0 8px;
 `;
 
-const CompleteImg = styled.img`
-  width: 68ßpx;
+const CompleteImg = styled.div`
+  width: 68px;
   height: 68px;
+  margin: 0 auto;
 `;
 
-const CompleteSpan = styled.span`
+const CompleteSpan = styled.span<{ percentage: number }>`
   display: block;
-  color: #ffbf3e;
-  // color: #6ecc64;
+  color: ${props =>
+    props.percentage < 30 ? '#ff5252' : props.percentage < 70 ? '#ffbf3e' : '#6ecc64'};
   font-weight: 500;
 `;

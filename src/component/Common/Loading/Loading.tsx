@@ -1,5 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+// animation
+import Angry from '../Lottie/Angry';
+import Neutral from '../Lottie/Neutral';
+import Happy from '../Lottie/Happy';
+import Delighted from '../Lottie/Delighted';
 
 const Loading = () => {
   return (
@@ -8,16 +13,16 @@ const Loading = () => {
         <LoadingAnimation>
           <LoadingBox>
             <LoadingImg>
-              <Img src="/gif/upset.gif" alt="loading" />
+              <Angry />
             </LoadingImg>
             <LoadingImg>
-              <Img src="/gif/neutral.gif" alt="loading" />
+              <Neutral />
             </LoadingImg>
             <LoadingImg>
-              <Img src="/gif/happy.gif" alt="loading" />
+              <Happy />
             </LoadingImg>
             <LoadingImg>
-              <Img src="/gif/delight.gif" alt="loading" />
+              <Delighted />
             </LoadingImg>
           </LoadingBox>
         </LoadingAnimation>
@@ -65,23 +70,17 @@ const LoadingImg = styled.div`
   height: 52px;
   border-radius: 50%;
   margin-right: -6px;
-  // overflow: hidden;
 
   &::after {
     content: '';
     position: absolute;
     left: 0;
     bottom: 0;
-    background-color: ${props => props.theme.primary_07};
+    background-color: ${props => props.theme.primary_08};
     width: 100%;
     height: 50%;
     border-radius: 50%;
     z-index: -1;
     margin-right: -6px;
   }
-`;
-
-const Img = styled.img`
-  width: 100%;
-  height: 100%;
 `;

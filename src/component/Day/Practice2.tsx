@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 
 import { useBottom } from '@/hooks/useBottom';
 import { DayProps } from '@/Interface/IDay';
@@ -45,10 +45,14 @@ const Practice2 = ({ onNext, dayData }: DayProps) => {
         } else {
           setOpenBottom(true);
         }
-      }, 500);
+      }, 1000);
     },
     [correct, currentIdx, dayData.length, onNext],
   );
+
+  const percentage = useMemo(() => {
+    return ((great / dayData.length) * 100).toFixed(0);
+  }, [great]);
 
   return (
     <>
@@ -65,7 +69,7 @@ const Practice2 = ({ onNext, dayData }: DayProps) => {
           </StateItem>
           <StateItem>
             <StateCategory>%</StateCategory>
-            <State>{((great / dayData.length) * 100).toFixed(0)}%</State>
+            <State>{percentage}%</State>
           </StateItem>
         </StateMenu>
         {/* 문제 */}
@@ -98,13 +102,26 @@ const Practice2 = ({ onNext, dayData }: DayProps) => {
           setOpenBottom(false);
         }}
       >
-        <PracticeComplete handleComplete={() => onNext?.()} setOpenBottom={setOpenBottom} />
+        <PracticeComplete
+          handleComplete={() => onNext?.()}
+          setOpenBottom={setOpenBottom}
+          percentage={Number(percentage)}
+        />
       </BottomSheet>
     </>
   );
 };
 
 export default Practice2;
+
+const shake = keyframes`
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-8px); }
+  80% { transform: translateX(8px); }
+  100% { transform: translateX(0); }
+`;
 
 const PracticeBase = styled.div`
   position: relative;
@@ -152,14 +169,23 @@ const AnswerItem = styled.li<{
   isCorrect: string | boolean | null;
   isWrong: string | boolean | null;
 }>`
+  background-color: ${props =>
+    props.isCorrect ? '#f2f8ff' : props.isWrong ? '#fcf1f3' : 'transparent'};
   margin-bottom: 16px;
   padding: 16px 0;
   border: 1px solid
     ${props => (props.isCorrect ? '#027FFF' : props.isWrong ? '#c64657' : '#ADB5BD')};
   border-radius: 8px;
   color: ${props => (props.isCorrect ? '#027FFF' : props.isWrong ? '#c64657' : '#212529')};
+  font-weight: ${props => (props.isCorrect || props.isWrong ? '500' : '400')};
+
   text-align: center;
   cursor: pointer;
+  ${props =>
+    props.isWrong &&
+    css`
+      animation: ${shake} 0.4s ease-in-out;
+    `}
   &:last-child {
     margin-bottom: 0;
   }

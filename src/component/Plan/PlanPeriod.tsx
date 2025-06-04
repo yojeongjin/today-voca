@@ -12,6 +12,8 @@ dayjs.locale('ko');
 import { PlanInfo } from '@/type/planInfo';
 // components
 import ApplyBtn from '../Common/Button/ApplyButton';
+import CloseButton from '../Common/Button/CloseButton';
+
 // icons
 import { RiCloseLargeLine } from 'react-icons/ri';
 
@@ -26,13 +28,11 @@ const PlanPeriod = ({ planInfo, setPlanInfo, setOpenBottom }: PlanPeriodProps) =
 
   return (
     <PeriodBase>
-      <CloseBtn
+      <CloseButton
         onClick={() => {
           setOpenBottom(false);
         }}
-      >
-        <CloseIcon />
-      </CloseBtn>
+      />
       {/* period */}
       <PeriodBox>
         <TotalTime>
@@ -71,6 +71,7 @@ const PlanPeriod = ({ planInfo, setPlanInfo, setOpenBottom }: PlanPeriodProps) =
       </PeriodCalendar>
       {/* button */}
       <BtnBox>
+        <CalendarAlert>📍 종료일은 최대 한 달까지 지정 가능해요!</CalendarAlert>
         <ApplyBtn
           color="#027FFF"
           onClick={() => {
@@ -123,7 +124,7 @@ const TotalStrong = styled.strong`
 const PeriodMenu = styled.div`
   position: relative;
   display: flex;
-  margin: 0 0 24px;
+  padding: 0 0 16px;
 `;
 
 const StartDay = styled.div`
@@ -316,5 +317,12 @@ const PeriodCalendar = styled.div`
 `;
 
 const BtnBox = styled.div`
-  padding: 16px 8px;
+  padding: 12px 8px;
+`;
+
+const CalendarAlert = styled.p`
+  margin-bottom: 8px;
+  text-align: center;
+  font-size: 13px;
+  color: ${props => props.theme.primary_04};
 `;

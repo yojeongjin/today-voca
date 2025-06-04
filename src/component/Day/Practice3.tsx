@@ -1,7 +1,10 @@
 import { useReducer, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { DayProps } from '@/Interface/IDay';
+
+// components
 import ApplyBtn from '../Common/Button/ApplyButton';
+import Happy from '../Common/Lottie/Happy';
 
 interface PracticeState {
   stage: -1 | 0 | 1 | 2; // -1: 잠금, 0: 준비, 1: 진행, 2: 결과
@@ -126,7 +129,7 @@ const Practice3 = ({ dayData }: DayProps) => {
       {state.stage === 0 && (
         <>
           <CountContent>
-            <CountCharacter src="/gif/happy.gif" />
+            <Happy />
           </CountContent>
           <CountP>
             <Count>{state.count}</Count>초 뒤에 테스트가 시작됩니다!
@@ -212,11 +215,6 @@ const CountContent = styled.div`
   height: 135px;
   margin-bottom: 24px;
   border-radius: 50%;
-`;
-
-const CountCharacter = styled.img`
-  width: 100%;
-  height: 100%;
 `;
 
 const CountP = styled.p`

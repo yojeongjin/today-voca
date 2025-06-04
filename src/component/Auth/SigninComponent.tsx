@@ -39,6 +39,9 @@ const SigninComponent = () => {
   return (
     <SigninBase>
       <SigninContents>
+        {/* logo */}
+        <LogoImg src="/images/logo.webp" alt="로고" />
+
         {/* id input */}
         <InputWrapper>
           <InputLabel htmlFor="idInput">
@@ -112,6 +115,14 @@ const SigninContents = styled.article`
   gap: 16px;
 `;
 
+// logo
+const LogoBox = styled.div``;
+
+const LogoImg = styled.img`
+  width: 40%;
+  margin-bottom: 8px;
+`;
+
 // input
 const InputWrapper = styled.div`
   width: 100%;
@@ -144,10 +155,9 @@ const InputSpan = styled.span`
 
 const Input = styled.input`
 width: 100%;
-// max-width: 300px;
-// min-width: 230px;
-height: 48px;
+height: 52px;
 padding: 16px;
+font-size:15px;
 transition: all .15s ease;
 border: 1px solid #e0e0e0;
 border-radius: 8px;
@@ -181,9 +191,9 @@ const PwIcon = styled(IoKeyOutline)`
 `;
 
 const JoinBtn = styled.button`
-  // border: 1px solid black;
   width: 100%;
   height: 24px;
   color: ${props => props.theme.primary_06};
   text-decoration: underline;
+  font-size: 14px;
 `;
