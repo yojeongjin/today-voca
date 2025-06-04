@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 // animation
 import Angry from '../Lottie/Angry';
 import Neutral from '../Lottie/Neutral';
@@ -52,6 +52,15 @@ const LoadingInner = styled.div`
 
 // 로딩 애니메이션
 
+const bounce = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+`;
+
 const LoadingAnimation = styled.div`
   height: 100%;
   display: flex;
@@ -70,6 +79,20 @@ const LoadingImg = styled.div`
   height: 52px;
   border-radius: 50%;
   margin-right: -6px;
+  animation: ${bounce} 1.2s ease-in-out infinite;
+
+  &:nth-child(1) {
+    animation-delay: 0s;
+  }
+  &:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  &:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  &:nth-child(4) {
+    animation-delay: 0.6s;
+  }
 
   &::after {
     content: '';
@@ -81,6 +104,5 @@ const LoadingImg = styled.div`
     height: 50%;
     border-radius: 50%;
     z-index: -1;
-    margin-right: -6px;
   }
 `;

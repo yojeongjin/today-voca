@@ -1,11 +1,19 @@
 import { createGlobalStyle } from 'styled-components';
 import Reset from 'styled-reset';
 // font
+import Fredoka from './fonts/Fredoka-Bold.woff';
 import 'pretendard/dist/web/static/pretendard.css';
 
 const GlobalStyles = createGlobalStyle`
 ${Reset}
-  
+
+  @font-face {
+    font-family: 'Fredoka';
+    src: local('Fredoka'), url(${Fredoka}) format('woff');
+    font-style: normal;
+    font-display: swap;
+  }
+
   * {
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
     box-sizing: border-box;

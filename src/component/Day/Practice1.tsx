@@ -44,7 +44,7 @@ const Practice1 = ({ onNext, dayData }: DayProps) => {
                 <PiSpeakerHighFill />
               </VocaBtn>
             </VocaBox>
-            <Pronunciation>[{data.phonetic}]</Pronunciation>
+            <Pronunciation>{data.phonetic && `${[data.phonetic]}`}</Pronunciation>
             <Meaning>
               {data.pos1}. {data.meaning1}
               {'  '}

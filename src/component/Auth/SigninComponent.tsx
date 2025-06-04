@@ -1,4 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { signin } from '@/redux/modules/auth';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 // icons
@@ -6,8 +8,7 @@ import { IoMailOutline, IoKeyOutline } from 'react-icons/io5';
 
 // component
 import ApplyBtn from '../Common/Button/ApplyButton';
-import { useDispatch } from 'react-redux';
-import { signin } from '@/redux/modules/auth';
+import Main from '../Common/Lottie/Main';
 
 const SigninComponent = () => {
   const router = useRouter();
@@ -40,7 +41,12 @@ const SigninComponent = () => {
     <SigninBase>
       <SigninContents>
         {/* logo */}
-        <LogoImg src="/images/logo.webp" alt="로고" />
+        <LogoBox>
+          KONGLISH
+          <LogoAnimation>
+            <Main />
+          </LogoAnimation>
+        </LogoBox>
 
         {/* id input */}
         <InputWrapper>
@@ -116,11 +122,26 @@ const SigninContents = styled.article`
 `;
 
 // logo
-const LogoBox = styled.div``;
+const LogoBox = styled.div`
+  position: relative;
+  font-family: 'Fredoka';
+  font-size: 46px;
+  position: relative;
+  color: ${props => props.theme.primary_01};
+`;
+
+const LogoAnimation = styled.div`
+  position: absolute;
+  left: 17px;
+  top: 7px;
+  // bottom: -8px;
+  width: 22%;
+`;
 
 const LogoImg = styled.img`
-  width: 40%;
-  margin-bottom: 8px;
+  width: 70%;
+  display: block;
+  margin: 0 auto;
 `;
 
 // input

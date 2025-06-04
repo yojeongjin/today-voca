@@ -92,12 +92,9 @@ const PlanComponent = ({ planData }: PlanData) => {
   return (
     <PlanBase>
       <PlanHead>
-        <PlanTitle>
-          <H2>
-            {emoji} {title}
-          </H2>
-          <PeriodLevel>{level}</PeriodLevel>
-        </PlanTitle>
+        <H2>
+          {emoji} {title}
+        </H2>
         <PeriodP>
           {`${dayjs(plan_from).format('MM.DD')} - ${dayjs(plan_to).format('MM.DD')}`} (총
           <PeriodStrong> {total_date}</PeriodStrong> 일)
@@ -173,32 +170,22 @@ const NoPlanP = styled.p`
 
 const PlanBox = styled.div`
   background-color: ${props => props.theme.primary_09};
-  min-height: calc(100% - 100px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  min-height: calc(100% - 70px);
   padding: 24px 16px;
   border-radius: 24px 24px 0 0;
 `;
 
 const PlanHead = styled.div`
   padding: 24px 24px 16px;
-`;
-
-const PlanTitle = styled.div`
   display: flex;
   align-items: flex-end;
   font-size: 13px;
 `;
 
-const PeriodLevel = styled.p`
-  margin: 0 4px;
-  color: ${props => props.theme.primary_05};
-  font-weight: 300;
-`;
-
 const PeriodP = styled.p`
-  margin: 4px 0 0 24px;
+  margin-left: 8px;
   font-weight: 300;
-  font-size: 13px;
+  font-size: 14px;
   color: ${props => props.theme.primary_04};
 `;
 
