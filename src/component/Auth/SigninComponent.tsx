@@ -42,10 +42,11 @@ const SigninComponent = () => {
       <SigninContents>
         {/* logo */}
         <LogoBox>
-          KONGLISH
-          <LogoAnimation>
+          K
+          <LottieWrapper>
             <Main />
-          </LogoAnimation>
+          </LottieWrapper>
+          NGLISH
         </LogoBox>
 
         {/* id input */}
@@ -130,18 +131,14 @@ const LogoBox = styled.div`
   color: ${props => props.theme.primary_01};
 `;
 
-const LogoAnimation = styled.div`
-  position: absolute;
-  left: 17px;
-  top: 7px;
-  // bottom: -8px;
-  width: 22%;
-`;
-
-const LogoImg = styled.img`
-  width: 70%;
-  display: block;
-  margin: 0 auto;
+const LottieWrapper = styled.span`
+  display: inline-block;
+  width: 44px;
+  height: 44px;
+  vertical-align: middle;
+  position: relative;
+  top: -10px;
+  margin: 0 -4px 0 -6px;
 `;
 
 // input

@@ -17,4 +17,5 @@ export interface DailyItem {
   day_number?: number;
   daily_state?: string;
   current_step?: number;
+  isToday?: boolean;
 }
