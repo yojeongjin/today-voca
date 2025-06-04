@@ -11,18 +11,51 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
   const user_id = (req.verifiedToken as any).user_idx;
 
   try {
-    const sql = `SELECT tp.*, td.day_number FROM tbl_plan as tp
-                  LEFT JOIN tbl_user as tu on tu.id = tp.user_id
-                  LEFT JOIN tbl_daily as td on tp.id = td.plan_id
-                  WHERE tp.user_id = ? AND tp.state = 'PENDING'
-                  `;
+    const sql = `
+      SELECT 
+        tp.*,
+        td.day_number,
+        td.state AS daily_state,
+        td.current_step
+      FROM tbl_plan AS tp
+      LEFT JOIN tbl_daily AS td ON td.plan_id = tp.id
+      WHERE tp.user_id = ?
+      ORDER BY tp.id DESC, td.day_number ASC
+    `;
+
     const [rows] = await pool.execute<RowDataPacket[]>(sql, [user_id]);
 
-    res.status(HttpStatus.OK).json(
-      successResponse({
-        data: rows,
-      }),
-    );
+    const planMap = new Map<number, any>();
+
+    rows.forEach(row => {
+      const planId = row.id;
+
+      if (!planMap.has(planId)) {
+        planMap.set(planId, {
+          plan_id: row.id,
+          title: row.title,
+          plan_from: row.plan_from,
+          plan_to: row.plan_to,
+          total_date: row.total_date,
+          level: row.level,
+          state: row.state,
+          emoji: row.emoji,
+          daily_list: [],
+        });
+      }
+
+      // daily 정보가 존재할 때만 push
+      if (row.day_number !== null) {
+        planMap.get(planId).daily_list.push({
+          day_number: row.day_number,
+          daily_state: row.daily_state,
+          current_step: row.current_step,
+        });
+      }
+    });
+
+    const result = Array.from(planMap.values());
+    res.status(200).json(successResponse({ data: result }));
   } catch (err) {
     next(err);
   }

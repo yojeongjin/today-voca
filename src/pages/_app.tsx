@@ -1,8 +1,10 @@
 import type { AppProps } from 'next/app';
 import { NextPage } from 'next';
 import { useEffect } from 'react';
-// store
+// store'
+import { useSelector } from 'react-redux';
 import wrapper from '@/redux/store';
+import { RootState } from '@/redux/modules/reducer';
 // persist
 import { PersistGate } from 'redux-persist/integration/react';
 // hook
@@ -15,8 +17,6 @@ import '../styles/fonts/index.css';
 // components
 import Layout from '@/component/Common/Layout/Layout';
 import Loading from '@/component/Common/Loading/Loading';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/modules/reducer';
 
 const App: NextPage<AppProps> = ({ Component, pageProps }: AppProps) => {
   useRouteLoading();

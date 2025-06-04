@@ -4,8 +4,8 @@ import { DayProps } from '@/Interface/IDay';
 // container
 import DayContainer from '@/container/Day/DayContainer';
 
-const Day: NextPage<DayProps> = ({ dayData }) => {
-  return <DayContainer dayData={dayData} />;
+const Day: NextPage<DayProps> = ({ dayData, plan_id, day_number }) => {
+  return <DayContainer dayData={dayData} plan_id={plan_id} day_number={day_number} />;
 };
 
 // ssr
@@ -32,11 +32,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
       withCredentials: true,
     });
 
-    const dayData = result.data.data.data;
+    const res = result.data.data;
+    console.log(res);
 
     if (result.data.code === 200) {
       return {
-        props: { dayData },
+        props: {
+          dayData: res.data,
+          plan_id: res.plan_id,
+          day_number: Number(ctx.query.day),
+        },
       };
     }
 

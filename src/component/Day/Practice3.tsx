@@ -61,7 +61,11 @@ const reducer = (state: PracticeState, action: PracticeAction): PracticeState =>
   }
 };
 
-const Practice3 = ({ dayData }: DayProps) => {
+interface Practice3Props extends DayProps {
+  handleFinish: () => void;
+}
+
+const Practice3 = ({ dayData, handleFinish }: Practice3Props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const inputRef = useRef<HTMLInputElement>(null);
   const countId = useRef<NodeJS.Timeout | null>(null);
@@ -189,7 +193,7 @@ const Practice3 = ({ dayData }: DayProps) => {
               </AnswerItem>
             ))}
           </AnswerMenu>
-          <ApplyBtn>테스트 종료</ApplyBtn>
+          <ApplyBtn onClick={handleFinish}>테스트 종료</ApplyBtn>
         </AnswerBox>
       )}
     </PracticeBase>

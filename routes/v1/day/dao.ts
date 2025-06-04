@@ -3,7 +3,7 @@ import { HttpStatus } from '../../../back/enum/HttpStatus.enum';
 import { successResponse } from '../../../back/utils/apiResponse';
 
 // db
-import { RowDataPacket, ResultSetHeader } from 'mysql2';
+import { RowDataPacket } from 'mysql2';
 import getPool from '../../../config/db';
 const pool = getPool();
 
@@ -15,18 +15,23 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
   const offset = (pageValue - 1) * pageSizeValue;
 
   try {
-    const sql = `SELECT tw.*
+    const sql = `SELECT tw.*, tp.id as plan_id
                 FROM tbl_word as tw
                 LEFT JOIN tbl_plan as tp on tp.level = tw.level
                 WHERE tw.level = ?
-                ORDER BY tw.id ASC 
+                ORDER BY tw.id ASC
                 LIMIT ${pageSizeValue} OFFSET ${offset}
                 `;
     const [rows] = await pool.execute<RowDataPacket[]>(sql, [level]);
 
+    const planId = rows.length > 0 ? rows[0].plan_id : null;
+    // word 데이터만 추출
+    const wordData = rows.map(({ plan_id, ...word }) => word);
+
     res.status(HttpStatus.OK).json(
       successResponse({
-        data: rows,
+        data: wordData,
+        plan_id: planId,
       }),
     );
   } catch (err) {
@@ -36,19 +41,52 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
 
 export const modify = async (req: Request, res: Response, next: NextFunction) => {
   const user_id = (req.verifiedToken as any).user_idx;
-  const { state } = req.body;
+  const { state, step, day_number } = req.body;
 
   try {
-    const daySql = `update tbl_daily set state = ? where idUser = ?`;
-    const [dayResult] = await pool.execute<ResultSetHeader>(daySql, [state, user_id]);
+    const daySql = `UPDATE tbl_daily AS td
+                    JOIN tbl_plan AS tp ON tp.id = td.plan_id
+                    JOIN tbl_user AS tu ON tp.user_id = tu.id
+                    SET td.state = ?, td.current_step = ?
+                    WHERE tu.id = ? and td.day_number = ?;`;
 
-    // day_id
-    const planId = dayResult.insertId;
-
-    const historySql = `insert into tbl_daily_history step_name = ?`;
+    await pool.execute(daySql, [state, step, user_id, day_number]);
 
     res.status(HttpStatus.OK).json(successResponse());
   } catch (err) {
     next(err);
+  }
+};
+
+export const done = async (req: Request, res: Response, next: NextFunction) => {
+  const { plan_id, day_number } = req.body;
+
+  const conn = await pool.getConnection();
+  await conn.beginTransaction();
+
+  try {
+    // 1. 기존 day를 done 처리
+    const updateSql = `
+      UPDATE tbl_daily AS td
+      JOIN tbl_plan AS tp ON tp.id = td.plan_id
+      SET td.state = 'done' 
+      WHERE td.plan_id = ?
+    `;
+    await conn.execute(updateSql, [plan_id]);
+
+    // 2. 다음 day 새로 생성
+    const insertSql = `
+        INSERT INTO tbl_daily (plan_id, day_number)
+        VALUES (?, ?)
+      `;
+    await conn.execute(insertSql, [plan_id, day_number + 1]);
+
+    await conn.commit();
+    res.status(HttpStatus.OK).json(successResponse());
+  } catch (err) {
+    await conn.rollback();
+    next(err);
+  } finally {
+    conn.release();
   }
 };

@@ -1,10 +1,20 @@
 export type PlanInfo = {
+  id?: number;
   title: string;
   plan_from: Date | null;
   plan_to: Date | null;
-  course: string;
+  total_date: number;
+  course?: string;
   level: string;
+  state: string;
   emoji: string;
-  total_date?: number;
-  day_number?: number | null;
+  daily_list: DailyItem[];
 };
+
+export interface DailyItem {
+  day: number;
+  locked: boolean;
+  day_number?: number;
+  daily_state?: string;
+  current_step?: number;
+}

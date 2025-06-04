@@ -4,13 +4,16 @@ import styled from 'styled-components';
 import dayjs from 'dayjs';
 // ifs
 import { PlanData } from '@/Interface/IPlan';
+import { DailyItem } from '@/type/planInfo';
 // components
 import ApplyBtn from '../Common/Button/ApplyButton';
 import H2 from '../Common/Title/H2';
+import Happy from '../Common/Lottie/Happy';
+import Neutral from '../Common/Lottie/Neutral';
+import Delighted from '../Common/Lottie/Delighted';
+
 // icons
 import { RiLockFill } from 'react-icons/ri';
-import Happy from '../Common/Lottie/Happy';
-import Loading from '../Common/Loading/Loading';
 
 const PlanComponent = ({ planData }: PlanData) => {
   const router = useRouter();
@@ -33,24 +36,57 @@ const PlanComponent = ({ planData }: PlanData) => {
   }
 
   const plan = planData[0];
-  const { plan_from, plan_to, day_number = 0, total_date = 0, emoji, title, level } = plan;
+  const { plan_from, plan_to, emoji, title, total_date, daily_list = [], level } = plan;
 
-  // 3. 완료된 날 / 잠긴 날 배열 생성
-  const daysArray = useMemo(() => {
-    const completedDays = Number(day_number);
-    const totalDays = Number(total_date);
-    return Array.from({ length: totalDays }, (_, i) => i < completedDays);
-  }, [day_number, total_date]);
+  const daysArray: DailyItem[] = useMemo(() => {
+    return Array.from({ length: total_date }, (_, i) => {
+      const dayNum = i + 1;
+      const matched = daily_list.find(d => d.day_number === dayNum);
 
-  const handleDay = (idx: number) => {
-    router.push({
-      pathname: 'day',
-      query: {
-        day: idx,
-        day_size: total_date,
-        level: level,
-      },
+      if (!matched) {
+        return {
+          day: dayNum,
+          locked: dayNum !== 1, // DAY 1만 기본 오픈
+        };
+      }
+
+      return {
+        ...matched,
+        day: dayNum,
+        dailyState: matched.daily_state,
+        currentStep: matched.current_step,
+        locked: false,
+      };
     });
+  }, [daily_list, total_date]);
+
+  // 아이콘 출력 부분
+  const MenuIcon = ({
+    locked,
+    dailyState,
+    currentStep,
+  }: {
+    locked: boolean;
+    dailyState?: string;
+    currentStep?: number;
+  }) => {
+    if (locked) return <RiLockFill />;
+
+    let LottieComponent = Happy;
+
+    if (dailyState === 'done') {
+      if (currentStep === 1 || currentStep === 2) {
+        LottieComponent = Neutral;
+      } else if (currentStep === 3) {
+        LottieComponent = Delighted;
+      }
+    }
+
+    return (
+      <LottieBox>
+        <LottieComponent />
+      </LottieBox>
+    );
   };
 
   return (
@@ -69,24 +105,32 @@ const PlanComponent = ({ planData }: PlanData) => {
       </PlanHead>
       <PlanBox>
         <PlanMenu>
-          {daysArray.map((isCompleted, idx) => (
-            <>
-              <MenuItem
-                key={idx}
-                locked={!isCompleted}
-                onClick={() => {
-                  if (!isCompleted) return;
+          {daysArray.map((item, idx) => (
+            <MenuItem
+              key={idx}
+              locked={item.locked}
+              onClick={() => {
+                if (item.locked) return;
 
-                  handleDay(idx + 1);
-                  return;
-                }}
-              >
-                <ItemContent>
-                  <MenuIcon locked={!isCompleted} />
-                </ItemContent>
-                <Day locked={!isCompleted}>DAY {idx + 1}</Day>
-              </MenuItem>
-            </>
+                router.push({
+                  pathname: 'day',
+                  query: {
+                    day: item.day,
+                    day_size: total_date,
+                    level,
+                  },
+                });
+              }}
+            >
+              <ItemContent>
+                <MenuIcon
+                  locked={item.locked}
+                  dailyState={item.daily_state}
+                  currentStep={item.current_step}
+                />
+              </ItemContent>
+              <Day locked={item.locked}>DAY {item.day}</Day>
+            </MenuItem>
           ))}
         </PlanMenu>
       </PlanBox>

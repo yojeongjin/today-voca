@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 import { CompleteProps } from '@/Interface/IComplete';
@@ -10,18 +9,22 @@ import Angry from '../Common/Lottie/Angry';
 import Delighted from '../Common/Lottie/Delighted';
 
 interface PracticeProps extends CompleteProps {
+  handleFinish: () => void;
   percentage: number;
 }
 
-const PracticeComplete = ({ handleComplete, setOpenBottom, percentage }: PracticeProps) => {
-  const router = useRouter();
-
+const PracticeComplete = ({
+  handleFinish,
+  handleComplete,
+  setOpenBottom,
+  percentage,
+}: PracticeProps) => {
   return (
     <CompleteBase>
       <CloseButton
-        onClick={() => {
+        onClick={async () => {
           setOpenBottom(false);
-          router.push('/');
+          await handleFinish();
         }}
       />
       <CompleteH2>학습 완료</CompleteH2>

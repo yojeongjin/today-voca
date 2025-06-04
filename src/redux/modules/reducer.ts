@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 
 import auth from './auth';
 import common from './common';
+import day from './day';
 
 const rootReducer = (state: any, action: any) => {
   switch (action.type) {
@@ -14,6 +15,7 @@ const rootReducer = (state: any, action: any) => {
       };
     default: {
       const combinedReducer = combineReducers({
+        day,
         common,
         auth,
       });

@@ -2,10 +2,11 @@ import { Router } from 'express';
 const router = Router();
 
 // controller
-import { list, modify } from './dao';
+import { list, modify, done } from './dao';
 import { jwtMiddleware } from '../../../back/middleware/jwtMiddleware';
 
 router.get('/', jwtMiddleware, list);
-router.get('/', jwtMiddleware, modify);
+router.patch('/', jwtMiddleware, modify);
+router.patch('/done', jwtMiddleware, done);
 
 export default router;

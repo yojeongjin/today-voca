@@ -7,7 +7,11 @@ import { DayProps } from '@/Interface/IDay';
 import BottomSheet from '../Common/BottomSheet/BottomSheet';
 import PracticeComplete from './PracticeComplete';
 
-const Practice2 = ({ onNext, dayData }: DayProps) => {
+interface Practice2Props extends DayProps {
+  handleFinish: () => void;
+}
+
+const Practice2 = ({ onNext, dayData, handleFinish }: Practice2Props) => {
   const { openBottom, setOpenBottom } = useBottom();
   const [answer, setAnswer] = useState<string | null>(null);
   const [great, setGreat] = useState<number>(0);
@@ -103,6 +107,7 @@ const Practice2 = ({ onNext, dayData }: DayProps) => {
         }}
       >
         <PracticeComplete
+          handleFinish={handleFinish}
           handleComplete={() => onNext?.()}
           setOpenBottom={setOpenBottom}
           percentage={Number(percentage)}
