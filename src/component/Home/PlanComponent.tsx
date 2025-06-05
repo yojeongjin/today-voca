@@ -113,7 +113,7 @@ const PlanComponent = ({ planData }: PlanData) => {
             {emoji} {title}
           </PlanH2>
           <PeriodP>
-            {`${dayjs(plan_from).format('MM.DD')} - ${dayjs(plan_to).format('MM.DD')}`} (총
+            {`${dayjs(plan_from).format('M.D')} - ${dayjs(plan_to).format('M.D')}`} (총
             <PeriodStrong> {total_date}</PeriodStrong> 일)
           </PeriodP>
         </PlanTitle>
@@ -209,7 +209,7 @@ const PlanTitle = styled.div`
 `;
 
 const PlanH2 = styled.h2`
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 500;
   letter-spacing: -0.5px;
 `;

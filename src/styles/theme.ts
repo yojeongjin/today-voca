@@ -1,7 +1,8 @@
 const theme = {
   // primary
   primary_01: '#027FFF',
-  primary_02: '#8CB8FE', // disabled
+  // primary_02: '#8CB8FE', // disabled
+  primary_02: '#d2e6fb', // disabled
   primary_03: '#212529',
   primary_04: '#737373',
   primary_05: '#868E96',

@@ -110,13 +110,14 @@ export const add = async (req: Request, res: Response, next: NextFunction) => {
 
 export const modify = async (req: Request, res: Response, next: NextFunction) => {
   const user_id = (req.verifiedToken as any).user_idx;
+  const { id } = req.body;
 
   try {
     const sql = `UPDATE tbl_plan
                     SET state = 'FINISHED'
-                    WHERE user_id = ?;`;
+                    WHERE user_id = ? and id = ?;`;
 
-    await pool.execute(sql, [user_id]);
+    await pool.execute(sql, [user_id, id]);
 
     res.status(HttpStatus.OK).json(successResponse());
   } catch (err) {

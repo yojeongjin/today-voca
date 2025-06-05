@@ -43,6 +43,7 @@ const HomeTitle = () => {
           <BottomMenu>
             <BottomItem
               onClick={() => {
+                setOpenBottom(false);
                 router.push('/mypage');
               }}
             >
@@ -85,7 +86,7 @@ const DotButton = styled.button`
 
 // bottom
 const BottomBase = styled.div`
-  min-height: 230px;
+  min-height: 260px;
   padding-top: 16px;
   font-size: 16px;
 `;
@@ -96,7 +97,7 @@ const BottomH4 = styled.h4`
 `;
 
 const BottomMenu = styled.ul`
-  margin-top: 24px;
+  margin-top: 28px;
 `;
 
 const BottomItem = styled.li`
@@ -104,7 +105,6 @@ const BottomItem = styled.li`
   align-items: center;
   padding: 16px 20px;
   border-top: 1px solid rgba(0, 0, 0, 0.03);
-  font-weight: 300;
   cursor: pointer;
   &:first-child {
     border-top: 0;

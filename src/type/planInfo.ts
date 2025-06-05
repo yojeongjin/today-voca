@@ -1,5 +1,6 @@
 export type PlanInfo = {
-  id?: number;
+  id: number;
+  plan_id: number;
   title: string;
   plan_from: Date | null;
   plan_to: Date | null;

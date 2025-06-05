@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
-// utils
-import axios from '@/utils/axiosInstance';
-import { handleApiError } from '@/utils/handleApiError';
+
 // hook
 import { useBottom } from '@/hooks/useBottom';
+// utils
+import handleFinish from '@/utils/finishPlan';
 // ifs
 import { PlanData } from '@/Interface/IPlan';
 
@@ -16,28 +16,26 @@ import BottomSheet from '@/component/Common/BottomSheet/BottomSheet';
 const HomeContainer = ({ planData }: PlanData) => {
   const data = planData[0];
   const { openBottom, setOpenBottom } = useBottom();
+  console.log(data);
 
-  // useEffect(() => {
-  //   if (!data) return;
+  useEffect(() => {
+    if (!data) return;
 
-  //   if (
-  //     (data?.daily_list.length === data?.total_date &&
-  //       data?.daily_list[data.total_date]?.current_step === 2) ||
-  //     3
-  //   ) {
-  //     handleFinish();
-  //   }
-  // }, []);
-
-  const handleFinish = async () => {
-    try {
-      const res = await axios.patch(`${process.env.NEXT_PUBLIC_APP_API_KEY}/v1/plan`);
-      console.log(res.data);
-      if (res.data.code === 200) {
-        setOpenBottom(true);
+    if (data?.daily_list.length - 1 === data?.total_date) {
+      if (
+        data?.daily_list[data.total_date - 1]?.current_step === 2 ||
+        data?.daily_list[data.total_date - 1]?.current_step === 3
+      ) {
+        finish(data.plan_id);
       }
-    } catch (err) {
-      handleApiError(err);
+    }
+  }, []);
+
+  const finish = async (id: number) => {
+    const res = await handleFinish(id);
+
+    if (res === 200) {
+      setOpenBottom(true);
     }
   };
 
