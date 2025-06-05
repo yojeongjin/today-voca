@@ -2,8 +2,6 @@ import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import styled, { keyframes, css } from 'styled-components';
 import dayjs from 'dayjs';
-// progress
-import { Line } from 'rc-progress';
 // ifs
 import { PlanData } from '@/Interface/IPlan';
 import { DailyItem } from '@/type/planInfo';
@@ -15,7 +13,6 @@ import Delighted from '../Common/Lottie/Delighted';
 
 // icons
 import { RiLockFill } from 'react-icons/ri';
-import BottomSheet from '../Common/BottomSheet/BottomSheet';
 
 const PlanComponent = ({ planData }: PlanData) => {
   const router = useRouter();
@@ -23,26 +20,24 @@ const PlanComponent = ({ planData }: PlanData) => {
   if (!planData || planData.length === 0) {
     return (
       <PlanBase>
-        <NoPlanBox>
-          <NoPlanImg src="/gif/neutral.gif" alt="Seedling" />
-          <NoPlanP>
-            아직 학습 플랜이 없어요.
-            <br></br>
-            아래 버튼을 눌러 학습 플랜을 심어주세요!
-          </NoPlanP>
+        <NoPlanInner>
+          <NoPlanBox>
+            <NoPlanImg src="/gif/neutral.gif" alt="Seedling" />
+            <NoPlanP>
+              아직 학습 플랜이 없어요.
+              <br></br>
+              아래 버튼을 눌러 학습 플랜을 심어주세요!
+            </NoPlanP>
 
-          <ApplyBtn onClick={() => router.push('/plan')}>플랜 심기</ApplyBtn>
-        </NoPlanBox>
+            <ApplyBtn onClick={() => router.push('/plan')}>플랜 심기</ApplyBtn>
+          </NoPlanBox>
+        </NoPlanInner>
       </PlanBase>
     );
   }
 
   const plan = planData[0];
   const { plan_from, plan_to, emoji, title, total_date, daily_list = [], level } = plan;
-
-  const percentage = useMemo(() => {
-    return ((daily_list.length / total_date) * 100).toFixed(0);
-  }, [daily_list.length]);
 
   const daysArray: DailyItem[] = useMemo(() => {
     let lastOpenIdx = -1;
@@ -112,7 +107,7 @@ const PlanComponent = ({ planData }: PlanData) => {
 
   return (
     <PlanBase>
-      <PlanHead>
+      <PlanBox>
         <PlanTitle>
           <PlanH2>
             {emoji} {title}
@@ -122,20 +117,6 @@ const PlanComponent = ({ planData }: PlanData) => {
             <PeriodStrong> {total_date}</PeriodStrong> 일)
           </PeriodP>
         </PlanTitle>
-
-        <PlanProgress>
-          <Line
-            percent={Number(percentage)}
-            strokeWidth={3}
-            trailWidth={3}
-            strokeColor="#1871ff"
-            trailColor="#e7ecf1"
-          />
-          <ProgressSpan isHalf={Number(percentage) > 50}>{percentage} %</ProgressSpan>
-        </PlanProgress>
-      </PlanHead>
-
-      <PlanBox>
         <PlanMenu>
           {daysArray.map((item, idx) => (
             <MenuItem
@@ -176,18 +157,29 @@ export default PlanComponent;
 
 const PlanBase = styled.section`
   background-color: ${props => props.theme.primary_08};
-  height: 100%;
+  height: calc(100% - 67px);
   overflow-y: scroll;
 `;
 
-const NoPlanBox = styled.div`
+const NoPlanInner = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100%;
+  padding: 32px 24px 24px;
+`;
+
+const NoPlanBox = styled.div`
+  background-color: ${props => props.theme.primary_09};
+  width: 100%;
+  height: 90%;
   padding: 0 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   gap: 16px;
+  border-radius: 12px;
 `;
 
 const NoPlanImg = styled.img`
@@ -205,19 +197,15 @@ const NoPlanP = styled.p`
 // plan
 const PlanBox = styled.div`
   background-color: ${props => props.theme.primary_09};
-  min-height: calc(100% - 110px);
+  min-height: 100%;
   padding: 24px 16px;
   border-radius: 24px 24px 0 0;
-`;
-
-const PlanHead = styled.div`
-  padding: 24px 24px 20px;
-  font-size: 13px;
 `;
 
 const PlanTitle = styled.div`
   display: flex;
   align-items: flex-end;
+  padding: 0 0 24px;
 `;
 
 const PlanH2 = styled.h2`
@@ -228,29 +216,13 @@ const PlanH2 = styled.h2`
 
 const PeriodP = styled.p`
   margin-left: 8px;
+  font-size: 13px;
   font-weight: 300;
   color: ${props => props.theme.primary_04};
 `;
 
 const PeriodStrong = styled.strong`
   font-weight: 400;
-`;
-
-const PlanProgress = styled.div`
-  position: relative;
-  margin-top: 8px;
-`;
-
-const ProgressSpan = styled.span<{ isHalf: boolean }>`
-  position: absolute;
-  top: 2px;
-  left: 50%;
-  display: flex;
-  align-items: center;
-  transform: translateX(-50%);
-  font-size: 9px;
-  font-weight: 300;
-  color: ${props => (props.isHalf ? '#fff' : '#252525')};
 `;
 
 const PlanMenu = styled.ul`

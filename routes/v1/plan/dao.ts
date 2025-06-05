@@ -19,7 +19,7 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
         td.current_step
       FROM tbl_plan AS tp
       LEFT JOIN tbl_daily AS td ON td.plan_id = tp.id
-      WHERE tp.user_id = ?
+      WHERE tp.user_id = ? and tp.state = 'PENDING'
       ORDER BY tp.id DESC, td.day_number ASC
     `;
 
@@ -85,6 +85,22 @@ export const add = async (req: Request, res: Response, next: NextFunction) => {
     // 2) tbl_daily에 plan_id를 사용해 한 줄 추가
     const dailySql = 'INSERT INTO tbl_daily (plan_id) VALUES (?)';
     await pool.execute(dailySql, [planId]);
+
+    res.status(HttpStatus.OK).json(successResponse());
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const modify = async (req: Request, res: Response, next: NextFunction) => {
+  const user_id = (req.verifiedToken as any).user_idx;
+
+  try {
+    const sql = `UPDATE tbl_plan
+                    SET state = 'FINISHED'
+                    WHERE user_id = ?;`;
+
+    await pool.execute(sql, [user_id]);
 
     res.status(HttpStatus.OK).json(successResponse());
   } catch (err) {

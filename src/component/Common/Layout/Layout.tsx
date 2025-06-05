@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 type LayoutProps = {
@@ -7,20 +6,6 @@ type LayoutProps = {
 };
 
 const Layout = ({ children }: LayoutProps) => {
-  const router = useRouter();
-
-  if (
-    router.pathname === '/signin' ||
-    router.pathname === '/join' ||
-    router.pathname === '/plan' ||
-    router.pathname === '/day'
-  ) {
-    return (
-      <LayoutBase>
-        <Inner>{children}</Inner>
-      </LayoutBase>
-    );
-  }
   return (
     <LayoutBase>
       <LayoutInner>{children}</LayoutInner>

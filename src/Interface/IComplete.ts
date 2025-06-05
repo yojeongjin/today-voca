@@ -1,4 +1,4 @@
 export interface CompleteProps {
-  handleComplete: () => void;
+  handleComplete?: () => void;
   setOpenBottom: React.Dispatch<React.SetStateAction<boolean>>;
 }

@@ -111,6 +111,7 @@ export const refreshAccessToken = (req: Request, res: Response, next: NextFuncti
       secure: false,
       sameSite: 'lax',
       domain: 'http://172.30.1.26',
+      maxAge: 1000 * 60 * 60,
     });
 
     res.status(200).json(successResponse());
@@ -137,6 +138,26 @@ export const getUser = (req: Request, res: Response, next: NextFunction) => {
         user_name: token.user_name,
       }),
     );
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const logout = (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res
+      .clearCookie('access_token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+      })
+      .clearCookie('refresh_token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+      });
+
+    res.status(200).json(successResponse());
   } catch (err) {
     next(err);
   }

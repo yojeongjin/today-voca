@@ -2,11 +2,10 @@ import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import axios from '../utils/axiosInstance';
 //interface
 import { PlanData } from '@/Interface/IPlan';
-// components
-import PlanComponent from '@/component/Home/PlanComponent';
+import HomeContainer from '@/container/Home/HomeContainer';
 
 const Home: NextPage<PlanData> = ({ planData }) => {
-  return <PlanComponent planData={planData} />;
+  return <HomeContainer planData={planData} />;
 };
 
 // ssr
