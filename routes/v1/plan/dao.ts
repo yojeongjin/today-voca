@@ -19,7 +19,7 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
         td.current_step
       FROM tbl_plan AS tp
       LEFT JOIN tbl_daily AS td ON td.plan_id = tp.id
-      WHERE tp.user_id = ? and tp.state = 'PENDING'
+      WHERE tp.user_id = ? and tp.state = 'PROGRESS'
       ORDER BY tp.id DESC, td.day_number ASC
     `;
 
@@ -56,6 +56,22 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
 
     const result = Array.from(planMap.values());
     res.status(200).json(successResponse({ data: result }));
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const all = async (req: Request, res: Response, next: NextFunction) => {
+  const user_id = (req.verifiedToken as any).user_idx;
+
+  try {
+    const sql = `
+      SELECT * FROM tbl_plan
+      WHERE user_id = ? order by id desc;`;
+
+    const [rows] = await pool.execute(sql, [user_id]);
+
+    res.status(HttpStatus.OK).json(successResponse({ data: rows }));
   } catch (err) {
     next(err);
   }

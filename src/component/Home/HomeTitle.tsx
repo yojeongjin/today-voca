@@ -41,7 +41,11 @@ const HomeTitle = () => {
           <BottomH4>더보기</BottomH4>
 
           <BottomMenu>
-            <BottomItem>
+            <BottomItem
+              onClick={() => {
+                router.push('/mypage');
+              }}
+            >
               <BottomIcon>📑</BottomIcon>내 플랜 관리
             </BottomItem>
             <BottomItem onClick={handleLogout}>

@@ -17,15 +17,17 @@ const HomeContainer = ({ planData }: PlanData) => {
   const data = planData[0];
   const { openBottom, setOpenBottom } = useBottom();
 
-  useEffect(() => {
-    if (
-      (data?.daily_list.length === data?.total_date &&
-        data?.daily_list[data.total_date]?.current_step === 2) ||
-      3
-    ) {
-      handleFinish();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!data) return;
+
+  //   if (
+  //     (data?.daily_list.length === data?.total_date &&
+  //       data?.daily_list[data.total_date]?.current_step === 2) ||
+  //     3
+  //   ) {
+  //     handleFinish();
+  //   }
+  // }, []);
 
   const handleFinish = async () => {
     try {
