@@ -36,7 +36,13 @@ const HomeTitle = () => {
           <RxDotsHorizontal />
         </DotButton>
       </HeaderTitle>
-      <BottomSheet height={480} isOpen={openBottom}>
+      <BottomSheet
+        height={480}
+        isOpen={openBottom}
+        onClose={() => {
+          setOpenBottom(false);
+        }}
+      >
         <BottomBase>
           <BottomH4>더보기</BottomH4>
 

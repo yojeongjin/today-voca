@@ -63,7 +63,13 @@ const MypageComponent = ({ planData }: PlanData) => {
                 </Progress>
               </PlanInner>
               {openBottom && (
-                <BottomSheet height={480} isOpen={openBottom}>
+                <BottomSheet
+                  height={480}
+                  isOpen={openBottom}
+                  onClose={() => {
+                    setOpenBottom(false);
+                  }}
+                >
                   <BottomBase>
                     <CloseButton
                       onClick={() => {

@@ -23,18 +23,18 @@ const BottomSheet: React.FC<BottomSheetProps> = props => {
     : height || window.innerHeight / 2;
 
   const [springProps, api] = useSpring(() => ({
-    height: '0px',
-    config: { tension: 190, friction: 23 },
-    onRest: {
-      height: height => {
-        if (height.value === `${heightPixel}px`) {
-          return;
-        }
-        if (height.value === '0px') {
-          setIsInDOM(false);
-        }
-      },
-    },
+    // height: '0px',
+    // config: { tension: 190, friction: 23 },
+    // onRest: {
+    //   height: height => {
+    //     if (height.value === `${heightPixel}px`) {
+    //       return;
+    //     }
+    //     if (height.value === '0px') {
+    //       setIsInDOM(false);
+    //     }
+    //   },
+    // },
   }));
 
   const handleContentClick = useCallback(

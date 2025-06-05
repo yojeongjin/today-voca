@@ -30,6 +30,13 @@ class MyDocument extends Document {
     return (
       <Html lang="ko">
         <Head>
+          <link rel="manifest" href="/manifest.json" />
+          <meta name="theme-color" content="#fff" />
+          <link rel="icon" href="/images/konglish.png" />
+          {/* iOS 지원용 */}
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+          <link rel="apple-touch-icon" href="/images/konglish.png" />
           <meta charSet="utf-8" />
           <meta
             name="viewport"
