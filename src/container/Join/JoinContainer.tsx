@@ -91,6 +91,21 @@ const JoinContainer = () => {
     }
   }, [joinInfo.email]);
 
+  const reAuth = async () => {
+    try {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_APP_API_KEY}/v1/join`, {
+        params: {
+          email: joinInfo.email,
+        },
+      });
+      if (res.data.code === 200) {
+        setEmailCode(res.data.data.authCode);
+      }
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
+
   const handleJoin = async () => {
     const body = {
       name: joinInfo.name,
@@ -135,6 +150,7 @@ const JoinContainer = () => {
         </ApplyBtn>
         {isOpen && (
           <Modal
+            heading="인증번호 입력"
             modalRef={modalRef}
             disabled={!isVerified}
             onClose={() => {
@@ -145,7 +161,7 @@ const JoinContainer = () => {
               closeModal();
             }}
           >
-            <JoinAuth setIsVerified={setIsVerified} emailCode={emailCode} />
+            <JoinAuth setIsVerified={setIsVerified} emailCode={emailCode} reAuth={reAuth} />
           </Modal>
         )}
       </JoinBase>

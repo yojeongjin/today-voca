@@ -7,9 +7,10 @@ import Toast from '@/component/Common/Modal/Toast';
 interface JoinAuthProps {
   setIsVerified: React.Dispatch<React.SetStateAction<boolean>>;
   emailCode: string | null;
+  reAuth: () => void;
 }
 
-const JoinAuth = ({ setIsVerified, emailCode }: JoinAuthProps) => {
+const JoinAuth = ({ setIsVerified, emailCode, reAuth }: JoinAuthProps) => {
   const [openToast, setOpenToast] = useState(false);
   // 자동 포커싱
   const { focusNum1, focusNum2, focusNum3, focusNum4, focusNum5, handleMoveFocus } = useFocus();
@@ -72,7 +73,7 @@ const JoinAuth = ({ setIsVerified, emailCode }: JoinAuthProps) => {
       </AuthBox>
       <ReSendBox>
         <ReSpan>이메일이 오지않았나요?</ReSpan>
-        <ResendBtn>재전송</ResendBtn>
+        <ResendBtn onClick={reAuth}>재전송</ResendBtn>
       </ReSendBox>
       {openToast && <Toast setOpenToast={setOpenToast}>인증번호가 올바르지 않습니다.</Toast>}
     </ModalContent>

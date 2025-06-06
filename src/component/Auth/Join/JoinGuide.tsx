@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import Modal from '@/component/Common/Modal/Modal';
 
 type AgreementState = {
   guidanceAgreed: boolean;
@@ -11,6 +12,8 @@ interface JoinGuideProps {
 }
 
 const JoinGuide = ({ agreements, setAgreements }: JoinGuideProps) => {
+  const [openModal, setOpenModal] = useState(false);
+  const [heading, setHeading] = useState('');
   const isAllAgreed = Object.values(agreements).every(Boolean);
 
   // 이용약관 동의
@@ -54,7 +57,14 @@ const JoinGuide = ({ agreements, setAgreements }: JoinGuideProps) => {
             onChange={handleAgreementChange}
           />
           <AgreeLabel htmlFor="agree_check_used">[필수] 이용약관 동의</AgreeLabel>
-          <AgreeDetail>자세히</AgreeDetail>
+          <AgreeDetail
+            onClick={() => {
+              setHeading('이용약관');
+              setOpenModal(true);
+            }}
+          >
+            자세히
+          </AgreeDetail>
         </AgreeItem>
         <AgreeItem>
           <AgreeCheckInput
@@ -65,9 +75,51 @@ const JoinGuide = ({ agreements, setAgreements }: JoinGuideProps) => {
             onChange={handleAgreementChange}
           />
           <AgreeLabel htmlFor="agree_check_info">[선택] 개인정보 제3자 제공</AgreeLabel>
-          <AgreeDetail>자세히</AgreeDetail>
+          <AgreeDetail
+            onClick={() => {
+              setHeading('개인정보 제공 동의');
+              setOpenModal(true);
+            }}
+          >
+            자세히
+          </AgreeDetail>
         </AgreeItem>
       </AgreeMenu>
+      {openModal && (
+        <Modal
+          heading={heading}
+          onClose={() => {
+            setOpenModal(false);
+          }}
+          onApply={() => {
+            setOpenModal(false);
+          }}
+        >
+          <ModalBody>
+            <Content>
+              Lorem ipsum dolor sit amet, flibber wobble zonktastic. By accessing this service, you
+              agree to the following nonsense:
+            </Content>
+            <ContentMenu>
+              <ContentItem>
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                ex ea commodo consequat.
+              </ContentItem>
+              <ContentItem>
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat nulla pariatur.
+              </ContentItem>
+              <ContentItem>
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+                mollit anim id est laborum.
+              </ContentItem>
+              <ContentItem>
+                Blorbulus maximus est terminus glorb, et snorptum flibber wobble in perpetuum zoink.
+              </ContentItem>
+            </ContentMenu>
+          </ModalBody>
+        </Modal>
+      )}
     </AgreeContainer>
   );
 };
@@ -133,4 +185,51 @@ const TotalLabel = styled.label`
 const AgreeLabel = styled.label`
   font-weight: 300;
   cursor: pointer;
+`;
+
+// modal
+
+const ModalBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 400px;
+  overflow-y: scroll;
+`;
+
+const Content = styled.p``;
+
+const ContentMenu = styled.ul`
+  color: ${props => props.theme.primary_04};
+`;
+
+const ContentItem = styled.li`
+  position: relative;
+  counter-increment: circle-counter;
+  padding-left: 25px;
+  margin-bottom: 7px;
+  line-height: 1.5;
+  letter-spacing: -0.3px;
+  &:after {
+    content: '';
+    background: ${props => props.theme.primary_04};
+    position: absolute;
+    top: 4px;
+    left: 0px;
+    display: block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    z-index: 1;
+  }
+  &:before {
+    content: counter(circle-counter);
+    position: absolute;
+    top: 4px;
+    left: 5px;
+    font-size: 10px;
+    font-weight: 500;
+    color: #fff;
+    z-index: 2;
+  }
 `;

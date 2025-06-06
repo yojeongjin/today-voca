@@ -1,25 +1,25 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { IoCloseOutline } from 'react-icons/io5';
+
 import H4 from '../Title/H4';
+import CloseButton from '../Button/CloseButton';
 
 interface ModalProps {
   children: ReactNode;
+  heading?: string;
   onClose: () => void;
   onApply?: () => void;
   disabled?: boolean;
-  modalRef: React.RefObject<HTMLDivElement>;
+  modalRef?: React.RefObject<HTMLDivElement>;
 }
 
-const Modal = ({ children, onClose, onApply, disabled, modalRef }: ModalProps) => {
+const Modal = ({ heading, children, onClose, onApply, disabled, modalRef }: ModalProps) => {
   return (
     <ModalBase>
       <ModalInner ref={modalRef}>
         <ModalHeading>
-          <H4>알림</H4>
-          <ModalCloseBtn onClick={onClose}>
-            <IoCloseOutline />
-          </ModalCloseBtn>
+          <H4>{heading}</H4>
+          <CloseButton onClick={onClose} />
         </ModalHeading>
         <ModalBody>{children}</ModalBody>
         <ApplyBtn disabled={disabled} onClick={onApply}>
@@ -52,19 +52,11 @@ const ModalInner = styled.div`
 `;
 
 const ModalHeading = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 16px;
   border-bottom: 1px solid #ebebeb;
-`;
-
-const ModalCloseBtn = styled.button`
-  display: flex;
-  align-items: center;
-  font-size: 22px;
-  padding: 0 0;
-  color: ${props => props.theme.primary_03};
 `;
 
 const ModalBody = styled.div`

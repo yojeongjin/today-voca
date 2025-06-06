@@ -31,12 +31,16 @@ const JoinComponent = ({
               placeholder="abc@email.com"
               type="email"
               name="email"
+              autoComplete="off"
               isValid={valid.email || joinInfo.email === ''}
               onChange={handleChange}
               disabled={isVerified}
             />
-            <JoinCheckBtn onClick={handleAuth} disabled={isVerified || isLoading}>
-              {isLoading ? <SpinnerImg src="/gif/spinner.gif" alt="spinner" /> : '인증요청'}
+            <JoinCheckBtn
+              onClick={handleAuth}
+              disabled={isVerified || isLoading || joinInfo.email === ''}
+            >
+              {isLoading ? <SpinnerImg src="/images/spinner.gif" alt="spinner" /> : '인증요청'}
             </JoinCheckBtn>
           </JoinInputBox>
           {!valid.email && joinInfo.email !== '' && (
@@ -80,6 +84,7 @@ const JoinComponent = ({
             required
             placeholder="닉네임을 입력해주세요."
             name="name"
+            autoComplete="off"
             isValid={valid.name || joinInfo.name === ''}
             onChange={handleChange}
           />
