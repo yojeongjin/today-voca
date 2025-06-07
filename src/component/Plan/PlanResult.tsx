@@ -7,10 +7,11 @@ import { PlanProps } from '@/Interface/IPlan';
 
 // components
 import ApplyBtn from '../Common/Button/ApplyButton';
+import BottomSheet from '../Common/BottomSheet/BottomSheet';
 
 const PlanResult = ({ planInfo, setPlanInfo, addPlanHandler }: PlanProps) => {
   const [showPicker, setShowPicker] = useState(false);
-
+  const total_date = dayjs(planInfo.plan_to).diff(dayjs().startOf('day'), 'day') + 1;
   return (
     <ResultBase>
       <ResultBox>
@@ -47,7 +48,13 @@ const PlanResult = ({ planInfo, setPlanInfo, addPlanHandler }: PlanProps) => {
           </ResultItem>
         </ResultMenu>
       </ResultBox>
-      <ApplyBtn onClick={addPlanHandler}>플랜 시작</ApplyBtn>
+      <BtnBox>
+        <Info>
+          <InfoIcon>📣</InfoIcon>
+          하루에 약 {(planInfo?.length! / total_date).toFixed(0)}개의 문제를 풀게돼요!
+        </Info>
+        <ApplyBtn onClick={addPlanHandler}>플랜 시작</ApplyBtn>
+      </BtnBox>
     </ResultBase>
   );
 };
@@ -138,3 +145,17 @@ const ResultSubject = styled.span`
 `;
 
 const ResultContent = styled.span``;
+
+const BtnBox = styled.div`
+  width: 100%;
+`;
+
+const Info = styled.p`
+  padding: 8px 0;
+  text-align: center;
+  color: ${props => props.theme.primary_04};
+`;
+const InfoIcon = styled.i`
+  font-family: 'TossFace';
+  margin-right: 4px;
+`;

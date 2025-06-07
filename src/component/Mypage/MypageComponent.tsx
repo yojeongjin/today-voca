@@ -19,9 +19,41 @@ const MypageComponent = ({ planData }: PlanData) => {
   const router = useRouter();
   const { openBottom, setOpenBottom } = useBottom();
 
+  if (!planData || planData.length === 0) {
+    return (
+      <MyBase>
+        <StepTitle
+          onBack={() => {
+            router.push('/');
+          }}
+        >
+          내 플랜 관리
+        </StepTitle>
+        <NoPlanBox>
+          <NoPlanImg>
+            <Neutral />
+          </NoPlanImg>
+          <NoPlanP>
+            아직 학습 플랜이 없어요.
+            <br></br>
+            아래 버튼을 눌러 학습 플랜을 심어주세요!
+          </NoPlanP>
+
+          <ApplyBtn onClick={() => router.push('/plan')}>플랜 심기</ApplyBtn>
+        </NoPlanBox>
+      </MyBase>
+    );
+  }
+
   return (
     <MyBase>
-      <StepTitle>내 플랜 관리</StepTitle>
+      <StepTitle
+        onBack={() => {
+          router.push('/');
+        }}
+      >
+        내 플랜 관리
+      </StepTitle>
       {planData.map(
         data =>
           data.state === 'PROGRESS' && (
@@ -97,7 +129,7 @@ const MypageComponent = ({ planData }: PlanData) => {
                     </CompleteBody>
                     <ApplyBtn
                       onClick={async () => {
-                        const res = await handleFinish(data.id);
+                        const res = await handleFinish(data?.id!);
                         if (res === 200) {
                           setOpenBottom(false);
                           router.reload();
@@ -147,6 +179,31 @@ const MyBase = styled.main`
   flex-direction: column;
   gap: 16px;
   height: 100%;
+`;
+
+const NoPlanBox = styled.div`
+  background-color: ${props => props.theme.primary_09};
+  width: 100%;
+  height: 100%;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 12px;
+`;
+
+const NoPlanImg = styled.div`
+  width: 64px;
+  height: 64px;
+`;
+
+const NoPlanP = styled.p`
+  text-align: center;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  color: ${props => props.theme.primary_04};
 `;
 
 const PlanInner = styled.div`

@@ -9,6 +9,7 @@ export type PlanInfo = {
   level: string;
   state?: string;
   emoji: string;
+  length?: number;
   daily_list?: DailyItem[];
 };
 

@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import { HttpStatus } from '../../../back/enum/HttpStatus.enum';
 import { successResponse } from '../../../back/utils/apiResponse';
-
+import { CustomError } from '../../../back/class/CustomError';
+import { ErrorCode } from '../../../back/enum/ErrorCode.enum';
 // db
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
 import getPool from '../../../config/db';
+
 const pool = getPool();
 
 export const list = async (req: Request, res: Response, next: NextFunction) => {
@@ -40,6 +42,7 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
           level: row.level,
           state: row.state,
           emoji: row.emoji,
+          length: row.length,
           daily_list: [],
         });
       }
@@ -79,12 +82,23 @@ export const all = async (req: Request, res: Response, next: NextFunction) => {
 
 export const add = async (req: Request, res: Response, next: NextFunction) => {
   const user_id = (req.verifiedToken as any).user_idx;
-  const { title, plan_from, plan_to, total_date, level, emoji } = req.body;
+  const { title, plan_from, plan_to, total_date, level, emoji, length } = req.body;
 
   try {
+    const sql = `SELECT * FROM tbl_plan WHERE user_id = ? and state ='PROGRESS'`;
+    const [rows] = await pool.execute<RowDataPacket[]>(sql, [user_id]);
+
+    if (rows.length > 0) {
+      throw new CustomError(
+        HttpStatus.FORBIDDEN,
+        `이미 플랜이 있습니다.\n기존 플랜을 진행해주세요.`,
+        ErrorCode.INVALID_REQUEST,
+      );
+    }
+
     // 1) tbl_plan에 새 플랜 넣기
     const planSql =
-      'INSERT INTO tbl_plan (title, plan_from, plan_to, total_date, level, emoji, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)';
+      'INSERT INTO tbl_plan (title, plan_from, plan_to, total_date, level, emoji, length, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     const [planResult] = await pool.execute<ResultSetHeader>(planSql, [
       title,
       plan_from,
@@ -92,6 +106,7 @@ export const add = async (req: Request, res: Response, next: NextFunction) => {
       total_date,
       level,
       emoji,
+      length,
       user_id,
     ]);
 

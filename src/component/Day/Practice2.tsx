@@ -183,6 +183,7 @@ const AnswerItem = styled.li<{
 }>`
   background-color: ${props =>
     props.isCorrect ? '#f2f8ff' : props.isWrong ? '#fcf1f3' : 'transparent'};
+
   margin-bottom: 16px;
   padding: 16px 0;
   border: 1px solid

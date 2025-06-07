@@ -50,7 +50,7 @@ const CompleteBody = styled.div`
   position: relative;
   &:before {
     content: '';
-    background-image: url('/gif/confetti.gif');
+    background-image: url('/images/confetti.gif');
     position: absolute;
     left: 36px;
     width: 80%;

@@ -22,13 +22,14 @@ const PlanComponent = ({ planData }: PlanData) => {
       <PlanBase>
         <NoPlanInner>
           <NoPlanBox>
-            <NoPlanImg src="/gif/neutral.gif" alt="Seedling" />
+            <NoPlanImg>
+              <Neutral />
+            </NoPlanImg>
             <NoPlanP>
               아직 학습 플랜이 없어요.
               <br></br>
               아래 버튼을 눌러 학습 플랜을 심어주세요!
             </NoPlanP>
-
             <ApplyBtn onClick={() => router.push('/plan')}>플랜 심기</ApplyBtn>
           </NoPlanBox>
         </NoPlanInner>
@@ -36,10 +37,13 @@ const PlanComponent = ({ planData }: PlanData) => {
     );
   }
 
-  const plan = planData[0];
-  const { plan_from, plan_to, emoji, title, total_date, daily_list = [], level } = plan;
+  const plan = planData[0]!;
+  const { plan_from, plan_to, emoji, title, total_date, daily_list = [], level, length } = plan;
+  const daySize = Number(length! / total_date!).toFixed(0);
 
   const daysArray: DailyItem[] = useMemo(() => {
+    if (!total_date || !Array.isArray(daily_list)) return [];
+
     let lastOpenIdx = -1;
 
     const array = Array.from({ length: total_date }, (_, i) => {
@@ -129,7 +133,7 @@ const PlanComponent = ({ planData }: PlanData) => {
                   pathname: 'day',
                   query: {
                     day: item.day,
-                    day_size: total_date,
+                    day_size: Number(daySize),
                     level,
                   },
                 });
@@ -172,7 +176,7 @@ const NoPlanInner = styled.div`
 const NoPlanBox = styled.div`
   background-color: ${props => props.theme.primary_09};
   width: 100%;
-  height: 90%;
+  height: 100%;
   padding: 0 16px;
   display: flex;
   align-items: center;
@@ -182,9 +186,14 @@ const NoPlanBox = styled.div`
   border-radius: 12px;
 `;
 
-const NoPlanImg = styled.img`
+const NoPlanImg = styled.div`
+  position: relative;
   width: 64px;
   height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 `;
 
 const NoPlanP = styled.p`

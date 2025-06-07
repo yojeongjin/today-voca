@@ -7,6 +7,7 @@ import ApplyBtn from '../Common/Button/ApplyButton';
 import Neutral from '../Common/Lottie/Neutral';
 import Angry from '../Common/Lottie/Angry';
 import Delighted from '../Common/Lottie/Delighted';
+import Confetti from '../Common/Lottie/Confetti';
 
 interface PracticeProps extends CompleteProps {
   handleFinish: () => void;
@@ -28,35 +29,40 @@ const PracticeComplete = ({
         }}
       />
       <CompleteH2>학습 완료</CompleteH2>
-      <CompleteBody>
-        <CompleteH4>오늘 학습을 완료했어요!</CompleteH4>
-        <CompleteP>반복 테스트를 통해서 실력을 업그레이드 시켜보세요</CompleteP>
+      <CompleteContents>
+        <CompleteBody>
+          <CompleteH4>오늘 학습을 완료했어요!</CompleteH4>
+          <CompleteP>반복 테스트로 확실하게 기억해요 🔥</CompleteP>
 
-        {percentage < 30 ? (
-          <CompleteImgBox>
-            <CompleteImg>
-              <Angry />
-            </CompleteImg>
-            <CompleteSpan percentage={percentage}>조금 더 분발해보아요</CompleteSpan>
-          </CompleteImgBox>
-        ) : percentage < 70 ? (
-          <CompleteImgBox>
-            <CompleteImg>
-              <Neutral />
-            </CompleteImg>
-            <CompleteSpan percentage={percentage}>아쉬워요</CompleteSpan>
-          </CompleteImgBox>
-        ) : (
-          <CompleteImgBox>
-            <CompleteImg>
-              <Delighted />
-            </CompleteImg>
-            <CompleteSpan percentage={percentage}>잘했어요!</CompleteSpan>
-          </CompleteImgBox>
-        )}
-      </CompleteBody>
+          {percentage < 30 ? (
+            <CompleteImgBox>
+              <CompleteImg>
+                <Angry />
+              </CompleteImg>
+              <CompleteSpan percentage={percentage}>조금 더 분발해보아요</CompleteSpan>
+            </CompleteImgBox>
+          ) : percentage < 70 ? (
+            <CompleteImgBox>
+              <CompleteImg>
+                <Neutral />
+              </CompleteImg>
+              <CompleteSpan percentage={percentage}>아쉬워요</CompleteSpan>
+            </CompleteImgBox>
+          ) : (
+            <CompleteImgBox>
+              <CompleteImg>
+                <Delighted />
+              </CompleteImg>
+              <CompleteSpan percentage={percentage}>잘했어요!</CompleteSpan>
+            </CompleteImgBox>
+          )}
+        </CompleteBody>
+        <ConfettiBox>
+          <Confetti />
+        </ConfettiBox>
+      </CompleteContents>
 
-      <ApplyBtn onClick={handleComplete}>다음 가기</ApplyBtn>
+      <ApplyBtn onClick={handleComplete}>반복 테스트 시작하기</ApplyBtn>
     </CompleteBase>
   );
 };
@@ -69,7 +75,7 @@ const CompleteBase = styled.div`
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 26px;
 `;
 
 const CompleteH2 = styled.h2`
@@ -77,16 +83,16 @@ const CompleteH2 = styled.h2`
   font-size: 16px;
 `;
 
-const CompleteBody = styled.div`
+const CompleteContents = styled.div`
   position: relative;
-  &:before {
-    content: '';
-    background-image: url('/gif/confetti.gif');
-    position: absolute;
-    left: 36px;
-    width: 80%;
-    height: 100%;
-  }
+  width: 100%;
+  min-height: 180px;
+  overflow: hidden;
+`;
+
+const CompleteBody = styled.div`
+  position: absolute;
+  width: 100%;
 `;
 
 const CompleteH4 = styled.h4`
@@ -115,4 +121,12 @@ const CompleteSpan = styled.span<{ percentage: number }>`
   color: ${props =>
     props.percentage < 30 ? '#ff5252' : props.percentage < 70 ? '#ffbf3e' : '#6ecc64'};
   font-weight: 500;
+`;
+
+const ConfettiBox = styled.div`
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  width: 100%;
+  transform: translateX(-50%);
 `;

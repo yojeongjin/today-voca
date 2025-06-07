@@ -17,8 +17,6 @@ import StepComponent from '@/component/Common/Step/StepComponent';
 const DayContainer = ({ dayData, plan_id, day_number, percent }: DayProps) => {
   const router = useRouter();
 
-  console.log(percent);
-
   const steps = ['1', '2', '3'] as const;
   const { step, next, back, isFirst } = useStep(steps);
 
@@ -72,13 +70,13 @@ const DayContainer = ({ dayData, plan_id, day_number, percent }: DayProps) => {
       <StepComponent stepKey={step}>
         {step === '1' && (
           <>
-            <StepTitle onBack={!isFirst ? back : undefined}>필수 어휘</StepTitle>
+            <StepTitle onBack={!isFirst ? back : undefined}>단어 살펴보기</StepTitle>
             <Practice1 dayData={dayData} onNext={next} />
           </>
         )}
         {step === '2' && (
           <>
-            <StepTitle onBack={!isFirst ? back : undefined}>필수 어휘</StepTitle>
+            <StepTitle onBack={!isFirst ? back : undefined}>단어 퀴즈</StepTitle>
             <Practice2 dayData={dayData} onNext={next} handleFinish={handleFinish} />
           </>
         )}

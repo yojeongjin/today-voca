@@ -36,32 +36,34 @@ const HomeTitle = () => {
           <RxDotsHorizontal />
         </DotButton>
       </HeaderTitle>
-      <BottomSheet
-        height={480}
-        isOpen={openBottom}
-        onClose={() => {
-          setOpenBottom(false);
-        }}
-      >
-        <BottomBase>
-          <BottomH4>더보기</BottomH4>
+      {openBottom && (
+        <BottomSheet
+          height={480}
+          isOpen={openBottom}
+          onClose={() => {
+            setOpenBottom(false);
+          }}
+        >
+          <BottomBase>
+            <BottomH4>더보기</BottomH4>
 
-          <BottomMenu>
-            <BottomItem
-              onClick={() => {
-                setOpenBottom(false);
-                router.push('/mypage');
-              }}
-            >
-              <BottomIcon>📑</BottomIcon>내 플랜 관리
-            </BottomItem>
-            <BottomItem onClick={handleLogout}>
-              <BottomIcon>👋🏻</BottomIcon>
-              로그아웃
-            </BottomItem>
-          </BottomMenu>
-        </BottomBase>
-      </BottomSheet>
+            <BottomMenu>
+              <BottomItem
+                onClick={() => {
+                  setOpenBottom(false);
+                  router.push('/mypage');
+                }}
+              >
+                <BottomIcon>📑</BottomIcon>내 플랜 관리
+              </BottomItem>
+              <BottomItem onClick={handleLogout}>
+                <BottomIcon>👋🏻</BottomIcon>
+                로그아웃
+              </BottomItem>
+            </BottomMenu>
+          </BottomBase>
+        </BottomSheet>
+      )}
     </>
   );
 };

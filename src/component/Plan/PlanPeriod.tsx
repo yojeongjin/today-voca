@@ -71,7 +71,10 @@ const PlanPeriod = ({ planInfo, setPlanInfo, setOpenBottom }: PlanPeriodProps) =
       </PeriodCalendar>
       {/* button */}
       <BtnBox>
-        <CalendarAlert>📍 종료일은 최대 한 달까지 지정 가능해요!</CalendarAlert>
+        <CalendarAlert>
+          <AlertIcon>📣</AlertIcon>
+          종료일은 최대 한 달까지 지정 가능해요!
+        </CalendarAlert>
         <ApplyBtn
           color="#027FFF"
           onClick={() => {
@@ -100,14 +103,6 @@ const PeriodBase = styled.section`
 const PeriodBox = styled.div`
   padding: 0 16px;
   border-bottom: 5px solid ${props => props.theme.primary_08};
-`;
-const CloseBtn = styled.button`
-  position: absolute;
-  top: 16px;
-  right: 18px;
-`;
-const CloseIcon = styled(RiCloseLargeLine)`
-  font-size: 16px;
 `;
 
 const TotalTime = styled.div`
@@ -325,4 +320,9 @@ const CalendarAlert = styled.p`
   text-align: center;
   font-size: 13px;
   color: ${props => props.theme.primary_04};
+`;
+
+const AlertIcon = styled.i`
+  font-family: 'TossFace';
+  margin-right: 7px;
 `;

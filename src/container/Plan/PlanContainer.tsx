@@ -25,6 +25,7 @@ const PlanContainer = () => {
     title: '',
     plan_from: null,
     plan_to: null,
+    length: 0,
     level: '',
     course: '',
     emoji: '🏄🏻‍♀️',

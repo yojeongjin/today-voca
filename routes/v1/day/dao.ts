@@ -11,8 +11,8 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
   const user_id = (req.verifiedToken as any).user_idx;
   const { day, day_size, level } = req.query;
 
-  const pageValue = Number(day) || 1;
-  const pageSizeValue = Number(day_size) || 10;
+  const pageValue = Number(day);
+  const pageSizeValue = Number(day_size);
   const offset = (pageValue - 1) * pageSizeValue;
 
   try {
@@ -20,7 +20,8 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
                 FROM tbl_word as tw
                 LEFT JOIN tbl_plan as tp on tp.level = tw.level
                 LEFT JOIN tbl_daily as td on td.plan_id = tp.id
-                WHERE tw.level = ? and td.day_number = ? and tp.user_id = ?
+                WHERE 
+                  tw.level = ? and td.day_number = ? and tp.user_id = ? and tp.state = 'PROGRESS'
                 ORDER BY tw.id ASC
                 LIMIT ${pageSizeValue} OFFSET ${offset}
                 `;

@@ -8,22 +8,22 @@ const PlanCourse = ({ planInfo, setPlanInfo, onNext }: PlanProps) => {
   const courseList = [
     {
       name: '기초',
-      length: 800,
+      length: 772,
       level: 'basic',
     },
     {
       name: '중등',
-      length: 1200,
+      length: 600,
       level: '700',
     },
     {
       name: '고교/수능',
-      length: 1400,
+      length: 840,
       level: '800',
     },
     {
       name: 'toeic 850+',
-      length: 1100,
+      length: 900,
       level: '900',
     },
   ];
@@ -38,6 +38,7 @@ const PlanCourse = ({ planInfo, setPlanInfo, onNext }: PlanProps) => {
               setPlanInfo({
                 ...planInfo,
                 level: course.level,
+                length: course.length,
                 course: course.name,
               });
             }}

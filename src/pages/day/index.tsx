@@ -35,7 +35,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
     });
 
     const res = result.data.data;
-    console.log(res);
 
     if (result.data.code === 200) {
       return {

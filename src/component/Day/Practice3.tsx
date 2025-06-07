@@ -28,7 +28,7 @@ type PracticeAction =
 
 const initialState: PracticeState = {
   stage: 0,
-  count: 3,
+  count: 5,
   timer: 0,
   currentIndex: 0,
   answerList: [],
@@ -40,7 +40,7 @@ const reducer = (state: PracticeState, action: PracticeAction): PracticeState =>
     case 'TICK_COUNT':
       return { ...state, count: state.count - 1 };
     case 'START_TEST':
-      return { ...state, stage: 1, timer: 5 };
+      return { ...state, stage: 1, timer: 10 };
     case 'TICK_TIMER':
       return { ...state, timer: state.timer - 1 };
     case 'SET_ANSWER':
@@ -79,7 +79,7 @@ const Practice3 = ({ dayData, handleFinish }: Practice3Props) => {
     if (state.stage !== 0) return;
     countId.current = setInterval(() => {
       dispatch({ type: 'TICK_COUNT' });
-    }, 500);
+    }, 1000);
     return () => {
       if (countId.current) clearInterval(countId.current);
     };
@@ -96,7 +96,7 @@ const Practice3 = ({ dayData, handleFinish }: Practice3Props) => {
     if (state.stage !== 1) return;
     timerId.current = setInterval(() => {
       dispatch({ type: 'TICK_TIMER' });
-    }, 500);
+    }, 1000);
     return () => {
       if (timerId.current) clearInterval(timerId.current);
     };
