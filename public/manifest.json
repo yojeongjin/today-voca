@@ -1,0 +1,21 @@
+{
+  "name": "콩글리시",
+  "short_name": "콩글리시",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#027FFF",
+  "description": "재미있게 영어 단어를 배우는 웹앱",
+  "icons": [
+    {
+      "src": "/images/konglish.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/konglish.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
