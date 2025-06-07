@@ -1,39 +1,47 @@
-import dotenv from 'dotenv';
-dotenv.config();
 import express from 'express';
+import next from 'next';
+import dotenv from 'dotenv';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-//middleware
+
+// custom middlewares
 import { LoggerMiddleware } from './back/middleware/loggerMiddleware';
 import { globalExceptionHandler } from './back/middleware/globalExceptionHandler';
-// router
+
+// routers
 import indexRouter from './routes/index';
 import usersRouter from './routes/users';
 
-const app = express();
+dotenv.config();
 
-// 로그 미들웨어 적용
-app.use(LoggerMiddleware);
+const dev = process.env.NODE_ENV !== 'production';
+const nextApp = next({ dev });
+const handle = nextApp.getRequestHandler();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+nextApp.prepare().then(() => {
+  const app = express();
 
-// app.use(cors());
-app.use(
-  cors({
-    origin: ['http://localhost:8000', 'http://127.0.0.1:8000', 'http://172.30.1.26:8000'],
-    credentials: true,
-  }),
-);
+  // Middlewares
+  app.use(LoggerMiddleware);
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
+  app.use(cookieParser());
 
-app.use(express.static(path.join(__dirname, 'public')));
-// 라우터
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+  app.use(cors());
+  app.use(express.static(path.join(__dirname, 'public')));
 
-// 모든 예외 처리
-app.use(globalExceptionHandler);
+  // API routes
+  app.use('/', indexRouter);
+  app.use('/users', usersRouter);
 
-export default app;
+  // Next.js 페이지 핸들링
+  app.all('*', (req, res) => handle(req, res));
+
+  app.use(globalExceptionHandler);
+
+  const PORT = parseInt(process.env.PORT || '3000', 10);
+  app.listen(PORT, () => {
+    console.log(`✅ Server running on http://localhost:${PORT}`);
+  });
+});

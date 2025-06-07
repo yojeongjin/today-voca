@@ -35,13 +35,12 @@ const createTransporter = () => {
 const createMailOptions = (email: any, authCode: string) => ({
   from: process.env.GMAIL_ADDRESS,
   to: email,
-  subject: '오늘 VOCA 회원가입 인증메일입니다.',
+  subject: '콩글리시 회원가입 인증메일입니다.',
   html: `
-    <p>계정 보안을 위해 2차 인증이 필요합니다. 아래 인증 코드를 입력하여 로그인 절차를 완료해주세요.</p>
+    <p>계정 보안을 위해 2차 인증이 필요합니다. 아래 인증 코드를 입력하여 회원가입 절차를 완료해주세요.</p>
     <br />
     <p><strong>인증번호: ${authCode}</strong></p>
     <br />
-    <p>인증코드는 5분 동안만 유효합니다.<br />
     인증이 완료되지 않은 경우 새로운 인증코드를 발급받으시기 바랍니다.</p>
   `,
 });

@@ -14,7 +14,7 @@ instance.interceptors.response.use(
     // access token 만료일 때 한 번만 재시도 - 무한루프 방지
     if (
       error.response?.status === 401 &&
-      error.response?.errorCode === 'EXPIRED_ACCESS_TOKEN' &&
+      error.response?.data?.errorCode === 'EXPIRED_ACCESS_TOKEN' &&
       !originalRequest._retry
     ) {
       originalRequest._retry = true;

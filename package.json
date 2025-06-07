@@ -6,8 +6,7 @@
     "dev": "next dev -p 8000",
     "dev:local": "next dev -H 0.0.0.0 -p 8000",
     "build": "next build",
-    "start": "ts-node ./bin/www.ts",
-    "next-start": "next start -p 88"
+    "start": "NODE_ENV=production ts-node app.ts"
   },
   "dependencies": {
     "@emoji-mart/data": "^1.2.1",

@@ -315,6 +315,7 @@ const CompleteH4 = styled.h4`
 
 const BottomStrong = styled.strong`
   font-weight: 500;
+  margin: 0 4px;
 `;
 
 const CompleteP = styled.p`

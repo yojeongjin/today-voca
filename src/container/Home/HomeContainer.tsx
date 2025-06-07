@@ -60,15 +60,6 @@ const HomeContainer = ({ planData }: PlanData) => {
           <PlanComplete setOpenBottom={setOpenBottom} />
         </BottomSheet>
       )}
-      <BottomSheet
-        height={480}
-        isOpen={true}
-        onClose={() => {
-          setOpenBottom(false);
-        }}
-      >
-        <PlanComplete setOpenBottom={setOpenBottom} />
-      </BottomSheet>
 
       {isVisible && <A2HS onInstall={installApp} onCancel={cancel} />}
       {isIOSGuideVisible && <IOSGuide onClick={cancelIOSGuide} />}

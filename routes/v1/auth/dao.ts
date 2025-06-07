@@ -99,19 +99,11 @@ export const refreshAccessToken = (req: Request, res: Response, next: NextFuncti
       { expiresIn: '1h' },
     );
 
-    // res.cookie('access_token', newAccessToken, {
-    //   httpOnly: true,
-    //   secure: process.env.NODE_ENV === 'production',
-    //   sameSite: 'strict',
-    //   maxAge: 1000 * 60 * 60, // 1시간
-    // });
-
     res.cookie('access_token', newAccessToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
-      domain: 'http://172.30.1.26',
-      maxAge: 1000 * 60 * 60,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 1000 * 60 * 60, // 1시간
     });
 
     res.status(200).json(successResponse());

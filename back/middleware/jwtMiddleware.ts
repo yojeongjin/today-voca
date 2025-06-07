@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { CustomError } from '../class/CustomError';
 import { HttpStatus } from '../enum/HttpStatus.enum';
 import { ErrorCode } from '../enum/ErrorCode.enum';
@@ -21,7 +21,8 @@ export const jwtMiddleware = (req: Request, res: Response, next: NextFunction) =
 
     next();
   } catch (err: any) {
-    if (err.name === 'TokenExpiredError') {
+    console.log('JWT Error:', err);
+    if (err instanceof TokenExpiredError) {
       throw new CustomError(
         HttpStatus.UNAUTHORIZED,
         'Access Token이 만료되었습니다.',
