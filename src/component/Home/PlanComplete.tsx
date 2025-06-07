@@ -2,14 +2,12 @@ import dynamic from 'next/dynamic';
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-
-import Lottie from 'lottie-react';
-import conffeti from '../../../public/json/confetti.json';
 // ifs
 import { CompleteProps } from '@/Interface/IComplete';
 
 import CloseButton from '../Common/Button/CloseButton';
 import ApplyBtn from '../Common/Button/ApplyButton';
+import Confetti from '../Common/Lottie/Confetti';
 
 // model
 const MyCarrot = dynamic(() => import('@/component/Common/Model/Carrot'), { ssr: false });
@@ -55,9 +53,9 @@ const PlanComplete = ({ setOpenBottom }: CompleteProps) => {
 
           <CompetePlant>{randomPlant.Component}</CompetePlant>
 
-          <Confetti>
-            <Lottie animationData={conffeti} loop={true} />
-          </Confetti>
+          <ConfettiImg>
+            <Confetti />
+          </ConfettiImg>
         </CompleteContent>
       </CompleteBody>
       <ApplyBtn
@@ -92,6 +90,7 @@ const CompleteBody = styled.div`
   position: relative;
   width: 100%;
   min-height: 250px;
+  overflow: hidden;
 `;
 
 const CompleteContent = styled.div`
@@ -118,9 +117,9 @@ const CompleteP = styled.p`
   margin-top: 8px;
 `;
 
-const Confetti = styled.div`
+const ConfettiImg = styled.div`
   position: absolute;
-  top: -20px;
+  top: 0px;
   left: 50%;
   width: 280px;
   transform: translateX(-50%);

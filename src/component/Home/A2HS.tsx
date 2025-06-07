@@ -1,10 +1,8 @@
-import Lottie from 'lottie-react';
 import styled from 'styled-components';
 
 import BottomSheet from '../Common/BottomSheet/BottomSheet';
 import ApplyBtn from '../Common/Button/ApplyButton';
-
-import jumping from '../../../public/json/jumping.json';
+import Jumping from '../Common/Lottie/Jumping';
 
 interface Props {
   onInstall: () => void;
@@ -21,7 +19,7 @@ const A2HS = ({ onInstall, onCancel }: Props) => {
           <CompleteP>한 번의 터치로 매일 단어 학습을 할 수 있어요 🌱</CompleteP>
         </CompleteBody>
         <CompleteImg>
-          <Lottie animationData={jumping} loop={true} />
+          <Jumping />
         </CompleteImg>
         <ApplyBtn onClick={onInstall}>추가하기</ApplyBtn>
         <CancelBtn onClick={onCancel}>나중에</CancelBtn>

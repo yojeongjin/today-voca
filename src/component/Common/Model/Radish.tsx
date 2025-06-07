@@ -5,7 +5,7 @@ import { Group } from 'three';
 
 function Radish() {
   const ref = useRef<Group>(null);
-  const gltf = useGLTF('/model/radish.glb');
+  const gltf = useGLTF('https://voca-bucket.s3.ap-northeast-2.amazonaws.com/model/radish.glb');
 
   useFrame(() => {
     if (ref.current) {
@@ -15,7 +15,7 @@ function Radish() {
 
   return <primitive ref={ref} object={gltf.scene} />;
 }
-useGLTF.preload('/model/radish.glb');
+useGLTF.preload('https://voca-bucket.s3.ap-northeast-2.amazonaws.com/model/radish.glb');
 
 export default function MyRadish() {
   return (

@@ -5,7 +5,7 @@ import { Group } from 'three';
 
 function Tomato() {
   const ref = useRef<Group>(null);
-  const gltf = useGLTF('/model/tomato.glb');
+  const gltf = useGLTF('https://voca-bucket.s3.ap-northeast-2.amazonaws.com/model/tomato.glb');
 
   useFrame(() => {
     if (ref.current) {
@@ -15,7 +15,7 @@ function Tomato() {
 
   return <primitive ref={ref} object={gltf.scene} scale={1.8} />;
 }
-useGLTF.preload('/model/tomato.glb');
+useGLTF.preload('https://voca-bucket.s3.ap-northeast-2.amazonaws.com/model/tomato.glb');
 
 export default function MyTomato() {
   return (

@@ -5,7 +5,7 @@ import { Group } from 'three';
 
 function Eggplant() {
   const ref = useRef<Group>(null);
-  const gltf = useGLTF('/model/eggplant.glb');
+  const gltf = useGLTF('https://voca-bucket.s3.ap-northeast-2.amazonaws.com/model/eggplant.glb');
 
   useFrame(() => {
     if (ref.current) {
@@ -15,7 +15,7 @@ function Eggplant() {
 
   return <primitive ref={ref} object={gltf.scene} scale={0.3} />;
 }
-useGLTF.preload('/model/eggplant.glb');
+useGLTF.preload('https://voca-bucket.s3.ap-northeast-2.amazonaws.com/model/eggplant.glb');
 
 export default function MyEggplant() {
   return (

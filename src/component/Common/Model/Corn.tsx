@@ -5,7 +5,7 @@ import { Group } from 'three';
 
 function Corn() {
   const ref = useRef<Group>(null);
-  const gltf = useGLTF('/model/corn.glb');
+  const gltf = useGLTF('https://voca-bucket.s3.ap-northeast-2.amazonaws.com/model/corn.glb');
 
   useFrame(() => {
     if (ref.current) {
@@ -15,7 +15,7 @@ function Corn() {
 
   return <primitive ref={ref} object={gltf.scene} scale={0.3} />;
 }
-useGLTF.preload('/model/corn.glb');
+useGLTF.preload('https://voca-bucket.s3.ap-northeast-2.amazonaws.com/model/corn.glb');
 
 export default function MyCorn() {
   return (

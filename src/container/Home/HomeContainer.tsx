@@ -15,6 +15,7 @@ import PlanComplete from '@/component/Home/PlanComplete';
 import BottomSheet from '@/component/Common/BottomSheet/BottomSheet';
 import A2HS from '@/component/Home/A2HS';
 import IOSGuide from '@/component/Home/IOSGuide';
+import Angry from '@/component/Common/Lottie/Angry';
 
 const HomeContainer = ({ planData }: PlanData) => {
   const data = planData[0];
@@ -60,7 +61,6 @@ const HomeContainer = ({ planData }: PlanData) => {
           <PlanComplete setOpenBottom={setOpenBottom} />
         </BottomSheet>
       )}
-
       {isVisible && <A2HS onInstall={installApp} onCancel={cancel} />}
       {isIOSGuideVisible && <IOSGuide onClick={cancelIOSGuide} />}
     </Home>

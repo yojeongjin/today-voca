@@ -5,7 +5,7 @@ import { Group } from 'three';
 
 function Avocado() {
   const ref = useRef<Group>(null);
-  const gltf = useGLTF('/model/avocado.glb');
+  const gltf = useGLTF('https://voca-bucket.s3.ap-northeast-2.amazonaws.com/model/avocado.glb');
 
   useFrame(() => {
     if (ref.current) {
@@ -15,7 +15,7 @@ function Avocado() {
 
   return <primitive ref={ref} object={gltf.scene} scale={0.3} />;
 }
-useGLTF.preload('/model/avocado.glb');
+useGLTF.preload('https://voca-bucket.s3.ap-northeast-2.amazonaws.com/model/avocado.glb');
 
 export default function MyAvocado() {
   return (

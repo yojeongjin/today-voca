@@ -5,7 +5,7 @@ import { Group } from 'three';
 
 function Carrot() {
   const ref = useRef<Group>(null);
-  const gltf = useGLTF('/model/carrot.glb');
+  const gltf = useGLTF('https://voca-bucket.s3.ap-northeast-2.amazonaws.com/model/carrot.glb');
 
   useFrame(() => {
     if (ref.current) {
@@ -15,7 +15,7 @@ function Carrot() {
 
   return <primitive ref={ref} object={gltf.scene} scale={0.6} />;
 }
-useGLTF.preload('/model/carrot.glb');
+useGLTF.preload('https://voca-bucket.s3.ap-northeast-2.amazonaws.com/model/carrot.glb');
 
 export default function MyCarrot() {
   return (
