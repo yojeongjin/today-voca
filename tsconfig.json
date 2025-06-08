@@ -4,12 +4,7 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-<<<<<<< HEAD
-    "strict": true,
-    "noEmit": true,
-=======
     "strict": false,
->>>>>>> ddffc3f (Dockerfile 수정)
     "esModuleInterop": true,
     "module": "CommonJS",
     "moduleResolution": "node",
@@ -24,8 +19,9 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "noEmit": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "bin/www"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "bin/**/*"],
   "exclude": ["node_modules"]
 }
