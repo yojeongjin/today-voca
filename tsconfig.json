@@ -4,8 +4,12 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
+<<<<<<< HEAD
     "strict": true,
     "noEmit": true,
+=======
+    "strict": false,
+>>>>>>> ddffc3f (Dockerfile 수정)
     "esModuleInterop": true,
     "module": "CommonJS",
     "moduleResolution": "node",
