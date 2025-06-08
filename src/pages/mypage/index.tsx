@@ -1,5 +1,5 @@
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
-import axios from '@/utils/axiosInstance';
+import axios from 'axios';
 import { PlanData } from '@/Interface/IPlan';
 import MypageComponent from '@/component/Mypage/MypageComponent';
 
@@ -12,7 +12,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   try {
     const result = await axios.get(`${process.env.NEXT_SERVER_APP_API_KEY}/v1/plan/all`, {
       headers: {
-        cookie: ctx.req?.headers?.cookie,
+        cookie: ctx.req?.headers?.cookie || '',
       },
       withCredentials: true,
     });
@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
 
     return {
       redirect: {
-        destination: `/signin?redirect=${ctx.resolvedUrl}`, // 나중에 다시 수정
+        destination: `/signin?redirect=${ctx.resolvedUrl}`,
         permanent: false,
       },
     };

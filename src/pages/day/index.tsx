@@ -1,5 +1,5 @@
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
-import axios from '../../utils/axiosInstance';
+import axios from 'axios';
 import { DayProps } from '@/Interface/IDay';
 // container
 import DayContainer from '@/container/Day/DayContainer';
@@ -29,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
     const result = await axios.get(`${process.env.NEXT_SERVER_APP_API_KEY}/v1/day`, {
       params,
       headers: {
-        cookie: ctx.req?.headers?.cookie,
+        cookie: ctx.req?.headers?.cookie || '',
       },
       withCredentials: true,
     });
@@ -58,7 +58,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
 
     return {
       redirect: {
-        destination: `/`, // 나중에 다시 수정
+        destination: `/`,
         permanent: false,
       },
     };
