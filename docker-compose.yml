@@ -4,6 +4,10 @@ services:
   app:
     build: .
     ports:
+<<<<<<< HEAD
+=======
+      - '88:88'
+>>>>>>> 729dc7d (test: redeploy after path fix)
       - '3000:3000'
     env_file:
       - .env
