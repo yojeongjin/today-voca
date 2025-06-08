@@ -70,7 +70,7 @@ const DayContainer = ({ dayData, plan_id, day_number, percent }: DayProps) => {
       <StepComponent stepKey={step}>
         {step === '1' && (
           <>
-            <StepTitle onBack={!isFirst ? back : undefined}>단어 살펴보기</StepTitle>
+            <StepTitle onBack={() => router.push('/')}>단어 살펴보기</StepTitle>
             <Practice1 dayData={dayData} onNext={next} />
           </>
         )}

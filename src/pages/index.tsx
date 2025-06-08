@@ -14,7 +14,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   try {
     const result = await axios.get(`${process.env.NEXT_SERVER_APP_API_KEY}/v1/plan`, {
       headers: {
-        cookie: ctx.req?.headers?.cookie || '',
+        cookie: ctx.req?.headers?.cookie,
       },
       withCredentials: true,
     });
@@ -37,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
 
     return {
       redirect: {
-        destination: `/signin?redirect=${ctx.resolvedUrl}`,
+        destination: `/signin?redirect=${ctx.resolvedUrl}`, // 나중에 다시 수정
         permanent: false,
       },
     };

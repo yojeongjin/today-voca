@@ -4,8 +4,8 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 // persist
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-// etc
-import axios from 'axios';
+// utils
+import axios from '../../utils/axiosInstance';
 // type
 import { AuthReqType, UserInfoType } from '@/type/user';
 import { handleApiError } from '@/utils/handleApiError';
@@ -90,7 +90,11 @@ function* signinSaga(action: SigninSagaAction): Generator<any, void, any> {
 
     const user: UserInfoType = res.data.data;
     yield put(success(user));
-    yield call(() => window.location.replace('/'));
+    yield call(() => {
+      if (typeof window !== 'undefined') {
+        window.location.href = 'https://www.konglish.shop/';
+      }
+    });
     // 정보 저장
     yield put(success(user));
   } catch (error: any) {
