@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_APP_API_KEY,
+  baseURL:
+    typeof window === 'undefined'
+      ? process.env.NEXT_SERVER_APP_API_KEY
+      : process.env.NEXT_PUBLIC_APP_API_KEY,
   withCredentials: true,
 });
 
@@ -27,7 +30,7 @@ instance.interceptors.response.use(
         return instance(originalRequest);
       } catch (refreshError) {
         if (typeof window !== 'undefined') {
-          window.location.href = '/';
+          window.location.href = `${process.env.NEXT_PUBLIC_APP_URL}`;
         }
         return Promise.reject(refreshError);
       }

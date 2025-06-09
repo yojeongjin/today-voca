@@ -46,29 +46,32 @@ const HomeContainer = ({ planData }: PlanData) => {
   };
 
   return (
-    <Home>
-      <HomeTitle />
-      <PlanComponent planData={planData} />
-      {openBottom && (
-        <BottomSheet
-          height={480}
-          isOpen={openBottom}
-          onClose={() => {
-            setOpenBottom(false);
-          }}
-        >
-          <PlanComplete setOpenBottom={setOpenBottom} />
-        </BottomSheet>
-      )}
-      {isVisible && <A2HS onInstall={installApp} onCancel={cancel} />}
-      {isIOSGuideVisible && <IOSGuide onClick={cancelIOSGuide} />}
-    </Home>
+    <>
+      <Home>
+        <HomeTitle />
+        <PlanComponent planData={planData} />
+        {!openBottom && (
+          <BottomSheet
+            height={480}
+            isOpen={!openBottom}
+            onClose={() => {
+              setOpenBottom(false);
+            }}
+          >
+            <PlanComplete setOpenBottom={setOpenBottom} />
+          </BottomSheet>
+        )}
+        {isVisible && <A2HS onInstall={installApp} onCancel={cancel} />}
+        {isIOSGuideVisible && <IOSGuide onClick={cancelIOSGuide} />}
+      </Home>
+    </>
   );
 };
 
 export default HomeContainer;
 
 const Home = styled.main`
+  position: relative;
   background-color: ${props => props.theme.primary_08};
   height: 100%;
 `;
