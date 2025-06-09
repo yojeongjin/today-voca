@@ -1,6 +1,5 @@
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
-// import axios from '../utils/axiosInstance';
-import axios from 'axios';
+import axios from '@/utils/axiosInstance';
 //interface
 import { PlanData } from '@/Interface/IPlan';
 import HomeContainer from '@/container/Home/HomeContainer';

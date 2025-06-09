@@ -1,5 +1,5 @@
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
-import axios from 'axios';
+import axios from '@/utils/axiosInstance';
 import { PlanData } from '@/Interface/IPlan';
 import MypageComponent from '@/component/Mypage/MypageComponent';
 

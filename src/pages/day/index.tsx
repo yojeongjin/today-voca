@@ -1,5 +1,5 @@
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
-import axios from 'axios';
+import axios from '@/utils/axiosInstance';
 import { DayProps } from '@/Interface/IDay';
 // container
 import DayContainer from '@/container/Day/DayContainer';
