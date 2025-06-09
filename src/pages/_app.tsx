@@ -13,7 +13,6 @@ import useRouteLoading from '@/hooks/useRouteLoading';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyles from '@/styles/globalstyles';
 import theme from '@/styles/theme';
-import '../styles/fonts/index.css';
 // components
 import Layout from '@/component/Common/Layout/Layout';
 import Loading from '@/component/Common/Loading/Loading';

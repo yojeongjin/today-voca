@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import styled from 'styled-components';
 // components
 import H2 from '../../Common/Title/H2';
@@ -40,7 +41,17 @@ const JoinComponent = ({
               onClick={handleAuth}
               disabled={isVerified || isLoading || joinInfo.email === ''}
             >
-              {isLoading ? <SpinnerImg src="/images/spinner.gif" alt="spinner" /> : '인증요청'}
+              {isLoading ? (
+                <Image
+                  src="/images/spinner.gif"
+                  alt="spinner"
+                  width={50}
+                  height={46}
+                  quality={75}
+                />
+              ) : (
+                '인증요청'
+              )}
             </JoinCheckBtn>
           </JoinInputBox>
           {!valid.email && joinInfo.email !== '' && (
@@ -151,10 +162,6 @@ const JoinCheckBtn = styled.button`
     color: #f7f2f2;
     cursor: default;
   }
-`;
-
-const SpinnerImg = styled.img`
-  width: 50%;
 `;
 
 // caution

@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.konglish.shop
+
+# Sitemaps
+Sitemap: https://www.konglish.shop/sitemap.xml

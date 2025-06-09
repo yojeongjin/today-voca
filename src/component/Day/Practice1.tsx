@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '@/redux/modules/common';
 import styled from 'styled-components';
@@ -12,6 +12,7 @@ import { handleApiError } from '@/utils/handleApiError';
 
 const Practice1 = ({ onNext, dayData }: DayProps) => {
   const dispatch = useDispatch();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   // 단어 듣기
   const handlePhonetic = useCallback(async (word: string) => {
     try {
@@ -19,8 +20,16 @@ const Practice1 = ({ onNext, dayData }: DayProps) => {
       const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
       const data = await res.json();
       const audioUrl = data[0]?.phonetics?.find((p: { audio: any }) => p.audio)?.audio;
-      const audio = new Audio(audioUrl);
 
+      if (!audioUrl) throw new Error('Audio not available.');
+
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
       audio.play();
     } catch (err) {
       handleApiError(err);
@@ -40,6 +49,7 @@ const Practice1 = ({ onNext, dayData }: DayProps) => {
                 onClick={() => {
                   handlePhonetic(data.word);
                 }}
+                aria-label={`${data.word} 발음 듣기`}
               >
                 <PiSpeakerHighFill />
               </VocaBtn>

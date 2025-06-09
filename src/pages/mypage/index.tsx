@@ -2,9 +2,15 @@ import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import axios from '@/utils/axiosInstance';
 import { PlanData } from '@/Interface/IPlan';
 import MypageComponent from '@/component/Mypage/MypageComponent';
+import SeoHead from '@/component/Common/SeoHead.tsx/SeoHead';
 
 const Mypage: NextPage<PlanData> = ({ planData }) => {
-  return <MypageComponent planData={planData} />;
+  return (
+    <>
+      <SeoHead title="내 플랜 관리 | 콩글리시" url="https://www.konglish.shop/mypage" />
+      <MypageComponent planData={planData} />
+    </>
+  );
 };
 
 // ssr

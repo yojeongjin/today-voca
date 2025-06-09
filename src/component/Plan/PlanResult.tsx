@@ -4,10 +4,10 @@ import styled from 'styled-components';
 import Picker from '@emoji-mart/react';
 //ifs
 import { PlanProps } from '@/Interface/IPlan';
-
 // components
 import ApplyBtn from '../Common/Button/ApplyButton';
-import BottomSheet from '../Common/BottomSheet/BottomSheet';
+// icons
+import { FcAdvertising } from 'react-icons/fc';
 
 const PlanResult = ({ planInfo, setPlanInfo, addPlanHandler }: PlanProps) => {
   const [showPicker, setShowPicker] = useState(false);
@@ -50,7 +50,9 @@ const PlanResult = ({ planInfo, setPlanInfo, addPlanHandler }: PlanProps) => {
       </ResultBox>
       <BtnBox>
         <Info>
-          <InfoIcon>📣</InfoIcon>
+          <InfoIcon>
+            <FcAdvertising />
+          </InfoIcon>
           하루에 약 {(planInfo?.length! / total_date).toFixed(0)}개의 문제를 풀게돼요!
         </Info>
         <ApplyBtn onClick={addPlanHandler}>플랜 시작</ApplyBtn>
@@ -151,11 +153,11 @@ const BtnBox = styled.div`
 `;
 
 const Info = styled.p`
-  padding: 8px 0;
+  padding: 12px 0;
   text-align: center;
   color: ${props => props.theme.primary_04};
 `;
 const InfoIcon = styled.i`
-  font-family: 'TossFace';
-  margin-right: 4px;
+  margin-right: 6px;
+  font-size: 16px;
 `;

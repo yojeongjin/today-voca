@@ -13,9 +13,8 @@ import { PlanInfo } from '@/type/planInfo';
 // components
 import ApplyBtn from '../Common/Button/ApplyButton';
 import CloseButton from '../Common/Button/CloseButton';
-
 // icons
-import { RiCloseLargeLine } from 'react-icons/ri';
+import { FcLeave } from 'react-icons/fc';
 
 interface PlanPeriodProps {
   planInfo: PlanInfo;
@@ -72,7 +71,9 @@ const PlanPeriod = ({ planInfo, setPlanInfo, setOpenBottom }: PlanPeriodProps) =
       {/* button */}
       <BtnBox>
         <CalendarAlert>
-          <AlertIcon>📣</AlertIcon>
+          <AlertIcon>
+            <FcLeave />
+          </AlertIcon>
           종료일은 최대 한 달까지 지정 가능해요!
         </CalendarAlert>
         <ApplyBtn
@@ -316,13 +317,15 @@ const BtnBox = styled.div`
 `;
 
 const CalendarAlert = styled.p`
-  margin-bottom: 8px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
   font-size: 13px;
   color: ${props => props.theme.primary_04};
 `;
 
 const AlertIcon = styled.i`
-  font-family: 'TossFace';
-  margin-right: 7px;
+  margin: 4px 7px 0 0;
+  font-size: 16px;
 `;

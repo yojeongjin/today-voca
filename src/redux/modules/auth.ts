@@ -92,7 +92,7 @@ function* signinSaga(action: SigninSagaAction): Generator<any, void, any> {
     yield put(success(user));
     yield call(() => {
       if (typeof window !== 'undefined') {
-        window.location.href = `${process.env.NEXT_PUBLIC_APP_API_KEY}`;
+        window.location.href = `${process.env.NEXT_PUBLIC_APP_URL}`;
       }
     });
     // 정보 저장

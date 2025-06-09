@@ -61,8 +61,6 @@ const CompleteP = styled.p`
 `;
 
 const CompleteImg = styled.div`
-  // width: 64px;
-  // height: 64px;
   width: 80%;
   margin: 0 auto;
 `;

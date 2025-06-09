@@ -3,10 +3,17 @@ import axios from '@/utils/axiosInstance';
 import { DayProps } from '@/Interface/IDay';
 // container
 import DayContainer from '@/container/Day/DayContainer';
+import SeoHead from '@/component/Common/SeoHead.tsx/SeoHead';
 
-const Day: NextPage<DayProps> = ({ dayData, plan_id, day_number, percent }) => {
+const Day: NextPage<DayProps> = ({ dayData, plan_id, day_number, day_size, level, percent }) => {
   return (
-    <DayContainer dayData={dayData} plan_id={plan_id} day_number={day_number} percent={percent} />
+    <>
+      <SeoHead
+        title={`Day${day_number ?? day_number} | 콩글리시`}
+        url={`https://www.konglish.shop/day?day=${day_number}&day_size=${day_size}&level=${level}`}
+      />
+      <DayContainer dayData={dayData} plan_id={plan_id} day_number={day_number} percent={percent} />
+    </>
   );
 };
 
@@ -43,6 +50,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
           plan_id: res.plan_id,
           percent: res.percent,
           day_number: Number(ctx.query.day),
+          day_size: ctx.query.day_size,
+          level: ctx.query.level,
         },
       };
     }

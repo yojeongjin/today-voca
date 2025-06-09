@@ -8,6 +8,8 @@ import { useBottom } from '@/hooks/useBottom';
 import axios from '@/utils/axiosInstance';
 // icons
 import { RxDotsHorizontal } from 'react-icons/rx';
+import { FcSurvey } from 'react-icons/fc';
+import { FcExport } from 'react-icons/fc';
 
 import BottomSheet from '../Common/BottomSheet/BottomSheet';
 
@@ -54,10 +56,15 @@ const HomeTitle = () => {
                   router.push('/mypage');
                 }}
               >
-                <BottomIcon>📑</BottomIcon>내 플랜 관리
+                <BottomIcon>
+                  <FcSurvey />
+                </BottomIcon>
+                내 플랜 관리
               </BottomItem>
               <BottomItem onClick={handleLogout}>
-                <BottomIcon>👋🏻</BottomIcon>
+                <BottomIcon>
+                  <FcExport />
+                </BottomIcon>
                 로그아웃
               </BottomItem>
             </BottomMenu>
@@ -123,6 +130,6 @@ const BottomItem = styled.li`
 `;
 
 const BottomIcon = styled.i`
-  font-family: TossFace;
-  margin-right: 16px;
+  margin: 4px 16px 0 0;
+  font-size: 20px;
 `;

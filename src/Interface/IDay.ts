@@ -6,4 +6,7 @@ export interface DayProps extends NextStepProps {
   plan_id?: number;
   day_number?: number;
   percent?: number;
+
+  day_size?: string;
+  level?: string;
 }

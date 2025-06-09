@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import styled from 'styled-components';
 
 import BottomSheet from '../Common/BottomSheet/BottomSheet';
@@ -21,12 +22,31 @@ const IOSGuide = ({ onClick }: iOSProps) => {
         </CompleteBody>
         <GuideMenu>
           <GuideItem>
-            <Guide>1. Safari 공유 버튼 클릭 </Guide>
-            <GuideImg src="/images/1.png" alt="iOS 홈 화면 추가 방법" />
+            <Guide>
+              <GuideStrong>Step1</GuideStrong>
+              Safari 공유 버튼 클릭{' '}
+            </Guide>
+            <GuideImgBox>
+              <Image
+                src="/images/1.png"
+                alt="iOS 홈 화면 추가 방법1"
+                fill
+                style={{ objectFit: 'contain' }}
+              />
+            </GuideImgBox>
           </GuideItem>
           <GuideItem>
-            <Guide>2. 홈 화면에 추가 </Guide>
-            <GuideImg src="/images/2.png" alt="iOS 홈 화면 추가 방법" />
+            <Guide>
+              <GuideStrong>Step2</GuideStrong>홈 화면에 추가{' '}
+            </Guide>
+            <GuideImgBox>
+              <Image
+                src="/images/2.png"
+                alt="iOS 홈 화면 추가 방법2"
+                fill
+                style={{ objectFit: 'contain' }}
+              />
+            </GuideImgBox>
           </GuideItem>
         </GuideMenu>
         <ApplyBtn onClick={onClick}>닫기</ApplyBtn>
@@ -67,19 +87,34 @@ const CompleteP = styled.p`
   margin-top: 8px;
 `;
 
-const GuideMenu = styled.ul``;
-
-const GuideItem = styled.li`
-  padding: 8px 0;
+const GuideMenu = styled.ul`
+  background-color: #fafafa;
+  border-radius: 4px;
+  padding: 24px 16px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 6px 16px;
 `;
 
-const GuideImg = styled.img`
-  width: 70%;
-  display: block;
-  border-radius: 5px;
-  margin: 0 auto;
+const GuideItem = styled.li``;
+
+const GuideImgBox = styled.div`
+  position: relative;
+  // width: 70%;
+  height: 120px;
+  margin: 24px auto;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 `;
 
-const Guide = styled.p`
-  color: ${props => props.theme.primary_01};
+const Guide = styled.div`
+  text-align: left;
+  font-weight: 500;
+  font-size: 16px;
+`;
+
+const GuideStrong = styled.strong`
+  background-color: #f3f9ff;
+  padding: 8px 12px;
+  border-radius: 20px;
+  margin-right: 8px;
+  color: #1871ff;
+  font-size: 14px;
 `;

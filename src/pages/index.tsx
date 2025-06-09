@@ -2,10 +2,17 @@ import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
 import axios from '@/utils/axiosInstance';
 //interface
 import { PlanData } from '@/Interface/IPlan';
+// components
 import HomeContainer from '@/container/Home/HomeContainer';
+import SeoHead from '@/component/Common/SeoHead.tsx/SeoHead';
 
 const Home: NextPage<PlanData> = ({ planData }) => {
-  return <HomeContainer planData={planData} />;
+  return (
+    <>
+      <SeoHead />
+      <HomeContainer planData={planData} />;
+    </>
+  );
 };
 
 // ssr
