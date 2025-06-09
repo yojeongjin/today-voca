@@ -8,12 +8,12 @@
   "description": "재미있게 영어 단어를 배우는 웹앱",
   "icons": [
     {
-      "src": "/images/konglish.png",
+      "src": "/images/konglish.webp",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/images/konglish.png",
+      "src": "/images/konglish.webp",
       "sizes": "512x512",
       "type": "image/png"
     }

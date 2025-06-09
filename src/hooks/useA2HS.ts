@@ -10,21 +10,36 @@ type BeforeInstallPromptEvent = Event & {
 
 export const useA2HS = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isVisible, setIsVisible] = useState(false); // Android
-  const [isIOSGuideVisible, setIsIOSGuideVisible] = useState(false); // iOS
+  const [isVisible, setIsVisible] = useState(false); // Android A2HS
+  const [isIOSGuideVisible, setIsIOSGuideVisible] = useState(false); // iOS 가이드
 
   const isInstalled = () => {
     if (typeof window === 'undefined') return false;
-    return (
-      window.matchMedia('(display-mode: standalone)').matches ||
-      (window.navigator as any).standalone === true
-    );
+
+    try {
+      return (
+        window.matchMedia('(display-mode: standalone)').matches ||
+        (window.navigator as any).standalone === true
+      );
+    } catch (e) {
+      return false;
+    }
   };
 
-  const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
-  const isSafari = () => /^((?!chrome|android).)*safari/i.test(navigator.userAgent.toLowerCase());
-  const isInStandaloneMode = () =>
-    'standalone' in window.navigator && (window.navigator as any).standalone;
+  const isIOS = () => {
+    if (typeof window === 'undefined') return false;
+    return /iphone|ipad|ipod/i.test(window.navigator.userAgent.toLowerCase());
+  };
+
+  const isSafari = () => {
+    if (typeof window === 'undefined') return false;
+    return /^((?!chrome|android).)*safari/i.test(window.navigator.userAgent.toLowerCase());
+  };
+
+  const isInStandaloneMode = () => {
+    if (typeof window === 'undefined') return false;
+    return 'standalone' in window.navigator && (window.navigator as any).standalone;
+  };
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -32,34 +47,54 @@ export const useA2HS = () => {
 
     const now = Date.now();
 
-    // Android 설치 이벤트
-    const hideUntil = Number(localStorage.getItem(LOCALSTORAGE_KEY));
+    // Android: beforeinstallprompt
+    let hideUntil = 0;
+    try {
+      hideUntil = Number(localStorage.getItem(LOCALSTORAGE_KEY));
+    } catch (e) {
+      console.warn('localStorage not available (Android hideUntil):', e);
+    }
+
     if (!hideUntil || now > hideUntil) {
       const handleBeforeInstallPrompt = (e: Event) => {
         e.preventDefault();
         setDeferredPrompt(e as BeforeInstallPromptEvent);
         setIsVisible(true);
       };
+
       window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      return () => {
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      };
     }
 
-    // iOS 설치 가이드
-    const iosHideUntil = Number(localStorage.getItem(IOS_GUIDE_KEY));
+    // iOS: 홈화면 설치 유도 가이드
+    let iosHideUntil = 0;
+    try {
+      iosHideUntil = Number(localStorage.getItem(IOS_GUIDE_KEY));
+    } catch (e) {
+      console.warn('localStorage not available (iOS hideUntil):', e);
+    }
+
     if (isIOS() && isSafari() && !isInStandaloneMode() && (!iosHideUntil || now > iosHideUntil)) {
       setIsIOSGuideVisible(true);
     }
   }, []);
 
-  // Android
+  // Android 설치 진행
   const installApp = async () => {
     if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
 
-    if (outcome === 'dismissed') {
-      const threeDaysLater = Date.now() + 3 * 24 * 60 * 60 * 1000;
-      localStorage.setItem(LOCALSTORAGE_KEY, `${threeDaysLater}`);
+    try {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+
+      if (outcome === 'dismissed') {
+        const threeDaysLater = Date.now() + 3 * 24 * 60 * 60 * 1000;
+        localStorage.setItem(LOCALSTORAGE_KEY, `${threeDaysLater}`);
+      }
+    } catch (e) {
+      console.warn('Error during installApp:', e);
     }
 
     setDeferredPrompt(null);
@@ -67,16 +102,25 @@ export const useA2HS = () => {
   };
 
   const cancel = () => {
-    const threeDaysLater = Date.now() + 3 * 24 * 60 * 60 * 1000;
-    localStorage.setItem(LOCALSTORAGE_KEY, `${threeDaysLater}`);
+    try {
+      const threeDaysLater = Date.now() + 3 * 24 * 60 * 60 * 1000;
+      localStorage.setItem(LOCALSTORAGE_KEY, `${threeDaysLater}`);
+    } catch (e) {
+      console.warn('Error during cancel:', e);
+    }
+
     setDeferredPrompt(null);
     setIsVisible(false);
   };
 
-  // iOS
   const cancelIOSGuide = () => {
-    const threeDaysLater = Date.now() + 3 * 24 * 60 * 60 * 1000;
-    localStorage.setItem(IOS_GUIDE_KEY, `${threeDaysLater}`);
+    try {
+      const threeDaysLater = Date.now() + 3 * 24 * 60 * 60 * 1000;
+      localStorage.setItem(IOS_GUIDE_KEY, `${threeDaysLater}`);
+    } catch (e) {
+      console.warn('Error during cancelIOSGuide:', e);
+    }
+
     setIsIOSGuideVisible(false);
   };
 

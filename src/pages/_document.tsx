@@ -32,11 +32,11 @@ class MyDocument extends Document {
         <Head>
           <link rel="manifest" href="/manifest.json" />
           <meta name="theme-color" content="#fff" />
-          <link rel="icon" href="/images/konglish.png" />
+          <link rel="icon" href="/images/konglish.webp" />
           {/* iOS 지원용 */}
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-          <link rel="apple-touch-icon" href="/images/konglish.png" />
+          <link rel="apple-touch-icon" href="/images/konglish.webp" />
           <meta charSet="utf-8" />
           <meta
             name="viewport"
