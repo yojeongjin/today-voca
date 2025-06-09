@@ -14,6 +14,7 @@ export const useA2HS = () => {
   const [isIOSGuideVisible, setIsIOSGuideVisible] = useState(false); // iOS
 
   const isInstalled = () => {
+    if (typeof window === 'undefined') return false;
     return (
       window.matchMedia('(display-mode: standalone)').matches ||
       (window.navigator as any).standalone === true
@@ -26,6 +27,7 @@ export const useA2HS = () => {
     'standalone' in window.navigator && (window.navigator as any).standalone;
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     if (isInstalled()) return;
 
     const now = Date.now();
