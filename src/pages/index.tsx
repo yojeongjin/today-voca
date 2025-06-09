@@ -10,7 +10,7 @@ const Home: NextPage<PlanData> = ({ planData }) => {
   return (
     <>
       <SeoHead />
-      <HomeContainer planData={planData} />;
+      <HomeContainer planData={planData} />
     </>
   );
 };

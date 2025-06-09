@@ -6,7 +6,7 @@ const Join: NextPage = () => {
   return (
     <>
       <SeoHead title="회원가입 | 콩글리시" url="https://www.konglish.shop/join" />
-      <JoinContainer />;
+      <JoinContainer />
     </>
   );
 };

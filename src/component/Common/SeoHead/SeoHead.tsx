@@ -10,7 +10,7 @@ interface SeoHeadProps {
 const SeoHead = ({
   title = '콩글리시',
   description = '콩들과 함께하는 즐거운 단어 암기',
-  image = 'https://www.konglish.shop/images/ogimg.webp',
+  image = 'https://voca-bucket.s3.ap-northeast-2.amazonaws.com/og.webp',
   url = 'https://www.konglish.shop',
 }: SeoHeadProps) => {
   return (

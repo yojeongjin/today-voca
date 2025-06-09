@@ -63,7 +63,6 @@ export const useA2HS = () => {
         setIsVisible(true);
       }
     };
-
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
     // iOS Guide 처리

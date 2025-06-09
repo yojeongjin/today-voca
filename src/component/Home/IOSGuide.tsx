@@ -10,48 +10,50 @@ interface iOSProps {
 
 const IOSGuide = ({ onClick }: iOSProps) => {
   return (
-    <BottomSheet height={480} isOpen={true}>
-      <A2HSBase>
-        <CompleteH2>홈 화면 추가</CompleteH2>
-        <CompleteBody>
-          <CompleteH4>홈 화면에 콩글리시를 심어보세요!</CompleteH4>
-          <CompleteP>
-            현재 사용 중인 브라우저에서는 앱 설치가 지원되지 않아요.
-            <br></br>아래 순서를 따라 홈 화면에 추가해주세요!
-          </CompleteP>
-        </CompleteBody>
-        <GuideMenu>
-          <GuideItem>
-            <Guide>
-              <GuideStrong>Step1</GuideStrong>
-              Safari 공유 버튼 클릭{' '}
-            </Guide>
-            <GuideImgBox>
-              <Image
-                src="/images/1.png"
-                alt="iOS 홈 화면 추가 방법1"
-                fill
-                style={{ objectFit: 'contain' }}
-              />
-            </GuideImgBox>
-          </GuideItem>
-          <GuideItem>
-            <Guide>
-              <GuideStrong>Step2</GuideStrong>홈 화면에 추가{' '}
-            </Guide>
-            <GuideImgBox>
-              <Image
-                src="/images/2.png"
-                alt="iOS 홈 화면 추가 방법2"
-                fill
-                style={{ objectFit: 'contain' }}
-              />
-            </GuideImgBox>
-          </GuideItem>
-        </GuideMenu>
-        <ApplyBtn onClick={onClick}>닫기</ApplyBtn>
-      </A2HSBase>
-    </BottomSheet>
+    <A2HSBase>
+      <BottomSheet height={480} isOpen={true}>
+        <A2HSBox>
+          <CompleteH2>홈 화면 추가</CompleteH2>
+          <CompleteBody>
+            <CompleteH4>홈 화면에 콩글리시를 심어보세요!</CompleteH4>
+            <CompleteP>
+              현재 사용 중인 브라우저에서는 앱 설치가 지원되지 않아요.
+              <br></br>아래 순서를 따라 홈 화면에 추가해주세요!
+            </CompleteP>
+          </CompleteBody>
+          <GuideMenu>
+            <GuideItem>
+              <Guide>
+                <GuideStrong>Step1</GuideStrong>
+                Safari 공유 버튼 클릭{' '}
+              </Guide>
+              <GuideImgBox>
+                <Image
+                  src="/images/1.png"
+                  alt="iOS 홈 화면 추가 방법1"
+                  fill
+                  style={{ objectFit: 'contain' }}
+                />
+              </GuideImgBox>
+            </GuideItem>
+            <GuideItem>
+              <Guide>
+                <GuideStrong>Step2</GuideStrong>홈 화면에 추가{' '}
+              </Guide>
+              <GuideImgBox>
+                <Image
+                  src="/images/2.png"
+                  alt="iOS 홈 화면 추가 방법2"
+                  fill
+                  style={{ objectFit: 'contain' }}
+                />
+              </GuideImgBox>
+            </GuideItem>
+          </GuideMenu>
+          <ApplyBtn onClick={onClick}>닫기</ApplyBtn>
+        </A2HSBox>
+      </BottomSheet>
+    </A2HSBase>
   );
 };
 
@@ -59,6 +61,9 @@ export default IOSGuide;
 
 const A2HSBase = styled.div`
   position: relative;
+`;
+
+const A2HSBox = styled.div`
   padding: 24px 16px;
   text-align: center;
   display: flex;
@@ -90,7 +95,7 @@ const CompleteP = styled.p`
 const GuideMenu = styled.ul`
   background-color: #fafafa;
   border-radius: 4px;
-  padding: 24px 16px;
+  padding: 16px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 6px 16px;
 `;
 
@@ -99,8 +104,8 @@ const GuideItem = styled.li``;
 const GuideImgBox = styled.div`
   position: relative;
   // width: 70%;
-  height: 120px;
-  margin: 24px auto;
+  height: 90px;
+  margin: 16px auto;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 `;
 
