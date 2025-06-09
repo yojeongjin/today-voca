@@ -50,10 +50,10 @@ const HomeContainer = ({ planData }: PlanData) => {
       <Home>
         <HomeTitle />
         <PlanComponent planData={planData} />
-        {!openBottom && (
+        {openBottom && (
           <BottomSheet
             height={480}
-            isOpen={!openBottom}
+            isOpen={openBottom}
             onClose={() => {
               setOpenBottom(false);
             }}
