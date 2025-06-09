@@ -1,6 +1,5 @@
-node_modules
 .vscode
 .git
-.env
-config
-public
+.gitignore
+
+node_modules
