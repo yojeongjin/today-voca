@@ -5,7 +5,7 @@
 
 ## 프로젝트 소개
 
-Konglish는 단어 학습 플랜을 만들고 단계별 학습을 통해 **사용자의 성장과 반복을 유도하는** 웹 기반 단어 암기 앱입니다.  
+Konglish는 단어 학습 플랜을 만들고 단계별 학습을 통해 **반복 학습과 성취 경험을 자연스럽게 유도하는** 웹 기반 단어 암기 앱입니다.  
 학습 목적의 웹페이지이기 때문에 딱딱함보다는 재미있고 자연스러운 인터렉션 중심의 학습 경험을 제공하고자 **모션 디자인을 활용하여 교육과 재미를 동시에 제공할 수 있도록 하였습니다.**
 
 학습을 마친 사용자가 작은 성취감을 느끼고 자연스럽게 다음 학습으로 이어지도록 반복성과 리텐션 구조를 설계했으며,
@@ -44,8 +44,10 @@ Konglish는 단어 학습 플랜을 만들고 단계별 학습을 통해 **사�
 </AnimatePresence>
 ```
 
-<img src="./public/readme/app-like1.gif" width="280" height="580"/>
-<img src="./public/readme/app-like2.gif" width="280" height="580"/>
+<p align="center">
+  <img src="./public/readme/app-like1.gif" width="300" height="620"/>
+  <img src="./public/readme/app-like2.gif" width="300" height="620"/>
+</p>
 
 ### 📲 A2HS (Add to Home Screen) 적용
 
@@ -62,9 +64,6 @@ Konglish는 단어 학습 플랜을 만들고 단계별 학습을 통해 **사�
 - 로딩 없이 빠르게 진입할 수 있어
 
 웹앱이지만 실제 앱처럼 **일관된 사용 경험**을 제공합니다.
-
-<img src="./public/readme/AOS.gif" width="300" height="550"/>
-<img src="./public/readme/iOS.gif" width="300" height="550"/>
 
 ## Phase2. 재미와 몰입을 유도하는 학습 구조
 
@@ -87,14 +86,10 @@ const handlePhonetic = async (word: string) => {
 };
 ```
 
-<details><summary>Practice 1 보기</summary>
-<img src="./public/readme/practice1.png" width="320" height="580"/>
-</details>
-
 ### 📚 Practice 2 - 객관식 퀴즈 + 피드백
 
 - 각 단어에 대해 4개의 보기를 생성하고 정답과 함께 무작위로 섞어 렌더링합니다.
-- 정답 클릭 시 애니메이션 피드백과 함께 점수가 누적되고, great 상태값을 증가시킵니다.
+- 정답 클릭 시 애니메이션 피드백과 함께 점수가 누적되고, 성취도를 기록합니다.
 - 문제 전환은 `setTimeout` 기반으로 이루어지며, `isTransitioning` 상태를 활용해 중복 클릭 방지 및 부드러운 문제 전환 흐름을 구현했습니다.
 
 ```js
@@ -103,8 +98,10 @@ if (correct === choice) {
 }
 ```
 
-<img src="./public/readme/practice2.png" width="320" height="580"/>
-<img src="./public/readme/practice2.gif" width="300" height="580"/>
+<p align="center">
+<img src="./public/readme/practice2.png" width="320" height="600"/>
+<img src="./public/readme/practice2.gif" width="300" height="600"/>
+</p>
 
 ### 📚 Practice 2.5 - 감정 기반 성취도 피드백
 
@@ -117,16 +114,18 @@ if (correct === choice) {
 }
 ```
 
+<p align="center">
 <img src="./public/readme/delight.gif" width="280" height="580"/>
 <img src="./public/readme/neutral.gif" width="280" height="580"/>
 <img src="./public/readme/angry.gif" width="280" height="580"/>
+</p>
 
 ### 📚 Practice 3 - 타이핑 기반 반복 학습
 
 - 학습 흐름의 마지막 단계는 사용자가 직접 단어의 뜻을 입력하는 타이핑 기반 반복 학습으로 구성했습니다.
 - 제한 시간 내에 뜻을 입력하는 퀴즈로 기억을 능동적으로 떠올려 입력하는 과정을 통해 회상 효과를 극대화하고자 했습니다.
 - `useReducer`로 상태를 명확히 분리하여 `stage`, `timer`, `currentIndex`, `answerList` 등을 관리합니다.
-- 타이머는 `useRef`로 관리하여 불필요한 렌더링을 막고, 입력 제출(Enter 또는 타이머 종료 시) 후 다음 문제로 자동 전환됩니다.
+- 타이머는 `useRef`로 관리하여 렌더링 없이 시간 값을 추적하며 성능을 최적화했습니다.
 
 ```js
 const reducer = (state, action) => {
@@ -152,16 +151,6 @@ const reducer = (state, action) => {
 
 const [state, dispatch] = useReducer(reducer, initialState);
 ```
-
-#### (+) 흐름 요약
-
-| 단계 | 설명                                         |
-| ---- | -------------------------------------------- |
-| 준비 | 5초 카운트다운 후 자동 시작                  |
-| 입력 | 단어가 주어지고 제한시간(10초) 내에 뜻 입력  |
-| 제출 | 시간 초과 or Enter 입력 시 정답 제출         |
-| 반복 | 다음 문제로 자연스럽게 전환                  |
-| 결과 | 입력한 답안과 실제 뜻을 비교하는 결과표 제공 |
 
 <img src="./public/readme/practice3.gif" width="320" height="580"/>
 
@@ -199,27 +188,30 @@ const randomPlant = useMemo(() => {
 }, []);
 ```
 
-<img src="./public/readme/carrot.gif" width="300" height="580"/>
-<img src="./public/readme/corn.gif" width="300" height="580"/>
-<img src="./public/readme/tomato.gif" width="300" height="580"/>
+<p align="center">
+<img src="./public/readme/carrot.gif" width="320" height="600"/>
+<img src="./public/readme/corn.gif" width="320" height="600"/>
+</p>
 
 <details><summary>채소 더 보기 👀</summary>
-<img src="./public/readme/radish.gif" width="300" height="580"/>
-<img src="./public/readme/avocado.gif" width="300" height="580"/>
-<img src="./public/readme/eggplant.gif" width="300" height="580"/>
+<p align="center">
+<img src="./public/readme/tomato.gif" width="320" height="600" />
+<img src="./public/readme/avocado.gif" width="320" height="600" />
+<img src="./public/readme/radish.gif" width="320" height="600" />
+<img src="./public/readme/eggplant.gif" width="320" height="600" />
+</p>
 </details>
 
 ## Phase 3. 끊김 없는 인증 흐름 구현
 
-단어 학습 앱은 **매일 접속**하고, **짧게 머무는 사용성**이 많습니다.  
-그런데 매번 로그인 액션이 이루어져야한다면 그 자체가 진입 장벽이 된다고 생각했습니다.
+단어 학습 웹앱은 하루에 여러 번 짧게 접속하는 경우가 많습니다. 이런 특성상 매번 로그인 과정을 거쳐야 한다면 사용자의 진입을 방해하는 요소가 될 수 있다고 판단했습니다.  
 그래서 사용자는 로그인 상태를 인식하지 않으면서도, 백에선 안전하게 인증이 유지되도록 설계했습니다.
 
 ### 🔐 구조 요약
 
 - 로그인 시 서버에서 `access_token`, `refresh_token`을 **HTTP Only 쿠키**로 발급합니다.
 - 프론트에서는 `axios` 요청마다 쿠키를 자동으로 포함시킵니다. (`withCredentials: true`)
-- access token이 만료되면, Axios 인터셉터가 자동으로 `/refresh-token` 요청 후 원래 요청을 재시도합니다.
+- 서버가 401 오류와 함께 'EXPIRED_ACCESS_TOKEN'을 응답하면, 인터셉터가 이를 감지해 자동으로 /refresh-token을 호출한 뒤 원래 요청을 재시도합니다.
 
 ```js
 const instance = axios.create({
@@ -263,7 +255,7 @@ instance.interceptors.response.use(
 yield call(axios.post, '/v1/auth/signin', action.payload, { withCredentials: true });
 
 // 사용자 정보 가져오기
-const res: any = yield call(axios.get, '/v1/auth/user', { withCredentials: true });
+const res = yield call(axios.get, '/v1/auth/user', { withCredentials: true });
 yield put(success(res.data.data));
 ```
 
@@ -279,9 +271,9 @@ const persistConfig = {
 };
 ```
 
-### 페이지 전환 시 전역 로딩 처리
+### ⏳ 페이지 전환 시 전역 로딩 처리
 
-- 전역에서 로딩 상태를 감지할 수 있도록 Redux로 분리
+- 페이지 전환 시 `router.events`를 감지하여 **Redux로 로딩 상태를 제어**하고, 전역에서 로딩 상태를 감지해 공통 스피너 UI를 통해 사용자에게 명확한 피드백을 제공합니다.
 - Next.js의 router 이벤트를 감지해서 공통 로딩 처리를 구성
   - `_app.tsx`에 `RouteLoadingHandler` 컴포넌트를 추가
   - `router.events`로 `routeChangeStart`/`Complete` 이벤트에 Redux 상태를 연동
@@ -289,3 +281,60 @@ const persistConfig = {
 ```js
 router.events.on('routeChangeStart', () => dispatch(setLoading(true)));
 ```
+
+## 프로젝트 정리
+
+### 👩🏻‍💻 개발 포인트
+
+- 단순한 단어 암기 기능 구현에 그치지않고, **사용자의 학습 흐름과 반복 유도 구조를 어떻게 설계할 것인지**를 가장 우선순위에 두고 개발했습니다.
+- 기획부터 디자인, 개발, 배포까지 모든 과정을 진행하며 **UX와 기술 구현이 맞닿는 지점에서 끊김 없는 학습 경험을 만드는 것**에 집중했습니다.
+- 특히 SSR 환경과 CSR 간의 hydration mismatch, 인증 토큰의 자동 갱신, 상태 동기화 문제 등 실제 서비스에서 흔히 마주치는 문제를 직접 해결하면서 서비스 완성도를 높였습니다.
+- 프론트엔드와 백엔드 모두 하나의 프로젝트 내에서 구성하였고, **Docker 기반의 환경 구성 → GitHub Actions CI/CD → Nginx를 통한 서비스 배포까지 전 과정을 자동화**하며 실무에 준하는 워크플로우를 경험했습니다.
+- 인터랙션에 있어서도 Lottie 애니메이션을 직접 제작하고 그것을 감정 기반 피드백 구조와 연결하여 학습 몰입도를 높이는 데 기여했습니다.
+
+### 📍 주요 특징 요약
+
+| 항목             | 설명                                                 |
+| ---------------- | ---------------------------------------------------- |
+| 학습 흐름 설계   | 진입 → 확인 → 입력 → 피드백 → 반복의 UX 흐름         |
+| 인증 처리        | Access/Refresh 기반 토큰 + 자동 갱신 인터셉터        |
+| 상태 관리        | Redux + Saga + Persist 조합으로 전역 상태 관리       |
+| 사용자 경험 향상 | A2HS, 앱 전환 애니메이션, 성취도 기반 보상 피드백    |
+| 배포 자동화      | Docker + GitHub Actions + EC2(Nginx) 기반 CI/CD 구성 |
+
+### 📁 디렉토리 구조 요약
+
+```json
+├── bin/www                   # Express 실행 엔트리 포인트
+├── app.ts                    # Express 설정 및 서버 로직
+├── back/                     # 백엔드 미들웨어 및 서비스 로직
+├── routes/                   # API 라우터 모듈
+├── config/                   # 환경설정(DB 등)
+├── src/
+│   ├── components/           # UI 컴포넌트
+│   ├── container/            # 페이지 컨테이너
+│   ├── pages/                # Next.js 라우팅 페이지
+│   ├── redux/                # Redux 상태 및 saga 설정
+│   └── hooks/                # 커스텀 훅 모음 (useA2HS 등)
+├── Dockerfile
+├── docker-compose.yml
+├── .github/workflows/        # GitHub Actions 배포 설정
+```
+
+### 📝 프로젝트를 통해 배운점
+
+- **UX 흐름 중심의 학습 설계 경험**
+
+  - 기능 구현 이전에, “어떻게 하면 사용자가 학습 흐름에 자연스럽게 몰입할 수 있을까?”를 고민하며 출발했습니다.  
+    이를 바탕으로 진입 → 확인 → 입력 → 피드백 → 반복으로 이어지는 UX 사이클을 설계했고, 학습 앱 특유의 루틴 구조에 대한 감각을 익힐 수 있었습니다.
+
+- **정적인 컨텐츠를 인터랙션 중심으로 전환한 경험**
+  - 단어 암기라는 지루할 수 있는 작업에 감정 기반 피드백과 애니메이션을 더해, 사용자 중심의 인터랙션 흐름을 설계했습니다.  
+    특히 Lottie 애니메이션을 직접 제작해 성취도 피드백에 적용함으로써, 정적인 컨텐츠를 사용자와 상호작용하는 경험 요소로 전환하는 경험을 해볼 수 있었습니다.
+- **A2HS(Add to Home Screen) 및 앱 전환 최적화 경험**
+  - 웹앱이지만 마치 앱처럼 보이도록 만들기 위해 A2HS 적용, 전환 애니메이션 설계, 설치 유도 로직 등을 구성하며
+    **웹과 앱 사이의 경계에서 사용자 경험을 설계**하는 감각을 쌓을 수 있었습니다.
+- **인증 구조의 사용자 중심 설계**
+  - Axios 인터셉터를 통한 인증 자동화 처리로 사용자의 피로도를 낮추고, 동시에 보안적인 요소는 유지하는 구조를 만들며 인증 로직에 대한 실전 이해도를 크게 높일 수 있었습니다.
+- **Lottie, 3D 모델 등 리소스도 직접 만들고 통합한 경험**
+  - 단순히 외부 리소스를 사용하는 것이 아닌 After Effects 기반 Lottie 애니메이션과 3D 모델도 구현해내며 디자인 툴과 개발을 연결하는 경험을 통해 구현의 경계를 확장할 수 있었습니다.

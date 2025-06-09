@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_APP_API_KEY,
+  baseURL:
+    typeof window === 'undefined'
+      ? process.env.NEXT_SERVER_APP_API_KEY
+      : process.env.NEXT_PUBLIC_APP_API_KEY,
   withCredentials: true,
 });
 
