@@ -389,3 +389,109 @@ router.events.on('routeChangeStart', () => dispatch(setLoading(true)));
   - Axios 인터셉터를 통한 인증 자동화 처리로 사용자의 피로도를 낮추고, 동시에 보안적인 요소는 유지하는 구조를 만들며 인증 로직에 대한 실전 이해도를 크게 높일 수 있었습니다.
 - **Lottie, 3D 모델 등 리소스도 직접 만들고 통합한 경험**
   - 단순히 외부 리소스를 사용하는 것이 아닌 After Effects 기반 Lottie 애니메이션과 3D 모델도 구현해내며 디자인 툴과 개발을 연결하는 경험을 통해 구현의 경계를 확장할 수 있었습니다.
+
+<br/>
+<br/>
+<p align="right"><a href="#top">(Top)</a></p>
+
+<details>
+<summary><strong>👀 콩글리시에 대해 조금 더 궁금하다면?</strong></summary>
+
+## 회원가입
+
+### 👤 회원가입 & 이메일 인증
+
+- 사용자가 이메일을 입력하면 `/v1/join` API를 호출하여 인증 코드를 발급받습니다.
+- 기존 회원인지 먼저 확인한 후 문제가 없으면 인증번호를 생성 및 전송합니다.
+
+```js
+// [Front] 회원가입 시 입력된 이메일로 인증번호 요청
+await axios.get('/v1/join', {
+  params: { email: joinInfo.email },
+});
+```
+
+- 인증번호는 이메일로 전송되며, `nodemailer`로 Gmail을 통해 인증번호를 전송합니다.
+
+```js
+// [Back] 이메일 인증번호 발송 API
+const authCode = generateAuthCode();
+const transporter = createTransporter();
+const mailOptions = createMailOptions(email, authCode);
+
+transporter.sendMail(mailOptions, err => {
+  // 인증코드 응답
+  res.status(200).json({ authCode });
+});
+```
+
+- 비밀번호는 `bcrypt`로 암호화한 후 저장합니다.
+
+```js
+// [Back] 회원 정보 저장 API
+const hashedPwd = await bcrypt.hash(pwd, 12);
+await pool.execute('INSERT INTO tbl_user (nickname, email, pwd) VALUES (?, ?, ?)', [
+  name,
+  email,
+  hashedPwd,
+]);
+```
+
+<p align="center">
+<img src="./public/readme/join.png" width="320" height="600"/>
+<img src="./public/readme/join.gif" width="320" height="600"/>
+</p>
+
+<br/>
+
+## 플랜 생성
+
+### 🪴 플랜(트)을 심다 - 학습의 출발점
+
+Konglish에서 학습은 단어를 외우는 행위가 아닙니다.  
+이 프로젝트를 시작하면서 저는 이렇게 생각했습니다:
+
+> _"지루한 반복보다 뭔가 심고 키우는 것이 더 학습을 지속하게 만들지 않을까?"_
+
+그래서 콩글리시에서는 학습의 시작을 **Plan(트)를 심는 행위**로 정의했습니다.
+사용자는 앱에 들어오면 가장 먼저 자신만의 학습 **플랜(Plan)**을 등록하고 이름, 기간, 단어 코스 등을 설정합니다.
+
+이 과정을 “플랜(트) 심기”라고 부르며, 사용자는 매일 이 플랜(트)를 따라 학습을 이어가며 자연스럽게 '내가 키우는 학습'을 경험하게 됩니다. 🌱
+
+### Plan 1. 플랜명 - 기간
+
+- 사용자는 원하는 학습량과 기간을 선택하여 자신만의 학습 계획을 생성합니다.  
+  이 과정은 단순한 입력 폼이 아니라 **기간에 따라 하루 학습량을 자동으로 계산해주는 UX 흐름**으로 구성되어 있습니다.
+
+```js
+// 프론트에서 날짜와 단어 수를 기준으로 학습 분배
+const totalDay = getDiffDays(startDate, endDate);
+const wordsPerDay = Math.ceil(selectedWords.length / totalDay);
+```
+
+<p align="center">
+<img src="./public/readme/plan1.png" width="320" height="580"/>
+<img src="./public/readme/plan2.png" width="320" height="580"/>
+</p>
+
+### Plan 2. 학습 코스 선택
+
+- 사용자는 학습 수준에 맞게 기초 / 중등 / 고교 / 토익 850+ 등의 코스 중 하나를 선택할 수 있습니다.
+- 각 코스는 사전에 정의된 단어 수가 있으며, 선택된 코스에 따라 이후 학습에 사용할 단어 리스트가 결정됩니다.
+- 각 코스는 학습 난이도뿐 아니라 **플랜 생성 시점부터 전체 학습 설계에 영향을 주는 핵심 변수**로 사용됩니다.
+
+<p align="center">
+<img src="./public/readme/plan3.png" width="320" height="580"/>
+<img src="./public/readme/plan4.png" width="320" height="580"/>
+</p>
+
+### Plan 3. 나를 표현할 이모지 선택
+
+- 단어 학습이라는 반복 작업에 감정과 몰입을 불어넣기 위해 사용자에게 나만의 캐릭터 이모지를 고를 수 있는 단계를 넣었습니다.
+- 단순한 장식이 아닌 **학습 피드백에 감정과 개인화를 더하는 역할**로 작동하며, 학습자 스스로가 ‘내가 키운 플랜(트)’에 애정을 가질 수 있도록 유도합니다.
+
+<p align="center">
+<img src="./public/readme/plan5.png" width="320" height="580"/>
+<img src="./public/readme/plan6.png" width="320" height="580"/>
+</p>
+</details>
