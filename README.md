@@ -13,19 +13,24 @@ Konglish는 단어 학습 플랜을 만들고 단계별 학습을 통해 **반�
 
 📎 https://www.konglish.shop
 
-> **테스트 계정**  
-> id(email): test@email.com / pw: 1234
-> <br/>
+> **테스트 계정**
+>
+> `email(id)`: test@email.com  
+> `password`: 1234
+
+<br/>
 
 ## 기술스택
 
-| 분류             | 스택                                                    |
-| ---------------- | ------------------------------------------------------- |
-| Frontend         | Next.js 15, TypeScript Styled-Components, framer-motion |
-| Backend          | Node.js, Express, MySQL                                 |
-| Auth             | JWT-based 인증, Access/Refresh Token                    |
-| State Management | Redux + redux-persist                                   |
-| Infra            | Docker, EC2 + Nginx + GitHub Actions (CI/CD)            |
+| 분류             | 스택                                                     |
+| ---------------- | -------------------------------------------------------- |
+| Frontend         | Next.js 15, TypeScript, Styled-Components, framer-motion |
+| Backend          | Node.js, Express, MySQL                                  |
+| Auth             | JWT-based 인증, Access/Refresh Token                     |
+| State Management | Redux + redux-persist                                    |
+| Infra            | Docker, EC2 + Nginx + GitHub Actions (CI/CD)             |
+
+<br/>
 
 ## Phase1. 앱처럼 자연스럽게 들어오고, 머물 수 있도록
 
@@ -49,6 +54,8 @@ Konglish는 단어 학습 플랜을 만들고 단계별 학습을 통해 **반�
   <img src="./public/readme/app-like2.gif" width="300" height="620"/>
 </p>
 
+<br/>
+
 ### 📲 A2HS (Add to Home Screen) 적용
 
 또한 사용자가 앱처럼 사용할 수 있도록 **홈 화면 추가(Install App)** 를 유도했습니다.
@@ -65,12 +72,14 @@ Konglish는 단어 학습 플랜을 만들고 단계별 학습을 통해 **반�
 
 웹앱이지만 실제 앱처럼 **일관된 사용 경험**을 제공합니다.
 
+<br/>
+
 ## Phase2. 재미와 몰입을 유도하는 학습 구조
 
 반복적인 단어 학습은 쉽게 지루해질 수 있다고 생각했습니다.
 그래서 **조금이라도 더 재미있고, 조금이라도 더 기억에 남는 방식**으로 학습을 구성하고자 했습니다.
 
-단순 반복이 아닌 **몰입 → 확인 → 입력 → 피드백 → 반복**의 사이클을 설계함으로써 사용자가 흐름을 따라가다 보면 자연스럽게 복습이 이루어지는 구조를 목표로 했습니다.
+단순 반복이 아닌 **진입 → 확인 → 입력 → 피드백 → 반복**의 사이클을 설계함으로써 사용자가 흐름을 따라가다 보면 자연스럽게 복습이 이루어지는 구조를 목표로 했습니다.
 
 ### 📚 Practice 1 - 단어 살펴보기
 
@@ -89,13 +98,50 @@ const handlePhonetic = async (word: string) => {
 ### 📚 Practice 2 - 객관식 퀴즈 + 피드백
 
 - 각 단어에 대해 4개의 보기를 생성하고 정답과 함께 무작위로 섞어 렌더링합니다.
+
+```js
+const wrongs = dayData
+  .filter((data, idx) => idx !== currentIdx && data.meaning1)
+  .map(data => data.meaning1); // 정답 제외
+
+const shuffledWrong = wrongs.sort(() => Math.random() - 0.5).slice(0, 3);
+const allChoices = [...shuffledWrong, correct].sort(() => Math.random() - 0.5);
+
+return {
+  question: currentWord?.word,
+  choices: allChoices,
+  correct,
+};
+}, [currentWord, currentIdx, dayData]);
+```
+
 - 정답 클릭 시 애니메이션 피드백과 함께 점수가 누적되고, 성취도를 기록합니다.
 - 문제 전환은 `setTimeout` 기반으로 이루어지며, `isTransitioning` 상태를 활용해 중복 클릭 방지 및 부드러운 문제 전환 흐름을 구현했습니다.
 
 ```js
-if (correct === choice) {
-  setGreat(prev => prev + 1);
-}
+const handleNext = useCallback(
+  (choice: string) => {
+    if (isTransitioning || answer !== null) return; // 더블체킹 방지
+
+    setIsTransitioning(true);
+    setAnswer(choice);
+
+    if (correct === choice) {
+      setGreat(prev => prev + 1);
+    }
+
+    setTimeout(() => {
+      if (currentIdx < dayData.length - 1) {
+        setCurrentIdx(prev => prev + 1);
+        setAnswer(null);
+      } else {
+        setOpenBottom(true);
+      }
+      setIsTransitioning(false);
+    }, 1000);
+  },
+  [correct, currentIdx, dayData.length, answer, isTransitioning],
+);
 ```
 
 <p align="center">
@@ -106,7 +152,7 @@ if (correct === choice) {
 ### 📚 Practice 2.5 - 감정 기반 성취도 피드백
 
 - 퀴즈가 끝난 후 단순한 점수 대신 정답률에 따라 Lottie 애니메이션 기반 이모지 피드백을 제공합니다.
-- 이 피드백은 BottomSheet 컴포넌트 안에서 조건부 렌더링되어, 결과에 따라 다른 감정 상태를 전달했습니다.
+- 이 피드백은 BottomSheet 컴포넌트 안에서 조건부 렌더링되어 결과에 따라 다른 감정 상태를 전달했습니다.
 
 ```js
 {
@@ -114,7 +160,7 @@ if (correct === choice) {
 }
 ```
 
-<p align="center">
+<p>
 <img src="./public/readme/delight.gif" width="280" height="580"/>
 <img src="./public/readme/neutral.gif" width="280" height="580"/>
 <img src="./public/readme/angry.gif" width="280" height="580"/>
@@ -169,7 +215,7 @@ const [state, dispatch] = useReducer(reducer, initialState);
 ```
 
 - 단어 암기라는 반복 작업에 감정적 피드백, 인터랙션, 보상 요소를 더해 사용자 리텐션을 강화했습니다.
-- `dynamic import`와 `useMemo`를 활용해 클라이언트 사이드에서도 성능 저하 없이 3D 모델을 안정적으로 렌더링할 수 있도록 구성했습니다.
+- `dynamic import`와 `useMemo`를 활용해 클라이언트 사이드에서도 성능 저하 없이 3D 모델을 안정적으로 렌더링할 수 있도록 구현했습니다.
 
 ```js
 const MyCarrot = dynamic(() => import('@/component/Common/Model/Carrot'), { ssr: false });
@@ -179,7 +225,7 @@ const MyCorn = dynamic(() => import('@/component/Common/Model/Corn'), { ssr: fal
 
 ```
 
-- 사용자가 학습을 마칠 때마다 다른 보상 모델이 보이도록, `useMemo`를 활용해 초기 렌더링 시 한 번만 랜덤 모델을 선택하는 방식으로 처리했습니다.
+- 사용자가 학습을 마칠 때마다 다른 보상 모델이 보이도록 `useMemo`를 활용해 초기 렌더링 시 한 번만 랜덤 모델을 선택하는 방식으로 처리했습니다.
 
 ```js
 const randomPlant = useMemo(() => {
@@ -202,9 +248,11 @@ const randomPlant = useMemo(() => {
 </p>
 </details>
 
+<br/>
+
 ## Phase 3. 끊김 없는 인증 흐름 구현
 
-단어 학습 웹앱은 하루에 여러 번 짧게 접속하는 경우가 많습니다. 이런 특성상 매번 로그인 과정을 거쳐야 한다면 사용자의 진입을 방해하는 요소가 될 수 있다고 판단했습니다.  
+단어 학습 웹앱은 하루에 여러 번 짧게 접속하는 경우가 많습니다. 이런 웹앱 특성상 매번 로그인 과정을 거쳐야 한다면 사용자의 진입을 방해하는 요소가 될 수 있다고 판단했습니다.  
 그래서 사용자는 로그인 상태를 인식하지 않으면서도, 백에선 안전하게 인증이 유지되도록 설계했습니다.
 
 ### 🔐 구조 요약
@@ -239,6 +287,8 @@ instance.interceptors.response.use(
 );
 ```
 
+<br/>
+
 ## Phase4. 학습 상태를 지속적으로 관리하기
 
 단어 학습에서는 사용자의 상태가 빠르게 바뀌고 여러 컴포넌트가 이 상태를 동시에 공유해야 합니다.  
@@ -248,7 +298,6 @@ instance.interceptors.response.use(
 
 - 로그인/회원가입 흐름은 `Redux-Saga`를 통해 비동기적으로 처리
 - **access/refresh token**을 서버에 저장한 뒤, 사용자 정보는 Redux에 저장
-- 또한, `redux-persist`를 활용해 새로고침 시에도 로그인 상태가 유지되도록 구성
 
 ```js
 // 로그인 요청
@@ -261,7 +310,7 @@ yield put(success(res.data.data));
 
 ### 💿 새로고침에도 유지되는 상태 - redux-persist
 
-학습 도중 새로고침으로 인해 데이터가 사라지는 UX를 방지하기 위해 `redux-persist`를 적용해 상태를 `localStorage`에 저장하고, 앱과 자동으로 동기화되도록 설정했습니다.
+학습 도중 새로고침으로 인해 데이터가 사라지는 것을 방지하기 위해 `redux-persist`를 적용해 상태를 `localStorage`에 저장하고, 앱과 자동으로 동기화되도록 설정했습니다.
 
 ```js
 const persistConfig = {
@@ -281,6 +330,8 @@ const persistConfig = {
 ```js
 router.events.on('routeChangeStart', () => dispatch(setLoading(true)));
 ```
+
+<br/>
 
 ## 프로젝트 정리
 
@@ -304,7 +355,7 @@ router.events.on('routeChangeStart', () => dispatch(setLoading(true)));
 
 ### 📁 디렉토리 구조 요약
 
-```json
+```js
 ├── bin/www                   # Express 실행 엔트리 포인트
 ├── app.ts                    # Express 설정 및 서버 로직
 ├── back/                     # 백엔드 미들웨어 및 서비스 로직
