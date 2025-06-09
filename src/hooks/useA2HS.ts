@@ -8,79 +8,98 @@ type BeforeInstallPromptEvent = Event & {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
 };
 
+const getUserAgent = (): string => {
+  if (typeof window === 'undefined' || !window.navigator) return '';
+  return window.navigator.userAgent?.toLowerCase?.() || '';
+};
+
+const getPlatform = (): string => {
+  if (typeof window === 'undefined' || !window.navigator) return '';
+  return window.navigator.platform || '';
+};
+
+const isIOS = (): boolean => {
+  const ua = getUserAgent();
+  const platform = getPlatform();
+  return /iphone|ipad|ipod/.test(ua) || (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+};
+
+const isSafari = (): boolean => {
+  const ua = getUserAgent();
+  return (
+    ua.includes('safari') &&
+    !ua.includes('crios') &&
+    !ua.includes('fxios') &&
+    !ua.includes('edgios') &&
+    !ua.includes('opr') &&
+    !ua.includes('chrome')
+  );
+};
+
+const isAndroidChrome = (): boolean => {
+  const ua = getUserAgent();
+  return ua.includes('android') && ua.includes('chrome') && !ua.includes('crios');
+};
+
+const isInStandaloneMode = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return (
+    window.matchMedia?.('(display-mode: standalone)')?.matches ||
+    (window.navigator as any)?.standalone === true
+  );
+};
+
 export const useA2HS = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isVisible, setIsVisible] = useState(false); // Android
-  const [isIOSGuideVisible, setIsIOSGuideVisible] = useState(false); // iOS
-
-  const isInstalled = () => {
-    if (typeof window === 'undefined') return false;
-
-    try {
-      return (
-        window.matchMedia('(display-mode: standalone)').matches ||
-        (window.navigator as any).standalone === true
-      );
-    } catch {
-      return false;
-    }
-  };
-
-  const isIOS = () => {
-    if (typeof window === 'undefined') return false;
-    return /iphone|ipad|ipod/i.test(window.navigator.userAgent.toLowerCase());
-  };
-
-  const isSafari = () => {
-    if (typeof window === 'undefined') return false;
-
-    const ua = window.navigator.userAgent.toLowerCase();
-    return ua.includes('safari') && !ua.includes('chrome') && !ua.includes('crios');
-  };
-
-  const isInStandaloneMode = () => {
-    if (typeof window === 'undefined') return false;
-    return (window.navigator as any).standalone === true;
-  };
+  const [isVisible, setIsVisible] = useState(false); // Android A2HS
+  const [isIOSGuideVisible, setIsIOSGuideVisible] = useState(false); // iOS 가이드
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    if (isInstalled()) return;
+    if (isInStandaloneMode()) return;
 
     const now = Date.now();
 
-    // Android: Always register listener
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
+    // Android Chrome A2HS
+    if (isAndroidChrome()) {
+      const handleBeforeInstallPrompt = (e: Event) => {
+        e.preventDefault();
+        setDeferredPrompt(e as BeforeInstallPromptEvent);
 
-      try {
-        const hideUntil = Number(localStorage.getItem(LOCALSTORAGE_KEY));
-        if (!hideUntil || now > hideUntil) {
+        try {
+          const hideUntil = Number(localStorage.getItem(LOCALSTORAGE_KEY));
+          if (!hideUntil || now > hideUntil) {
+            setIsVisible(true);
+          }
+        } catch {
           setIsVisible(true);
         }
-      } catch {
-        setIsVisible(true);
-      }
-    };
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      };
 
-    // iOS Guide 처리
+      window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      return () => {
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      };
+    }
+
+    // iOS Safari 가이드
     try {
       const iosHideUntil = Number(localStorage.getItem(IOS_GUIDE_KEY));
-      if (isIOS() && isSafari() && !isInStandaloneMode() && (!iosHideUntil || now > iosHideUntil)) {
+      if (
+        !isVisible &&
+        isIOS() &&
+        isSafari() &&
+        !isInStandaloneMode() &&
+        (!iosHideUntil || now > iosHideUntil)
+      ) {
         setIsIOSGuideVisible(true);
       }
-    } catch {
-      // fallback to showing
-      if (isIOS() && isSafari() && !isInStandaloneMode()) {
+    } catch (e) {
+      console.warn('localStorage error for iOS Guide:', e);
+      if (!isVisible && isIOS() && isSafari() && !isInStandaloneMode()) {
         setIsIOSGuideVisible(true);
       }
     }
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    };
   }, []);
 
   const installApp = async () => {
