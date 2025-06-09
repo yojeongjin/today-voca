@@ -27,7 +27,7 @@ instance.interceptors.response.use(
         return instance(originalRequest);
       } catch (refreshError) {
         if (typeof window !== 'undefined') {
-          window.location.href = '/';
+          window.location.href = `${process.env.NEXT_PUBLIC_APP_URL}`;
         }
         return Promise.reject(refreshError);
       }

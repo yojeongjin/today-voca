@@ -11,8 +11,8 @@ interface Props {
 
 const A2HS = ({ onInstall, onCancel }: Props) => {
   return (
-    <BottomSheet height={480} isOpen={true}>
-      <A2HSBase>
+    <BottomSheet isOpen={true} height={480}>
+      <A2HSBox>
         <CompleteH2>홈 화면 추가</CompleteH2>
         <CompleteBody>
           <CompleteH4>홈 화면에 콩글리시를 심어보세요!</CompleteH4>
@@ -23,7 +23,7 @@ const A2HS = ({ onInstall, onCancel }: Props) => {
         </CompleteImg>
         <ApplyBtn onClick={onInstall}>추가하기</ApplyBtn>
         <CancelBtn onClick={onCancel}>나중에</CancelBtn>
-      </A2HSBase>
+      </A2HSBox>
     </BottomSheet>
   );
 };
@@ -31,6 +31,11 @@ const A2HS = ({ onInstall, onCancel }: Props) => {
 export default A2HS;
 
 const A2HSBase = styled.div`
+  position: relative;
+  height: 100%;
+`;
+
+const A2HSBox = styled.div`
   position: relative;
   padding: 24px 16px;
   text-align: center;
@@ -45,7 +50,6 @@ const CompleteH2 = styled.h2`
 `;
 
 const CompleteBody = styled.div`
-  position: relative;
   width: 100%;
 `;
 
@@ -61,7 +65,8 @@ const CompleteP = styled.p`
 `;
 
 const CompleteImg = styled.div`
-  width: 80%;
+  // width: 80%;
+  height: 180px;
   margin: 0 auto;
 `;
 

@@ -11,7 +11,11 @@ interface iOSProps {
 const IOSGuide = ({ onClick }: iOSProps) => {
   return (
     <BottomSheet height={480} isOpen={true}>
+<<<<<<< Updated upstream
       <A2HSBase>
+=======
+      <A2HSBox>
+>>>>>>> Stashed changes
         <CompleteH2>홈 화면 추가</CompleteH2>
         <CompleteBody>
           <CompleteH4>홈 화면에 콩글리시를 심어보세요!</CompleteH4>
@@ -50,7 +54,11 @@ const IOSGuide = ({ onClick }: iOSProps) => {
           </GuideItem>
         </GuideMenu>
         <ApplyBtn onClick={onClick}>닫기</ApplyBtn>
+<<<<<<< Updated upstream
       </A2HSBase>
+=======
+      </A2HSBox>
+>>>>>>> Stashed changes
     </BottomSheet>
   );
 };
