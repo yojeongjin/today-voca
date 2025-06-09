@@ -3,7 +3,7 @@ import axios from '@/utils/axiosInstance';
 import { DayProps } from '@/Interface/IDay';
 // container
 import DayContainer from '@/container/Day/DayContainer';
-import SeoHead from '@/component/Common/SeoHead.tsx/SeoHead';
+import SeoHead from '@/component/Common/SeoHead/SeoHead';
 
 const Day: NextPage<DayProps> = ({ dayData, plan_id, day_number, day_size, level, percent }) => {
   return (

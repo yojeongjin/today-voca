@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 // components
 import PlanContainer from '@/container/Plan/PlanContainer';
-import SeoHead from '@/component/Common/SeoHead.tsx/SeoHead';
+import SeoHead from '@/component/Common/SeoHead/SeoHead';
 
 const Plan: NextPage = () => {
   return (

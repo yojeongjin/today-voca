@@ -4,7 +4,7 @@ import axios from '@/utils/axiosInstance';
 import { PlanData } from '@/Interface/IPlan';
 // components
 import HomeContainer from '@/container/Home/HomeContainer';
-import SeoHead from '@/component/Common/SeoHead.tsx/SeoHead';
+import SeoHead from '@/component/Common/SeoHead/SeoHead';
 
 const Home: NextPage<PlanData> = ({ planData }) => {
   return (

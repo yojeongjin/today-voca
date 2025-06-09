@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import JoinContainer from '@/container/Join/JoinContainer';
-import SeoHead from '@/component/Common/SeoHead.tsx/SeoHead';
+import SeoHead from '@/component/Common/SeoHead/SeoHead';
 
 const Join: NextPage = () => {
   return (

@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 // components
 import SigninComponent from '@/component/Auth/SigninComponent';
-import SeoHead from '@/component/Common/SeoHead.tsx/SeoHead';
+import SeoHead from '@/component/Common/SeoHead/SeoHead';
 
 const Signin: NextPage = () => {
   return (

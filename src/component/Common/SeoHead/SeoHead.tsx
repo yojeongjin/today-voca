@@ -1,4 +1,3 @@
-// components/SeoHead.tsx
 import Head from 'next/head';
 
 interface SeoHeadProps {
