@@ -1,29 +1,27 @@
 import { useRef } from 'react';
 
-export default function useFocus() {
-  const focusNum1 = useRef<HTMLInputElement | null>(null);
-  const focusNum2 = useRef<HTMLInputElement | null>(null);
-  const focusNum3 = useRef<HTMLInputElement | null>(null);
-  const focusNum4 = useRef<HTMLInputElement | null>(null);
-  const focusNum5 = useRef<HTMLInputElement | null>(null);
+const useFocus = () => {
+  const focusNum1 = useRef<HTMLInputElement>(null);
+  const focusNum2 = useRef<HTMLInputElement>(null);
+  const focusNum3 = useRef<HTMLInputElement>(null);
+  const focusNum4 = useRef<HTMLInputElement>(null);
+  const focusNum5 = useRef<HTMLInputElement>(null);
 
-  const handleMoveFocus = (inputNum: number): void => {
-    switch (inputNum) {
-      case 1:
-        focusNum2.current?.focus();
-        break;
-      case 2:
-        focusNum3.current?.focus();
-        break;
-      case 3:
-        focusNum4.current?.focus();
-        break;
-      case 4:
-        focusNum5.current?.focus();
-        break;
-      default:
-        return;
-    }
+  const handleMoveFocus = (index: number) => {
+    const refArr = [focusNum1, focusNum2, focusNum3, focusNum4, focusNum5];
+    refArr[index]?.current?.focus();
+  };
+
+  const getCode = () => {
+    return [
+      focusNum1.current?.value,
+      focusNum2.current?.value,
+      focusNum3.current?.value,
+      focusNum4.current?.value,
+      focusNum5.current?.value,
+    ]
+      .join('')
+      .trim();
   };
 
   return {
@@ -33,5 +31,8 @@ export default function useFocus() {
     focusNum4,
     focusNum5,
     handleMoveFocus,
+    getCode,
   };
-}
+};
+
+export default useFocus;

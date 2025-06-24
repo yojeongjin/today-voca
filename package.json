@@ -8,7 +8,8 @@
     "postbuild": "next-sitemap",
     "build": "next build --no-lint",
     "start": "concurrently \"ts-node bin/www\" \"next start -p 88\"",
-    "next-start": "next start -p 88"
+    "next-start": "next start -p 88",
+    "back-dev": "nodemon ./bin/www"
   },
   "dependencies": {
     "@emoji-mart/data": "^1.2.1",
@@ -47,6 +48,7 @@
     "react-redux": "^8.1.3",
     "react-responsive": "^10.0.1",
     "react-router": "^6.30.0",
+    "redis": "^5.5.6",
     "redux": "^4.2.1",
     "redux-actions": "^3.0.3",
     "redux-devtools-extension": "^2.13.9",
@@ -84,6 +86,7 @@
     "eslint-config-next": "15.2.4",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.4",
+    "nodemon": "^3.1.10",
     "prettier": "^3.5.3"
   }
 }

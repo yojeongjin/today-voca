@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
+import nodemailer from 'nodemailer';
+import bcrypt from 'bcrypt';
+import redisClient from '../../../config/redisClient';
 import { CustomError } from '../../../back/class/CustomError';
 import { HttpStatus } from '../../../back/enum/HttpStatus.enum';
 import { ErrorCode } from '../../../back/enum/ErrorCode.enum';
 import { successResponse } from '../../../back/utils/apiResponse';
-import nodemailer from 'nodemailer';
-import bcrypt from 'bcrypt';
 
 // db
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
@@ -49,6 +50,7 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
   const { email } = req.query;
 
   try {
+    // DB에서 유저 존재 여부 확인
     const sql = 'SELECT * FROM tbl_user WHERE email = ?';
     const [rows] = await pool.execute<RowDataPacket[]>(sql, [email]);
 
@@ -60,7 +62,12 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
       );
     }
 
+    // 인증번호
     const authCode = generateAuthCode();
+    // redis 저장
+    await redisClient.setEx(`verify:${email}`, 180, authCode);
+
+    // 메일 발송
     const transporter = createTransporter();
     const mailOptions = createMailOptions(email, authCode);
 
@@ -73,12 +80,37 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
         );
       }
 
-      res.status(HttpStatus.OK).json(
-        successResponse({
-          authCode: authCode,
-        }),
-      );
+      res.status(HttpStatus.OK).json(successResponse());
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const verify = async (req: Request, res: Response, next: NextFunction) => {
+  const { email, authCode } = req.body;
+
+  try {
+    // redis에서 코드 받아오기
+    const savedCode = await redisClient.get(`verify:${email}`);
+
+    if (!savedCode) {
+      res.status(400).send({
+        success: false,
+        msg: '인증시간이 초과하였습니다.',
+      });
+    }
+
+    if (savedCode !== authCode) {
+      res.status(400).send({
+        success: false,
+        msg: '유효하지않은 인증번호입니다.',
+      });
+    }
+    // 코드 지우기
+    await redisClient.del(`verify:${email}`);
+
+    res.status(HttpStatus.OK).json(successResponse());
   } catch (err) {
     next(err);
   }
@@ -91,7 +123,7 @@ export const add = async (req: Request, res: Response, next: NextFunction) => {
     const hashedPwd = await bcrypt.hash(pwd, 12);
 
     const sql = 'insert into tbl_user (nickname, email, pwd) values (?, ?, ?)';
-    const [result] = await pool.execute<ResultSetHeader>(sql, [name, email, hashedPwd]);
+    await pool.execute<ResultSetHeader>(sql, [name, email, hashedPwd]);
 
     res.status(HttpStatus.OK).json(successResponse());
   } catch (err) {

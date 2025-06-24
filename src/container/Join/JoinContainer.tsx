@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -21,12 +21,13 @@ import JoinComplete from '@/component/Auth/Join/JoinComplete';
 
 const JoinContainer = () => {
   const dispatch = useDispatch();
+  const [countdown, setCountdown] = useState(180);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const { isLoading, setIsLoading } = useLoading();
   const { openBottom, setOpenBottom } = useBottom();
   const { isOpen, openModal, closeModal, modalRef } = useModal();
-  // 인증 modal state
-  const [emailCode, setEmailCode] = useState(null);
-  const [isVerified, setIsVerified] = useState(false);
   // 이용약관 필수동의 state
   const [agreements, setAgreements] = useState({
     guidanceAgreed: false,
@@ -46,6 +47,9 @@ const JoinContainer = () => {
     rePwd: false,
     name: false,
   });
+  // auth check
+  const [isVerified, setIsVerified] = useState(false);
+  const [code, setCode] = useState('');
 
   // join input form onchange
   useEffect(() => {
@@ -54,6 +58,32 @@ const JoinContainer = () => {
       rePwd: joinInfo.rePwd === joinInfo.pwd,
     }));
   }, [joinInfo.rePwd, joinInfo.pwd]);
+
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  const startCountdown = () => {
+    // 리셋
+    setCountdown(180);
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+    // 초마다 1초씩 감소
+    intervalRef.current = setInterval(() => {
+      setCountdown(prev => prev - 1);
+    }, 1000);
+
+    // 3분 뒤 홈 리다이렉트
+    timeoutRef.current = setTimeout(() => {
+      clearInterval(intervalRef.current!);
+      closeModal();
+      alert('인증 시간이 만료되었습니다.');
+    }, 180000);
+  };
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,9 +110,11 @@ const JoinContainer = () => {
           email: joinInfo.email,
         },
       });
+
       if (res.data.code === 200) {
-        setEmailCode(res.data.data.authCode);
         openModal();
+
+        startCountdown();
       }
     } catch (error) {
       handleApiError(error);
@@ -99,7 +131,8 @@ const JoinContainer = () => {
         },
       });
       if (res.data.code === 200) {
-        setEmailCode(res.data.data.authCode);
+        alert('인증번호가 재전송되었습니다.');
+        startCountdown();
       }
     } catch (error) {
       handleApiError(error);
@@ -128,22 +161,41 @@ const JoinContainer = () => {
     dispatch(signin(body));
   };
 
+  const handleVerify = async () => {
+    try {
+      const body = {
+        email: joinInfo.email,
+        authCode: code,
+      };
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_APP_API_KEY}/v1/join/verify`, body);
+
+      if (res.data.success) {
+        setIsVerified(true);
+        closeModal();
+
+        // 타이머 정리
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      }
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
+
   return (
     <>
       <JoinBase>
         <JoinComponent
+          isVerified={isVerified}
           valid={valid}
           isLoading={isLoading}
           joinInfo={joinInfo}
           handleChange={handleChange}
           handleAuth={handleAuth}
-          isVerified={isVerified}
         />
         <JoinGuide agreements={agreements} setAgreements={setAgreements} />
         <ApplyBtn
-          disabled={
-            Object.values(joinInfo).includes('') || !agreements.guidanceAgreed || !isVerified
-          }
+          disabled={Object.values(joinInfo).includes('') || !agreements.guidanceAgreed}
           onClick={handleJoin}
         >
           가입하기
@@ -152,16 +204,12 @@ const JoinContainer = () => {
           <Modal
             heading="인증번호 입력"
             modalRef={modalRef}
-            disabled={!isVerified}
             onClose={() => {
               closeModal();
             }}
-            onApply={() => {
-              setIsVerified(true);
-              closeModal();
-            }}
+            onApply={handleVerify}
           >
-            <JoinAuth setIsVerified={setIsVerified} emailCode={emailCode} reAuth={reAuth} />
+            <JoinAuth reAuth={reAuth} setCode={setCode} countdown={countdown} />
           </Modal>
         )}
       </JoinBase>

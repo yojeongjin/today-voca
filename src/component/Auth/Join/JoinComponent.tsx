@@ -39,7 +39,7 @@ const JoinComponent = ({
             />
             <JoinCheckBtn
               onClick={handleAuth}
-              disabled={isVerified || isLoading || joinInfo.email === ''}
+              disabled={joinInfo.email === '' || isLoading || isVerified}
             >
               {isLoading ? (
                 <Image
@@ -161,6 +161,7 @@ const JoinCheckBtn = styled.button`
     background-color: ${props => props.theme.primary_07};
     color: #f7f2f2;
     cursor: default;
+    pointer-events: none;
   }
 `;
 
