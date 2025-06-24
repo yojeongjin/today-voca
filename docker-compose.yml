@@ -12,6 +12,7 @@ services:
       - .env
     depends_on:
       - mysql
+      - redis
     restart: unless-stopped
 
   mysql:
@@ -22,6 +23,12 @@ services:
       - .env
     volumes:
       - mysql-data:/var/lib/mysql
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    ports:
+      - '6379:6379'
     restart: unless-stopped
 
 volumes:
